@@ -1,0 +1,39 @@
+# ── Dependencies & build output ──────────────────────────────
+node_modules/
+.next/
+out/
+.vercel/
+*.tsbuildinfo
+
+# ── Python / Django ──────────────────────────────────────────
+backend/venv/
+venv/
+__pycache__/
+*.pyc
+backend/staticfiles/
+# local database — may contain real customer enquiries
+*.sqlite3
+
+# ── Secrets ──────────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+
+# ── Local research & scratch files (not part of the site) ───
+# saved copies of third-party reference websites
+growmedlink*
+hirelinks*
+competitor.html
+all_snippets.txt
+# one-off image-inspection scripts
+check_*.py
+inspect_*.py
+get_step.py
+frontend/public/images/products/temp_*/
+
+# ── OS / editor ──────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
