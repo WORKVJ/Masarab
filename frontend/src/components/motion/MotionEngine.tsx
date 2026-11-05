@@ -173,7 +173,7 @@ export default function MotionEngine() {
         });
         heading.querySelectorAll<HTMLElement>('.mx-char').forEach((c) => accentChars.push(c));
 
-        const tl = gsap.timeline({ scrollTrigger: { trigger: heading, start: 'top 90%', once: true } });
+        const tl = gsap.timeline({ scrollTrigger: { trigger: heading, start: 'top 90%', toggleActions: 'play none none none' } });
         tl.fromTo(words, { yPercent: 110 }, { yPercent: 0, duration: 0.9, ease: 'power4.out', stagger: 0.04 });
         if (accentChars.length) {
           tl.fromTo(
@@ -228,7 +228,7 @@ export default function MotionEngine() {
       gsap.set(revealEls, { y: 36, opacity: 0 });
       ScrollTrigger.batch(revealEls, {
         start: 'top 98%', // anything visible on screen reveals, even near the bottom edge
-        once: true,
+        // no once:true — a self-killing trigger can corrupt ScrollTrigger's list mid-refresh (crash on reload mid-page)
         onEnter: (batch) =>
           gsap.to(batch, { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', stagger: 0.06, overwrite: true }),
       });
@@ -241,7 +241,7 @@ export default function MotionEngine() {
         gsap.set(els, { x: from, opacity: 0, scale: 0.96 });
         ScrollTrigger.batch(els, {
           start: 'top 98%',
-          once: true,
+          // (see note above: no once:true)
           onEnter: (batch) =>
             gsap.to(batch, {
               x: 0,
@@ -283,7 +283,7 @@ export default function MotionEngine() {
         gsap.set(flipEls, { opacity: 0, y: 50, rotateX: -28, transformOrigin: '50% 100%' });
         ScrollTrigger.batch(flipEls, {
           start: 'top 98%', // anything visible on screen reveals, even near the bottom edge
-          once: true,
+          // (see note above: no once:true)
           onEnter: (batch) => {
             gsap.to(batch, {
               opacity: 1,
