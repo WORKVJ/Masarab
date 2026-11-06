@@ -2,7 +2,7 @@
 
 import React, { useRef } from 'react';
 import Image from 'next/image';
-import { scrollToTarget } from '@/lib/motion';
+import Link from 'next/link';
 import RollText from '@/components/motion/RollText';
 import CountUp from '@/components/motion/CountUp';
 import {
@@ -24,12 +24,10 @@ import {
   Wrench,
   Calendar
 } from 'lucide-react';
+import { useRequestQuote } from '@/lib/useRequestQuote';
 
-interface HeroProps {
-  onOpenRfq: (productName?: string) => void;
-}
-
-export default function Hero({ onOpenRfq }: HeroProps) {
+export default function Hero() {
+  const onOpenRfq = useRequestQuote();
   // 3D tilt + depth parallax for the person card.
   // Writes CSS variables straight onto the card (one rAF per frame) instead of React state,
   // so moving the mouse never re-renders the hero or its 12 marquee cards.
@@ -58,10 +56,6 @@ export default function Hero({ onOpenRfq }: HeroProps) {
     cancelAnimationFrame(rafRef.current);
     ['--tilt-x', '--tilt-y'].forEach((v) => card.style.setProperty(v, '0deg'));
     ['--px', '--py'].forEach((v) => card.style.setProperty(v, '0'));
-  };
-
-  const scrollToSection = (id: string) => {
-    scrollToTarget(id);
   };
 
   return (
@@ -124,15 +118,15 @@ export default function Hero({ onOpenRfq }: HeroProps) {
               </button>
 
               {/* Secondary Pill Button with Dark Circle & Play Icon */}
-              <button
-                onClick={() => scrollToSection('solutions')}
+              <Link
+                href="/products"
                 className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-white hover:bg-slate-50 border-2 border-slate-200 hover:border-slate-300 text-slate-900 font-bold text-xs sm:text-sm shadow-2xs transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer flex items-center gap-2 group"
               >
                 <div className="mx-play-ring relative w-6 h-6 rounded-full bg-slate-950 text-white flex items-center justify-center shrink-0 group-hover:bg-[#0d7cae] group-hover:scale-110 transition-[background-color,scale] duration-300 shadow-2xs">
                   <Play className="w-2.5 h-2.5 fill-current ml-0.5 text-white" />
                 </div>
                 <RollText>Explore Products</RollText>
-              </button>
+              </Link>
 
               {/* Direct Phone Line Pill */}
               <a

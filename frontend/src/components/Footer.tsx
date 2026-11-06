@@ -2,20 +2,22 @@
 
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { MapPin, PhoneCall, Mail, ArrowUpRight, ArrowUp } from 'lucide-react';
 import { CATEGORIES, CONTACT } from '@/lib/masarContent';
 import { scrollToTarget } from '@/lib/motion';
+import { categoryHref } from '@/lib/routes';
 import RollText from '@/components/motion/RollText';
 
 const QUICK_LINKS = [
-  { label: 'Home', href: '#hero' },
-  { label: 'Product Range', href: '#product-range' },
-  { label: 'About Us', href: '#about' },
-  { label: 'Products', href: '#solutions' },
-  { label: 'Industries', href: '#industries' },
-  { label: 'Why Choose Us', href: '#why-us' },
-  { label: 'Clients', href: '#clients' },
-  { label: 'Contact', href: '#rfq' },
+  { label: 'Home', href: '/' },
+  { label: 'About Us', href: '/about' },
+  { label: 'Products', href: '/products' },
+  { label: 'Product Range', href: '/product-range' },
+  { label: 'Industries', href: '/industries' },
+  { label: 'Why Choose Us', href: '/about#why-us' },
+  { label: 'Clients', href: '/clients' },
+  { label: 'Contact', href: '/contact' },
 ];
 
 const linkCls =
@@ -45,14 +47,8 @@ function SocialIcon({ href, label, children }: { href: string; label: string; ch
 }
 
 export default function Footer() {
-  const openCategory = (e: React.MouseEvent, id: string) => {
-    e.preventDefault();
-    window.dispatchEvent(new CustomEvent('masar:category', { detail: id }));
-    scrollToTarget('solutions');
-  };
-
   return (
-    <footer id="contact" className="relative bg-[#04121f] text-white overflow-hidden">
+    <footer id="site-footer" className="relative bg-[#04121f] text-white overflow-hidden">
       <div className="mx-orb-drift absolute -top-40 -left-40 w-[480px] h-[480px] rounded-full bg-[#0d7cae]/15 blur-[120px] pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20">
@@ -90,9 +86,9 @@ export default function Footer() {
             <ul className="mt-4 space-y-1 text-sm">
               {QUICK_LINKS.map((l) => (
                 <li key={l.href}>
-                  <a href={l.href} className={linkCls}>
+                  <Link href={l.href} className={linkCls}>
                     <LinkLabel>{l.label}</LinkLabel>
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -104,9 +100,9 @@ export default function Footer() {
             <ul className="mt-4 space-y-1 text-sm">
               {CATEGORIES.map((c) => (
                 <li key={c.id}>
-                  <a href="#solutions" onClick={(e) => openCategory(e, c.id)} className={linkCls}>
+                  <Link href={categoryHref(c.slug)} className={linkCls}>
                     <LinkLabel>{c.name}</LinkLabel>
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -139,13 +135,13 @@ export default function Footer() {
                 </a>
               </li>
             </ul>
-            <a
-              href="#rfq"
+            <Link
+              href="/contact"
               className="group mt-7 inline-flex items-center gap-2 rounded-full bg-[#0d7cae] hover:bg-[#0b6a95] px-5 py-2.5 text-sm font-bold shadow-[0_10px_30px_-10px_rgba(13,124,174,0.8)] transition-colors"
             >
               <RollText>Request a Quote</RollText>
               <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:rotate-45" />
-            </a>
+            </Link>
           </div>
         </div>
 

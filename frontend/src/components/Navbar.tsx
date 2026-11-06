@@ -2,43 +2,44 @@
 
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import Image from 'next/image';
-import { ChevronDown, ArrowUpRight, Menu, X, Layers, Wrench, Wind, Droplet, PhoneCall, Mail } from 'lucide-react';
-import { CONTACT } from '@/lib/masarContent';
-import { scrollToTarget } from '@/lib/motion';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import {
+  ChevronDown, ArrowUpRight, Menu, X, Layers, Wrench, Wind, Droplet, FlaskConical, Zap, Gauge, ShieldCheck,
+  PhoneCall, Mail, LayoutGrid,
+} from 'lucide-react';
+import { CATEGORIES, CONTACT } from '@/lib/masarContent';
+import { NAV, categoryHref, isActive } from '@/lib/routes';
 import RollText from '@/components/motion/RollText';
 
-const NAV_ITEMS = [
-  { id: 'product-range', label: 'Product Range' },
-  { id: 'about', label: 'About' },
-  { id: 'solutions', label: 'Products' },
-  { id: 'industries', label: 'Industries' },
-  { id: 'why-us', label: 'Why Us' },
-  { id: 'clients', label: 'Clients' },
-  { id: 'rfq', label: 'Contact' },
-];
+const CATEGORY_META: Record<string, { desc: string; icon: React.ElementType; color: string }> = {
+  cooling: { desc: 'Cooling Towers, Chillers & AHUs', icon: Wind, color: 'text-cyan-500' },
+  water: { desc: 'EDI, EDR & Membrane Degassing', icon: Droplet, color: 'text-blue-500' },
+  chemical: { desc: 'Alcohols, Aromatics & Ketones', icon: FlaskConical, color: 'text-emerald-500' },
+  electrical: { desc: 'Gratings, Breakers & VFDs', icon: Zap, color: 'text-amber-500' },
+  instrumentation: { desc: 'Flow Meters, Gauges & Sensors', icon: Gauge, color: 'text-indigo-500' },
+  mechanical: { desc: 'Pumps, Valves & Actuators', icon: Wrench, color: 'text-orange-500' },
+  'pipe-fittings': { desc: 'Plates, Sheets & Special Fittings', icon: Layers, color: 'text-purple-500' },
+  safety: { desc: 'PPE, Fall Protection & FR Gear', icon: ShieldCheck, color: 'text-rose-500' },
+};
 
-const MOBILE_LINKS = [
-  { label: 'Product Range', href: '#product-range' },
-  { label: 'About', href: '#about' },
-  { label: 'Products', href: '#solutions' },
-  { label: 'Industries', href: '#industries' },
-  { label: 'Why Us', href: '#why-us' },
-  { label: 'Clients', href: '#clients' },
-  { label: 'Contact', href: '#rfq' },
-];
-
-interface NavbarProps {
-  onOpenRfq: (productName?: string) => void;
-}
-
-export default function Navbar({ onOpenRfq }: NavbarProps) {
+export default function Navbar() {
+  const pathname = usePathname() || '/';
   const [solutionsOpen, setSolutionsOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [active, setActive] = useState<string>('');
   const [pill, setPill] = useState({ x: 0, width: 0 });
   const navRef = useRef<HTMLElement>(null);
   const linkRefs = useRef<Record<string, HTMLElement | null>>({});
+  const activeHref = NAV.find((n) => isActive(pathname, n.href))?.href ?? '';
+
+  // Close menus whenever the page changes
+  const [lastPath, setLastPath] = useState(pathname);
+  if (pathname !== lastPath) {
+    setLastPath(pathname);
+    setMobileMenuOpen(false);
+    setSolutionsOpen(false);
+  }
 
   // Lock page scroll while the mobile menu is open; Escape closes it
   useEffect(() => {
@@ -56,27 +57,10 @@ export default function Navbar({ onOpenRfq }: NavbarProps) {
     };
   }, [mobileMenuOpen]);
 
-  // Scroll-spy: highlight the nav item for the section in the middle of the screen
-  useEffect(() => {
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) setActive(e.target.id === 'hero' ? '' : e.target.id);
-        });
-      },
-      { rootMargin: '-45% 0px -50% 0px' }
-    );
-    ['hero', ...NAV_ITEMS.map((n) => n.id)].forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) io.observe(el);
-    });
-    return () => io.disconnect();
-  }, []);
-
-  // Slide the pill under the active link (re-measured after the bar docks/undocks)
+  // Slide the pill under the current page's link (re-measured after the bar docks/undocks)
   useLayoutEffect(() => {
     const measure = () => {
-      const link = active ? linkRefs.current[active] : null;
+      const link = activeHref ? linkRefs.current[activeHref] : null;
       const nav = navRef.current;
       if (!link || !nav) {
         setPill((p) => (p.width ? { ...p, width: 0 } : p));
@@ -91,7 +75,7 @@ export default function Navbar({ onOpenRfq }: NavbarProps) {
       cancelAnimationFrame(raf);
       clearTimeout(t);
     };
-  }, [active, isScrolled]);
+  }, [activeHref, isScrolled]);
 
   useEffect(() => {
     // Dock the bar once scrolled past 30px — checked at most once per frame, state set only on change
@@ -108,173 +92,154 @@ export default function Navbar({ onOpenRfq }: NavbarProps) {
     const handleScroll = () => {
       if (!raf) raf = requestAnimationFrame(check);
     };
-
     window.addEventListener('scroll', handleScroll, { passive: true });
     raf = requestAnimationFrame(check);
-
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
-  const solutionsList = [
-    { id: 'cooling', name: 'Cooling Solutions', desc: 'Cooling Towers, Chillers & AHUs', icon: Wind, color: 'text-cyan-500' },
-    { id: 'water', name: 'Water Treatment', desc: 'EDI, EDR & Membrane Degassing', icon: Droplet, color: 'text-blue-500' },
-    { id: 'chemical', name: 'Chemical', desc: 'Alcohols, Aromatics & Ketones', icon: Layers, color: 'text-emerald-500' },
-    { id: 'electrical', name: 'Electrical', desc: 'Gratings, Breakers & VFDs', icon: Layers, color: 'text-amber-500' },
-    { id: 'instrumentation', name: 'Instrumentation', desc: 'Flow Meters, Gauges & Sensors', icon: Wrench, color: 'text-indigo-500' },
-    { id: 'mechanical', name: 'Mechanical', desc: 'Pumps, Valves & Actuators', icon: Wrench, color: 'text-orange-500' },
-    { id: 'pipe-fittings', name: 'Pipe Fittings and Alloys', desc: 'Plates, Sheets & Special Fittings', icon: Layers, color: 'text-purple-500' },
-    { id: 'safety', name: 'Safety Equipments', desc: 'PPE, Fall Protection & FR Gear', icon: Layers, color: 'text-rose-500' },
-  ];
-
-  const goToCategory = (id: string) => {
-    setSolutionsOpen(false);
-    window.dispatchEvent(new CustomEvent('masar:category', { detail: id }));
-    scrollToTarget('solutions');
-  };
-
   return (
     <>
-      {/* Dynamic Floating Navbar Header */}
       <header className="fixed top-3 sm:top-4 left-0 right-0 z-50 px-4 sm:px-6 pointer-events-none">
-        
-        {/* ================================================================= */}
-        {/* DESKTOP NAV CONTAINER: CONTINUOUS FLUID DOCKING SYSTEM (md:flex)  */}
-        {/* ================================================================= */}
+        {/* ── Desktop: continuous fluid docking bar ── */}
         <div
           className={`hidden md:flex items-center justify-between mx-auto transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             isScrolled
-              ? 'max-w-[960px] lg:max-w-[980px] bg-white/95 rounded-full border border-slate-200/90 shadow-[0_12px_36px_rgba(0,0,0,0.08)] px-4 py-1.5'
+              ? 'max-w-[960px] lg:max-w-[1000px] bg-white/95 rounded-full border border-slate-200/90 shadow-[0_12px_36px_rgba(0,0,0,0.08)] px-4 py-1.5'
               : 'max-w-7xl bg-transparent border-transparent shadow-none px-2 py-0'
           }`}
         >
-          
-          {/* 1. BRAND LOGO (Smoothly glides inward from the far left into the unified pill) */}
           <div className="shrink-0 flex items-center pointer-events-auto">
-            <a href="#" className="flex items-center group py-0.5">
-              <div className="relative flex items-center transition-transform group-hover:scale-[1.02]">
-                <Image
-                  src="/images/logo-dark.png"
-                  alt="Masar Arabia"
-                  width={150}
-                  height={34}
-                  style={{ width: 'auto' }}
-                  className="h-7.5 lg:h-8 w-auto object-contain object-left"
-                  priority
-                />
-              </div>
-            </a>
+            <Link href="/" aria-label="Masar Arabia — home" className="flex items-center group py-0.5">
+              <Image
+                src="/images/logo-dark.png"
+                alt="Masar Arabia"
+                width={150}
+                height={34}
+                style={{ width: 'auto' }}
+                className="h-7.5 lg:h-8 w-auto object-contain object-left transition-transform group-hover:scale-[1.02]"
+                priority
+              />
+            </Link>
           </div>
 
-          {/* 2. CENTER NAV LINKS */}
           <div
             className={`flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] pointer-events-auto ${
-              isScrolled
-                ? 'bg-transparent border-transparent shadow-none px-0 py-0'
-                : 'bg-white/95 rounded-full border border-slate-200/90 shadow-sm px-5 py-2'
+              isScrolled ? 'bg-transparent border-transparent shadow-none px-0 py-0' : 'bg-white/95 rounded-full border border-slate-200/90 shadow-sm px-5 py-2'
             }`}
           >
             <nav
               ref={navRef}
+              aria-label="Main"
               className="relative flex items-center gap-1 lg:gap-1.5 text-[12.5px] lg:text-[13px] font-normal text-slate-700 whitespace-nowrap"
             >
-              {/* Sliding active-section pill */}
+              {/* Sliding current-page pill */}
               <span
                 aria-hidden="true"
                 className="absolute top-1/2 left-0 h-7 rounded-full bg-[#e0f2fe] transition-[transform,width,opacity] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] pointer-events-none"
-                style={{
-                  width: pill.width,
-                  transform: `translate(${pill.x}px, -50%)`,
-                  opacity: pill.width ? 1 : 0,
-                }}
+                style={{ width: pill.width, transform: `translate(${pill.x}px, -50%)`, opacity: pill.width ? 1 : 0 }}
               />
 
-              {NAV_ITEMS.map((item) =>
-                item.id === 'solutions' ? (
+              {NAV.map((item) => {
+                const on = item.href === activeHref;
+                const cls = `group relative flex items-center gap-1.5 px-2.5 py-1.5 rounded-full transition-colors ${
+                  on ? 'text-[#0d7cae]' : 'hover:text-slate-950'
+                }`;
+                if (!item.dropdown) {
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      aria-current={on ? 'page' : undefined}
+                      ref={(el) => {
+                        linkRefs.current[item.href] = el;
+                      }}
+                      className={cls}
+                    >
+                      <span
+                        className={`w-1.5 h-1.5 rounded-full bg-[#0d7cae] transition-all duration-300 ${
+                          on ? 'opacity-100 scale-100' : 'opacity-0 scale-0 -mr-3'
+                        }`}
+                      />
+                      <RollText>{item.label}</RollText>
+                    </Link>
+                  );
+                }
+                return (
                   <div
-                    key={item.id}
+                    key={item.href}
                     className="relative"
                     onMouseEnter={() => setSolutionsOpen(true)}
                     onMouseLeave={() => setSolutionsOpen(false)}
                   >
-                    <button
+                    <Link
+                      href={item.href}
+                      aria-current={on ? 'page' : undefined}
+                      aria-haspopup="true"
+                      aria-expanded={solutionsOpen}
                       ref={(el) => {
-                        linkRefs.current[item.id] = el;
+                        linkRefs.current[item.href] = el;
                       }}
-                      className={`group relative flex items-center gap-1 px-2.5 py-1.5 rounded-full transition-colors cursor-pointer ${
-                        active === item.id ? 'text-[#0d7cae]' : 'hover:text-slate-950'
-                      }`}
-                      onClick={() => setSolutionsOpen(!solutionsOpen)}
+                      onFocus={() => setSolutionsOpen(true)}
+                      className={cls}
                     >
                       <RollText>{item.label}</RollText>
                       <ChevronDown className={`w-3.5 h-3.5 transition-transform ${solutionsOpen ? 'rotate-180' : ''}`} />
-                    </button>
+                    </Link>
 
                     {solutionsOpen && (
-                      <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 w-72 mx-dropdown-in">
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 w-[340px] mx-dropdown-in">
                         <div className="bg-white rounded-2xl p-2.5 border border-slate-200/90 shadow-xl grid grid-cols-1 gap-1">
-                          {solutionsList.map((sol, i) => {
-                            const Icon = sol.icon;
+                          {CATEGORIES.map((c, i) => {
+                            const meta = CATEGORY_META[c.id];
+                            const Icon = meta.icon;
+                            const here = pathname === categoryHref(c.slug);
                             return (
-                              <button
-                                key={sol.id}
-                                onClick={() => goToCategory(sol.id)}
+                              <Link
+                                key={c.id}
+                                href={categoryHref(c.slug)}
                                 style={{ animationDelay: `${i * 30}ms` }}
-                                className="mx-item-in group/item flex items-center gap-2.5 p-2 rounded-xl hover:bg-slate-50 text-xs text-slate-800 transition-colors text-left cursor-pointer"
+                                className={`mx-item-in group/item flex items-center gap-2.5 p-2 rounded-xl text-xs transition-colors ${
+                                  here ? 'bg-[#f0f9ff]' : 'hover:bg-slate-50'
+                                }`}
                               >
-                                <Icon className={`w-4 h-4 ${sol.color} transition-transform group-hover/item:scale-125 group-hover/item:-rotate-12`} />
+                                <Icon className={`w-4 h-4 ${meta.color} transition-transform group-hover/item:scale-125 group-hover/item:-rotate-12`} />
                                 <div className="transition-transform group-hover/item:translate-x-1">
-                                  <div className="font-medium text-slate-900">{sol.name}</div>
-                                  <div className="text-[10px] text-slate-400">{sol.desc}</div>
+                                  <div className={`font-medium ${here ? 'text-[#0d7cae]' : 'text-slate-900'}`}>{c.name}</div>
+                                  <div className="text-[10px] text-slate-400">{meta.desc}</div>
                                 </div>
-                              </button>
+                              </Link>
                             );
                           })}
+                          <Link
+                            href="/products"
+                            className="mt-1 flex items-center justify-center gap-2 rounded-xl bg-[#0d7cae] hover:bg-[#0b6a95] text-white text-xs font-bold py-2.5 transition-colors"
+                          >
+                            <LayoutGrid className="w-3.5 h-3.5" /> All products
+                          </Link>
                         </div>
                       </div>
                     )}
                   </div>
-                ) : (
-                  <a
-                    key={item.id}
-                    href={`#${item.id}`}
-                    ref={(el) => {
-                      linkRefs.current[item.id] = el;
-                    }}
-                    className={`group relative flex items-center gap-1.5 px-2.5 py-1.5 rounded-full transition-colors ${
-                      active === item.id ? 'text-[#0d7cae]' : 'hover:text-slate-950'
-                    }`}
-                  >
-                    <span
-                      className={`w-1.5 h-1.5 rounded-full bg-[#0d7cae] transition-all duration-300 ${
-                        active === item.id ? 'opacity-100 scale-100' : 'opacity-0 scale-0 -mr-3'
-                      }`}
-                    />
-                    <RollText>{item.label}</RollText>
-                  </a>
-                )
-              )}
+                );
+              })}
             </nav>
           </div>
 
-          {/* 3. GET A QUOTE BUTTON (Smoothly glides inward from the far right into the unified pill) */}
           <div className="shrink-0 flex items-center pointer-events-auto">
-            <button
-              onClick={() => onOpenRfq()}
-              className="group flex items-center gap-1.5 bg-[#0d7cae] hover:bg-[#0b6a95] text-white px-4 sm:px-5 py-2 rounded-full text-xs font-normal shadow-md shadow-[#0d7cae]/25 transition-all transform hover:scale-[1.02] active:scale-[0.98] cursor-pointer whitespace-nowrap"
+            <Link
+              href="/contact"
+              className="group flex items-center gap-1.5 bg-[#0d7cae] hover:bg-[#0b6a95] text-white px-4 sm:px-5 py-2 rounded-full text-xs font-normal shadow-md shadow-[#0d7cae]/25 transition-all transform hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap"
             >
               <RollText>Get a Quote</RollText>
               <ArrowUpRight className="w-3.5 h-3.5 text-white transition-transform duration-300 group-hover:rotate-45" />
-            </button>
+            </Link>
           </div>
-
         </div>
 
-        {/* ================================================================= */}
-        {/* MOBILE NAV CONTAINER (md:hidden)                                  */}
-        {/* ================================================================= */}
+        {/* ── Mobile bar ── */}
         <div
           className={`md:hidden pointer-events-auto mx-auto flex items-center justify-between transition-all duration-300 ease-out ${
             isScrolled
@@ -282,27 +247,18 @@ export default function Navbar({ onOpenRfq }: NavbarProps) {
               : 'w-full bg-transparent border-transparent px-1 py-1'
           }`}
         >
-          <a href="#" aria-label="Masar Arabia — home" className="flex items-center py-1.5 pr-2">
-            <Image
-              src="/images/logo-dark.png"
-              alt="Masar Arabia"
-              width={130}
-              height={30}
-              style={{ width: 'auto' }}
-              className="h-7 w-auto object-contain"
-              priority
-            />
-          </a>
+          <Link href="/" aria-label="Masar Arabia — home" className="flex items-center py-1.5 pr-2">
+            <Image src="/images/logo-dark.png" alt="Masar Arabia" width={130} height={30} style={{ width: 'auto' }} className="h-7 w-auto object-contain" priority />
+          </Link>
 
           <div className="flex items-center gap-2">
-            <button
-              onClick={() => onOpenRfq()}
+            <Link
+              href="/contact"
               className="flex items-center gap-1.5 h-10 bg-[#0d7cae] text-white px-4 rounded-full text-[13px] font-bold shadow-[0_8px_20px_-8px_rgba(13,124,174,0.8)] active:scale-95 transition-transform"
             >
               <span>Quote</span>
               <ArrowUpRight className="w-3.5 h-3.5 text-white" />
-            </button>
-
+            </Link>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
@@ -313,10 +269,9 @@ export default function Navbar({ onOpenRfq }: NavbarProps) {
             </button>
           </div>
         </div>
-
       </header>
 
-      {/* Mobile menu — full-screen panel with large, thumb-friendly links */}
+      {/* ── Mobile menu — full-screen panel with large, thumb-friendly links ── */}
       {mobileMenuOpen && (
         <div className="mx-menu-in fixed inset-0 z-[60] md:hidden bg-white flex flex-col" role="dialog" aria-modal="true" aria-label="Menu">
           <div className="flex items-center justify-between px-5 pt-4 pb-3 border-b border-slate-100">
@@ -330,14 +285,15 @@ export default function Navbar({ onOpenRfq }: NavbarProps) {
             </button>
           </div>
 
-          <nav className="flex-1 overflow-y-auto px-5 py-4" data-lenis-prevent>
-            {MOBILE_LINKS.map((l, i) => {
-              const on = active === l.href.slice(1);
+          <nav className="flex-1 overflow-y-auto px-5 py-4" data-lenis-prevent aria-label="Mobile">
+            {[{ href: '/', label: 'Home' }, ...NAV].map((l, i) => {
+              const on = l.href === '/' ? pathname === '/' : isActive(pathname, l.href);
               return (
-                <a
+                <Link
                   key={l.href}
                   href={l.href}
                   onClick={() => setMobileMenuOpen(false)}
+                  aria-current={on ? 'page' : undefined}
                   style={{ animationDelay: `${80 + i * 45}ms` }}
                   className={`mx-item-in flex items-center justify-between py-3.5 border-b border-slate-100 ${on ? 'text-[#0d7cae]' : 'text-slate-900'}`}
                 >
@@ -346,7 +302,7 @@ export default function Navbar({ onOpenRfq }: NavbarProps) {
                     <span className="text-2xl font-black uppercase tracking-tight">{l.label}</span>
                   </span>
                   <ArrowUpRight className={`w-5 h-5 ${on ? 'text-[#0d7cae]' : 'text-slate-300'}`} />
-                </a>
+                </Link>
               );
             })}
           </nav>
@@ -360,15 +316,13 @@ export default function Navbar({ onOpenRfq }: NavbarProps) {
                 <Mail className="w-4 h-4 text-[#0d7cae]" /> Email
               </a>
             </div>
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onOpenRfq();
-              }}
+            <Link
+              href="/contact"
+              onClick={() => setMobileMenuOpen(false)}
               className="w-full h-12 rounded-2xl bg-[#0d7cae] text-white text-sm font-bold shadow-md shadow-[#0d7cae]/25 flex items-center justify-center gap-2"
             >
               Request a Quote <ArrowUpRight className="w-4 h-4" />
-            </button>
+            </Link>
           </div>
         </div>
       )}

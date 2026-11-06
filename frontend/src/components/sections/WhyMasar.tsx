@@ -7,12 +7,9 @@ import {
 } from 'lucide-react';
 import { WHY_CHOOSE } from '@/lib/masarContent';
 import SectionHeader from './SectionHeader';
+import { useRequestQuote } from '@/lib/useRequestQuote';
 
 const ICONS = [Boxes, BadgeCheck, Settings2, Gauge, Headset, Tag, Handshake, Smile, Truck, Leaf];
-
-interface WhyMasarProps {
-  onOpenRfq: () => void;
-}
 
 /** Pointer-following glow: writes the pointer position into CSS vars on the hovered card only. */
 function onCardPointerMove(e: React.PointerEvent<HTMLDivElement>) {
@@ -23,7 +20,8 @@ function onCardPointerMove(e: React.PointerEvent<HTMLDivElement>) {
   card.style.setProperty('--gy', `${e.clientY - r.top}px`);
 }
 
-export default function WhyMasar({ onOpenRfq }: WhyMasarProps) {
+export default function WhyMasar() {
+  const onOpenRfq = useRequestQuote();
   return (
     <section id="why-us" className="relative py-20 sm:py-28 bg-[#04121f] text-white overflow-hidden">
       <div className="mx-orb-drift absolute -top-40 right-0 w-[520px] h-[520px] rounded-full bg-[#0d7cae]/25 blur-[110px] pointer-events-none" />
@@ -47,7 +45,7 @@ export default function WhyMasar({ onOpenRfq }: WhyMasarProps) {
             </p>
             <button
               data-anim="up"
-              onClick={onOpenRfq}
+              onClick={() => onOpenRfq()}
               data-magnetic
               className="group mt-8 inline-flex items-center gap-2 rounded-full bg-[#0d7cae] hover:bg-[#0b6a95] px-6 py-3 text-sm font-bold shadow-[0_10px_30px_-8px_rgba(13,124,174,0.7)] transition-colors cursor-pointer"
             >

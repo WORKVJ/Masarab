@@ -36,6 +36,8 @@ export interface CategoryProduct {
 
 export interface Category {
   id: string;
+  /** URL segment for /products/[slug] */
+  slug: string;
   name: string;
   headline: string;
   intro: string;
@@ -46,6 +48,7 @@ export interface Category {
 export const CATEGORIES: Category[] = [
   {
     id: 'cooling',
+    slug: 'cooling-solutions',
     name: 'Cooling Solutions',
     headline: 'Efficient Cooling Solutions',
     intro:
@@ -64,6 +67,7 @@ export const CATEGORIES: Category[] = [
   },
   {
     id: 'water',
+    slug: 'water-treatment',
     name: 'Water Treatment',
     headline: 'Elevating Water Treatment Excellence',
     intro:
@@ -84,6 +88,7 @@ export const CATEGORIES: Category[] = [
   },
   {
     id: 'chemical',
+    slug: 'chemical',
     name: 'Chemical',
     headline: 'Driving Progress through Advanced Chemical Solutions',
     intro:
@@ -105,6 +110,7 @@ export const CATEGORIES: Category[] = [
   },
   {
     id: 'electrical',
+    slug: 'electrical',
     name: 'Electrical',
     headline: 'Empowering Electrical Excellence',
     intro:
@@ -121,6 +127,7 @@ export const CATEGORIES: Category[] = [
   },
   {
     id: 'instrumentation',
+    slug: 'instrumentation',
     name: 'Instrumentation',
     headline: 'Precision Instrumentation Solutions',
     intro:
@@ -139,6 +146,7 @@ export const CATEGORIES: Category[] = [
   },
   {
     id: 'mechanical',
+    slug: 'mechanical',
     name: 'Mechanical',
     headline: 'Unveiling Mechanical Mastery',
     intro:
@@ -153,6 +161,7 @@ export const CATEGORIES: Category[] = [
   },
   {
     id: 'pipe-fittings',
+    slug: 'pipe-fittings-alloys',
     name: 'Pipe Fittings and Alloys',
     headline: 'Elevate Your Piping Systems',
     intro:
@@ -166,6 +175,7 @@ export const CATEGORIES: Category[] = [
   },
   {
     id: 'safety',
+    slug: 'safety-equipment',
     name: 'Safety Equipments',
     headline: 'Elevating Workplace Safety',
     intro:

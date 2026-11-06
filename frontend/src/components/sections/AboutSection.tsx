@@ -1,10 +1,14 @@
+'use client';
+
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { ArrowUpRight, Check, MapPin, PhoneCall } from 'lucide-react';
 import { ABOUT, CONTACT } from '@/lib/masarContent';
 import RollText from '@/components/motion/RollText';
 import SectionHeader from './SectionHeader';
 import StatsStrip from './StatsStrip';
+import { useRequestQuote } from '@/lib/useRequestQuote';
 
 const STRENGTHS = [
   {
@@ -25,11 +29,8 @@ const RING_TEXT = 'TRUSTED INDUSTRIAL PARTNER • JEDDAH • KSA • ';
 /** circumference of the r=47 ring path — the text is stretched to exactly this length so it never overlaps */
 const RING_LENGTH = 2 * Math.PI * 47;
 
-interface AboutSectionProps {
-  onOpenRfq: () => void;
-}
-
-export default function AboutSection({ onOpenRfq }: AboutSectionProps) {
+export default function AboutSection({ showMore = false }: { showMore?: boolean }) {
+  const onOpenRfq = useRequestQuote();
   return (
     <section id="about" className="relative py-16 lg:py-14 bg-white overflow-hidden">
       <div className="absolute inset-x-0 top-0 h-96 bg-gradient-to-b from-sky-50/70 to-transparent pointer-events-none" />
@@ -139,7 +140,7 @@ export default function AboutSection({ onOpenRfq }: AboutSectionProps) {
           {/* actions */}
           <div data-anim="up" className="mt-6 flex flex-wrap items-center gap-3">
             <button
-              onClick={onOpenRfq}
+              onClick={() => onOpenRfq()}
               data-magnetic
               className="group inline-flex items-center gap-2 rounded-full bg-[#0d7cae] hover:bg-[#0b6a95] text-white px-6 py-3 text-sm font-bold shadow-[0_10px_30px_-10px_rgba(13,124,174,0.8)] transition-colors cursor-pointer"
             >
@@ -158,6 +159,12 @@ export default function AboutSection({ onOpenRfq }: AboutSectionProps) {
                 <span className="block font-bold text-slate-900">{CONTACT.phoneDisplay}</span>
               </span>
             </a>
+            {showMore && (
+              <Link href="/about" className="group inline-flex items-center gap-1.5 px-2 py-3 text-sm font-bold text-[#0d7cae]">
+                <RollText>More about us</RollText>
+                <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:rotate-45" />
+              </Link>
+            )}
           </div>
         </div>
       </div>

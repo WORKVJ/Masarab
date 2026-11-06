@@ -2,20 +2,20 @@
 
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { categoryHref } from '@/lib/routes';
 import { ArrowUpRight, Check, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useInView } from '@/lib/useCycle';
 import { CATEGORIES } from '@/lib/masarContent';
 import SectionHeader from './SectionHeader';
 import RollText from '@/components/motion/RollText';
-
-interface SolutionsExplorerProps {
-  onRequestQuote: (productName: string) => void;
-}
+import { useRequestQuote } from '@/lib/useRequestQuote';
 
 const SAFETY_PREVIEW = 18;
 const AUTOPLAY_MS = 7000;
 
-export default function SolutionsExplorer({ onRequestQuote }: SolutionsExplorerProps) {
+export default function SolutionsExplorer() {
+  const onRequestQuote = useRequestQuote();
   const [activeId, setActiveId] = useState(CATEGORIES[0].id);
   const [showAll, setShowAll] = useState(false);
   // Deck motion: which way the new card arrives (next = from below, prev = from above)
@@ -233,6 +233,13 @@ export default function SolutionsExplorer({ onRequestQuote }: SolutionsExplorerP
                       <RollText>Request a Quote</RollText>
                       <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:rotate-45" />
                     </button>
+                    <Link
+                      href={categoryHref(c.slug)}
+                      className="group mt-5 ml-2 inline-flex items-center gap-2 rounded-full border border-white/40 text-white px-5 py-2.5 text-sm font-bold hover:bg-white/10 transition-colors"
+                    >
+                      <RollText>View page</RollText>
+                      <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:rotate-45" />
+                    </Link>
                   </div>
                 </div>
               </div>

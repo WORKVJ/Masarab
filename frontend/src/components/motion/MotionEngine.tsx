@@ -151,7 +151,7 @@ export default function MotionEngine() {
       }
 
       // ── 4. Split-word headings ───────────────────────────────────────
-      gsap.utils.toArray<HTMLElement>('section:not(#hero) h2').forEach((heading) => {
+      gsap.utils.toArray<HTMLElement>('section:not(#hero) h2, [data-split-heading]').forEach((heading) => {
         if (heading.closest('[data-no-split]')) return;
         splitWords(heading);
         const words = heading.querySelectorAll('.mx-word-inner');
@@ -385,7 +385,7 @@ export default function MotionEngine() {
       (entries) => entries.forEach((e) => e.target.classList.toggle('mx-offscreen', !e.isIntersecting)),
       { rootMargin: '100px 0px' }
     );
-    document.querySelectorAll('main > section, main > .mx-marquee, main > footer').forEach((el) => offscreenIO.observe(el));
+    document.querySelectorAll('[data-page] > section, [data-page] > .mx-marquee, footer').forEach((el) => offscreenIO.observe(el));
     cleanups.push(() => offscreenIO.disconnect());
 
     // ── 9. Keep trigger positions fresh as images/data load ────────────

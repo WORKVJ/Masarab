@@ -10,21 +10,23 @@ interface ActiveSectionInfo {
   num: string;
 }
 
-const SECTIONS: ActiveSectionInfo[] = [
-  { id: 'hero', name: 'HOME', num: '01' },
-  { id: 'product-range', name: 'PRODUCT RANGE', num: '02' },
-  { id: 'about', name: 'ABOUT US', num: '03' },
-  { id: 'solutions', name: 'PRODUCTS', num: '04' },
-  { id: 'industries', name: 'INDUSTRIES', num: '05' },
-  { id: 'why-us', name: 'WHY MASAR ARABIA', num: '06' },
-  { id: 'clients', name: 'CLIENTS', num: '07' },
-  { id: 'rfq', name: 'CONTACT', num: '08' },
-];
+/** Section label shown in the dial: `data-label` if present, otherwise the id, prettified. */
+const labelFor = (el: HTMLElement) =>
+  (el.dataset.label || el.id.replace(/[-_]+/g, ' ')).toUpperCase();
+
+/** Reads the current page's sections from the DOM, so the dial works on every page. */
+function readSections(): ActiveSectionInfo[] {
+  return Array.from(document.querySelectorAll<HTMLElement>('[data-page] > section[id]')).map((el, i) => ({
+    id: el.id,
+    name: labelFor(el),
+    num: String(i + 1).padStart(2, '0'),
+  }));
+}
 
 export default function ScrollController() {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [activeSection, setActiveSection] = useState<ActiveSectionInfo>(SECTIONS[0]);
+  const [activeSection, setActiveSection] = useState<ActiveSectionInfo>({ id: '', name: 'TOP', num: '01' });
   const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
@@ -63,7 +65,9 @@ export default function ScrollController() {
     // Layout is measured only on load/resize — never inside the scroll frame (avoids forced reflows)
     let tops: number[] = [];
     let maxScroll = 1;
+    let SECTIONS: ActiveSectionInfo[] = [];
     const measure = () => {
+      SECTIONS = readSections();
       tops = SECTIONS.map((s) => {
         const el = document.getElementById(s.id);
         return el ? el.getBoundingClientRect().top + window.scrollY : Infinity;

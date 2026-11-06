@@ -69,5 +69,22 @@ On Windows you can also use `run_frontend.bat` / `run_backend.bat`.
 - `POST /api/rfq/` — quote request (returns an `RFQ-MA-XXXXXX` reference)
 - `POST /api/contact/` — general enquiry
 
+## Pages
+
+| URL | Page |
+| --- | --- |
+| `/` | Home |
+| `/about` | About Us (+ Why Choose Us, clients) |
+| `/products` | Products catalog (8-category explorer) |
+| `/products/[slug]` | One page per category, e.g. `/products/water-treatment` (pre-rendered) |
+| `/product-range` | Showroom product range (16 lines) |
+| `/industries` | Industries served |
+| `/clients` | Client logos |
+| `/contact` | Contact details + quote form — `/contact?product=Metal%20Valves` pre-fills the form |
+
+Also generated: `/sitemap.xml`, `/robots.txt` and a branded 404 page. Every page shares the navbar,
+footer, smooth scrolling and animations (see `src/app/layout.tsx` and `src/components/motion/`).
+
 Site content (categories, products, clients, contact details) lives in
-[`frontend/src/lib/masarContent.ts`](frontend/src/lib/masarContent.ts).
+[`frontend/src/lib/masarContent.ts`](frontend/src/lib/masarContent.ts); the page list and URLs live in
+[`frontend/src/lib/routes.ts`](frontend/src/lib/routes.ts).

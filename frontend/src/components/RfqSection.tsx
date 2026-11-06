@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { submitRfq } from '@/lib/api';
 import { CATEGORIES, CONTACT, PRODUCT_RANGE } from '@/lib/masarContent';
 
@@ -9,16 +10,20 @@ import { Send, CheckCircle2, PhoneCall, AlertCircle, Mail, MapPin, ArrowUpRight 
 import SectionHeader from './sections/SectionHeader';
 import RollText from './motion/RollText';
 
-interface RfqSectionProps {
-  prefilledProduct?: string;
-  onClearPrefill?: () => void;
-}
-
 const inputCls =
   'w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-900 text-base sm:text-sm placeholder:text-slate-400 focus:outline-none focus:border-[#0d7cae] focus:ring-4 focus:ring-[#0d7cae]/10 transition';
 const labelCls = 'block text-xs font-bold text-slate-700 mb-1.5';
 
-export default function RfqSection({ prefilledProduct, onClearPrefill }: RfqSectionProps) {
+/**
+ * Contact details + quote form. A product/category can be pre-filled via the URL:
+ * /contact?product=Metal%20Valves (every "Enquire" / "Request a Quote" button links here).
+ * Must be rendered inside <Suspense> because it reads search params.
+ */
+export default function RfqSection() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const prefilledProduct = searchParams.get('product') ?? '';
+  const onClearPrefill = () => router.replace('/contact', { scroll: false });
   const [fullName, setFullName] = useState('');
   const [companyName, setCompanyName] = useState('');
   const [email, setEmail] = useState('');
@@ -101,7 +106,7 @@ export default function RfqSection({ prefilledProduct, onClearPrefill }: RfqSect
     setEstimatedQuantity('');
     setSpecificationsNotes('');
     setAppliedPrefill('');
-    onClearPrefill?.();
+    onClearPrefill();
   };
 
   const contactItems = [

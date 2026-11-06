@@ -6,12 +6,10 @@ import { ArrowUpRight, CheckCircle2, PhoneCall } from 'lucide-react';
 import { CTA, CONTACT } from '@/lib/masarContent';
 import { useCycle, useInView } from '@/lib/useCycle';
 import RollText from '@/components/motion/RollText';
+import { useRequestQuote } from '@/lib/useRequestQuote';
 
-interface CtaBandProps {
-  onOpenRfq: () => void;
-}
-
-export default function CtaBand({ onOpenRfq }: CtaBandProps) {
+export default function CtaBand() {
+  const onOpenRfq = useRequestQuote();
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref);
   const [active] = useCycle(CTA.achievements.length, 1800, inView);
@@ -46,7 +44,7 @@ export default function CtaBand({ onOpenRfq }: CtaBandProps) {
               </p>
               <div data-anim="up" className="mt-8 flex flex-wrap gap-3">
                 <button
-                  onClick={onOpenRfq}
+                  onClick={() => onOpenRfq()}
                   data-magnetic
                   className="group inline-flex items-center gap-2 rounded-full bg-white text-slate-950 px-6 py-3 text-sm font-bold hover:bg-sky-50 transition-colors cursor-pointer"
                 >

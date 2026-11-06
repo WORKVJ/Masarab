@@ -2,20 +2,27 @@ import type { Metadata, Viewport } from "next";
 import "lenis/dist/lenis.css";
 import "./globals.css";
 import Preloader from "@/components/Preloader";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import MotionRoot from "@/components/motion/MotionRoot";
 import { PRELOADER_HEAD_SCRIPT } from "@/lib/preloader";
+import { SITE_URL } from "@/lib/routes";
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
 };
 
-const SITE_URL = "https://masararabia.com";
 const SITE_DESCRIPTION =
   "Masar Arabia First Trading Company is a leading supplier of industrial products in Saudi Arabia — cooling solutions, water treatment, chemicals, electrical, instrumentation, mechanical, pipe fittings & alloys and safety equipment for Power, Oil & Gas, Desalination and industrial plants.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Masar Arabia | Leading Supplier of Industrial Solutions in Saudi Arabia",
+  // each page sets its own title → "About Us | Masar Arabia" etc.
+  title: {
+    default: "Masar Arabia | Leading Supplier of Industrial Solutions in Saudi Arabia",
+    template: "%s | Masar Arabia",
+  },
   description: SITE_DESCRIPTION,
   keywords: [
     "industrial supplier Saudi Arabia",
@@ -31,7 +38,6 @@ export const metadata: Metadata = {
     "pipe fittings and alloys Jeddah",
   ],
   authors: [{ name: "Masar Arabia First Trading Company" }],
-  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     url: SITE_URL,
@@ -67,7 +73,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="h-full antialiased scroll-smooth" suppressHydrationWarning>
+    <html lang="en" className="h-full antialiased" suppressHydrationWarning>
       <head>
         {/* Runs before first paint: skip the branded loader if it was already seen this session */}
         <script dangerouslySetInnerHTML={{ __html: PRELOADER_HEAD_SCRIPT }} />
@@ -102,7 +108,15 @@ export default function RootLayout({
             }),
           }}
         />
-        {children}
+        <Navbar />
+        <main
+          id="main"
+          className="min-h-screen flex flex-col overflow-x-clip bg-white text-slate-900 selection:bg-[#0d7cae] selection:text-white relative"
+        >
+          {children}
+          <Footer />
+        </main>
+        <MotionRoot />
       </body>
     </html>
   );

@@ -8,10 +8,7 @@ import { useCycle, useInView } from '@/lib/useCycle';
 import SectionHeader from './SectionHeader';
 import ProductIcon from './ProductIcons';
 import RollText from '@/components/motion/RollText';
-
-interface ProductRangeSectionProps {
-  onRequestQuote: (productName: string) => void;
-}
+import { useRequestQuote } from '@/lib/useRequestQuote';
 
 /** Per-card 3D tilt toward the pointer — writes CSS vars on the hovered card only (no React re-render). */
 function onTiltMove(e: React.PointerEvent<HTMLElement>) {
@@ -28,7 +25,8 @@ function onTiltLeave(e: React.PointerEvent<HTMLElement>) {
   e.currentTarget.style.setProperty('--ry', '0deg');
 }
 
-export default function ProductRangeSection({ onRequestQuote }: ProductRangeSectionProps) {
+export default function ProductRangeSection() {
+  const onRequestQuote = useRequestQuote();
   const sectionRef = useRef<HTMLElement>(null);
   const inView = useInView(sectionRef, 0.1);
   const [filter, setFilter] = useState<RangeGroup | 'all'>('all');

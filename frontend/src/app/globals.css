@@ -1625,3 +1625,11 @@ html.mx-motion { scroll-behavior: auto !important; }
   to   { opacity: 1; transform: none; }
 }
 @media (prefers-reduced-motion: reduce) { .mx-menu-in { animation: none !important; } }
+
+/* Page transition — every navigation fades the new page up (transform cleared afterwards) */
+.mx-page-in { animation: mxPageIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) backwards; }
+@keyframes mxPageIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) { .mx-page-in { animation: none !important; } }
