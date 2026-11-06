@@ -34,8 +34,8 @@ export default function SectionHeader({
       </span>
       <h2
         className={`${
-          compact ? 'mt-4 text-3xl sm:text-[34px] xl:text-[38px]' : 'mt-5 text-3xl sm:text-4xl lg:text-[46px]'
-        } font-black uppercase tracking-[-0.03em] leading-[1.04] ${
+          compact ? 'mt-4 text-[28px] sm:text-[32px] xl:text-[36px]' : 'mt-5 text-[28px] sm:text-4xl lg:text-[42px]'
+        } font-black uppercase tracking-[-0.025em] leading-[1.08] text-balance ${
           dark ? 'text-white' : 'text-slate-950'
         }`}
       >
@@ -44,7 +44,7 @@ export default function SectionHeader({
       {intro && (
         <p
           data-anim="up"
-          className={`${compact ? 'mt-4' : 'mt-5'} text-sm sm:text-[15px] leading-relaxed ${dark ? 'text-white/70' : 'text-slate-600'} ${
+          className={`${compact ? 'mt-4' : 'mt-6'} text-[15px] sm:text-[17px] leading-[1.75] ${dark ? 'text-white/75' : 'text-slate-600'} ${
             center ? 'mx-auto' : ''
           } max-w-2xl`}
         >

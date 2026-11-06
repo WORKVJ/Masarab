@@ -62,6 +62,7 @@ export default function CtaBand() {
             </div>
 
             <div className="lg:col-span-5 grid grid-cols-2 gap-3">
+              <p className="col-span-2 text-[11px] font-mono uppercase tracking-[0.18em] text-sky-100/85">{CTA.achievementsHeading}</p>
               {CTA.achievements.map((a, i) => {
                 const on = i === active;
                 return (

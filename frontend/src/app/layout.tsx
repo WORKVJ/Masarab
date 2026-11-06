@@ -1,12 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import "lenis/dist/lenis.css";
 import "./globals.css";
 import Preloader from "@/components/Preloader";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import MotionRoot from "@/components/motion/MotionRoot";
+import ChatContact from "@/components/chat/ChatContact";
 import { PRELOADER_HEAD_SCRIPT } from "@/lib/preloader";
 import { SITE_URL } from "@/lib/routes";
+import { siteJsonLd } from "@/lib/seo";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -14,7 +15,7 @@ export const viewport: Viewport = {
 };
 
 const SITE_DESCRIPTION =
-  "Masar Arabia First Trading Company is a leading supplier of industrial products in Saudi Arabia — cooling solutions, water treatment, chemicals, electrical, instrumentation, mechanical, pipe fittings & alloys and safety equipment for Power, Oil & Gas, Desalination and industrial plants.";
+  "Leading industrial supplier in Saudi Arabia: cooling towers, water treatment, chemicals, electrical, instrumentation, mechanical, pipe fittings & safety gear.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -84,28 +85,7 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              name: "Masar Arabia First Trading Company",
-              alternateName: "Masar Arabia",
-              url: SITE_URL,
-              logo: `${SITE_URL}/images/logo-dark.png`,
-              description: SITE_DESCRIPTION,
-              email: "info@masararabia.com",
-              telephone: "+966126576896",
-              address: {
-                "@type": "PostalAddress",
-                streetAddress: "Othman Bin Afan Street, PO Box No. 16301",
-                addressLocality: "Jeddah",
-                postalCode: "22234",
-                addressCountry: "SA",
-              },
-              sameAs: [
-                "https://www.facebook.com/people/Masar-Arabia/100091987398412/",
-                "https://www.instagram.com/masararabia/",
-              ],
-            }),
+            __html: JSON.stringify(siteJsonLd(SITE_DESCRIPTION)).replace(/</g, "\\u003c"),
           }}
         />
         <Navbar />
@@ -117,6 +97,7 @@ export default function RootLayout({
           <Footer />
         </main>
         <MotionRoot />
+        <ChatContact />
       </body>
     </html>
   );

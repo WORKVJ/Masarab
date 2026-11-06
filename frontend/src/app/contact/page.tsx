@@ -1,35 +1,29 @@
 import type { Metadata } from 'next';
-import { Suspense } from 'react';
+import { pageMetadata } from '@/lib/seo';
 import PageHero from '@/components/sections/PageHero';
 import RfqSection from '@/components/RfqSection';
-import { CONTACT } from '@/lib/masarContent';
+import { CONTACT, CONTACT_PAGE } from '@/lib/masarContent';
 
-const DESCRIPTION = `Request a quotation or contact Masar Arabia — ${CONTACT.addressLines.join(', ')} · ${CONTACT.phoneDisplay} · ${CONTACT.email}`;
+const DESCRIPTION = `Contact Masar Arabia, ${CONTACT.addressLines[0]}, Jeddah 22234. Call ${CONTACT.phoneDisplay} or email ${CONTACT.email} for quotes and product inquiries.`;
 
-export const metadata: Metadata = {
-  title: 'Contact Us',
-  description: DESCRIPTION,
-  alternates: { canonical: '/contact' },
-  openGraph: { url: '/contact', title: 'Contact Masar Arabia', description: DESCRIPTION },
-};
+export const metadata: Metadata = pageMetadata({ title: 'Contact Us – Industrial Product Inquiries', description: DESCRIPTION, path: '/contact' });
 
-export default function ContactPage() {
+export default async function ContactPage({ searchParams }: { searchParams: Promise<{ product?: string | string[] }> }) {
+  const { product } = await searchParams;
   return (
     <>
       <PageHero
-        eyebrow="Contact Us"
+        eyebrow="Get In Touch"
         title={
           <>
-            Let&apos;s Talk About <span className="text-[#0d7cae]">Your Project</span>
+            Contact <span className="text-[#0d7cae]">Us</span>
           </>
         }
-        intro="Share your requirements — product names, quantities or drawings — and our team will get back to you with pricing and availability."
-        crumbs={[{ label: 'Contact', href: '/contact' }]}
+        intro={CONTACT_PAGE.text}
+        crumbs={[{ label: 'Contacts', href: '/contact' }]}
       />
-      {/* RfqSection reads ?product= from the URL, so it renders inside a Suspense boundary */}
-      <Suspense fallback={<div className="min-h-[600px]" />}>
-        <RfqSection />
-      </Suspense>
+      {/* ?product= (from any "Enquire" / "Request a Quote" button) pre-fills the form */}
+      <RfqSection prefilledProduct={typeof product === 'string' ? product : ''} />
     </>
   );
 }

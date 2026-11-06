@@ -225,7 +225,7 @@ export default function SolutionsExplorer() {
                       {c.products.length} Products
                     </span>
                     <h3 className="text-2xl sm:text-3xl font-black uppercase tracking-tight leading-tight">{c.headline}</h3>
-                    <p className="mt-3 text-sm text-white/75 leading-relaxed">{c.intro}</p>
+                    <p className="mt-3 text-[15px] text-white/80 leading-[1.7]">{c.summary}</p>
                     <button
                       onClick={() => onRequestQuote(c.name)}
                       className="group mt-5 inline-flex items-center gap-2 rounded-full bg-white text-slate-950 px-5 py-2.5 text-sm font-bold hover:bg-sky-50 transition-colors cursor-pointer"
@@ -293,7 +293,7 @@ export default function SolutionsExplorer() {
                             {String(i + 1).padStart(2, '0')}
                           </span>
                         </div>
-                        <p className="mt-2 text-[13px] text-slate-500 leading-relaxed flex-1">{p.description}</p>
+                        <p className="mt-2 text-sm text-slate-600 leading-[1.7] flex-1">{p.description}</p>
                         <button
                           onClick={() => onRequestQuote(p.name)}
                           className="mt-2 self-start inline-flex items-center gap-1 py-2.5 -mb-2 text-xs font-bold text-[#0d7cae] cursor-pointer"

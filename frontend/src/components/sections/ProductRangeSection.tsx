@@ -19,11 +19,19 @@ function onTiltMove(e: React.PointerEvent<HTMLElement>) {
   const ny = (e.clientY - r.top) / r.height - 0.5;
   card.style.setProperty('--rx', `${(-ny * 8).toFixed(2)}deg`);
   card.style.setProperty('--ry', `${(nx * 8).toFixed(2)}deg`);
+  // Unitless pointer position (-0.5…0.5) for the photo parallax and the cursor glare
+  card.style.setProperty('--px', nx.toFixed(3));
+  card.style.setProperty('--py', ny.toFixed(3));
 }
 function onTiltLeave(e: React.PointerEvent<HTMLElement>) {
-  e.currentTarget.style.setProperty('--rx', '0deg');
-  e.currentTarget.style.setProperty('--ry', '0deg');
+  const s = e.currentTarget.style;
+  s.setProperty('--rx', '0deg');
+  s.setProperty('--ry', '0deg');
+  s.setProperty('--px', '0');
+  s.setProperty('--py', '0');
 }
+
+const HUD_CORNERS = ['tl', 'tr', 'bl', 'br'] as const;
 
 export default function ProductRangeSection() {
   const onRequestQuote = useRequestQuote();
@@ -159,42 +167,94 @@ export default function ProductRangeSection() {
                         : 'border-white/10 hover:border-white/25'
                     }`}
                   >
-                    {/* Illustration / photo tile */}
-                    <div className="relative h-28 sm:h-36 rounded-2xl bg-gradient-to-br from-[#16191d] via-[#0e1013] to-[#090a0c] border border-white/[0.06] flex items-center justify-center overflow-hidden">
-                      <span
-                        aria-hidden="true"
-                        className={`absolute inset-0 bg-gradient-to-br from-[#0d7cae]/45 via-[#0a2236] to-[#0b0d10] transition-opacity duration-700 ${
-                          active ? 'opacity-100' : 'opacity-0'
-                        }`}
-                      />
+                    {/* Photo tile (falls back to the line illustration when a product has no photo) */}
+                    <div
+                      className={`relative rounded-2xl bg-gradient-to-br from-[#16191d] via-[#0e1013] to-[#090a0c] border border-white/[0.06] flex items-center justify-center overflow-hidden ${
+                        p.image ? 'aspect-[5/4]' : 'h-28 sm:h-36'
+                      }`}
+                    >
+                      {p.image ? (
+                        <>
+                          {/* Dimmed and slightly desaturated at rest so light studio shots sit in the dark section;
+                              the spotlighted / hovered card comes up to full colour */}
+                          {/* .mx-tile-photo: shutter-reveal zoom (MotionEngine) · .mx-tile-par: pointer parallax (CSS) */}
+                          <div className="mx-tile-photo absolute inset-0">
+                            <div className="mx-tile-par absolute inset-0">
+                              <Image
+                                src={p.image}
+                                alt={p.name}
+                                fill
+                                sizes="(min-width: 1024px) 300px, 50vw"
+                                className={`object-cover transition-[scale,filter] duration-700 ease-out group-hover:scale-[1.06] group-hover:brightness-100 group-hover:saturate-100 ${
+                                  active ? 'scale-[1.06] brightness-100 saturate-100' : 'brightness-[0.72] saturate-[0.8]'
+                                }`}
+                              />
+                            </div>
+                          </div>
+                          {/* Dark vignette: blends the photo edges into the card and keeps the labels legible */}
+                          <span
+                            aria-hidden="true"
+                            className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/5 to-black/35 pointer-events-none"
+                          />
+                          {/* Brand-blue wash on the spotlighted card */}
+                          <span
+                            aria-hidden="true"
+                            className={`absolute inset-0 bg-gradient-to-br from-[#0d7cae]/55 via-[#0d7cae]/10 to-transparent mix-blend-multiply transition-opacity duration-700 pointer-events-none ${
+                              active ? 'opacity-100' : 'opacity-0'
+                            }`}
+                          />
+                          {/* Glare that follows the cursor */}
+                          <span aria-hidden="true" className="mx-tile-glare" />
+                          {/* Light sheen that sweeps across on hover */}
+                          <span aria-hidden="true" className="mx-tile-sheen absolute inset-0 pointer-events-none" />
+                          {/* Inspection scan line — sweeps down each time the card is spotlighted */}
+                          <span aria-hidden="true" className="mx-tile-scan" />
+                          {/* Viewfinder corner brackets — snap in on the spotlighted / hovered card */}
+                          {HUD_CORNERS.map((c) => (
+                            <span key={c} aria-hidden="true" data-c={c} className="mx-hud-c" />
+                          ))}
+                          {/* Colour shutter for the scroll-in reveal (idle unless MotionEngine runs it) */}
+                          <span aria-hidden="true" className="mx-tile-shutter" />
+                        </>
+                      ) : (
+                        <>
+                          <span
+                            aria-hidden="true"
+                            className={`absolute inset-0 bg-gradient-to-br from-[#0d7cae]/45 via-[#0a2236] to-[#0b0d10] transition-opacity duration-700 ${
+                              active ? 'opacity-100' : 'opacity-0'
+                            }`}
+                          />
+                          <ProductIcon
+                            id={p.id}
+                            className={`mx-ico mx-ico-dark relative w-20 h-20 sm:w-24 sm:h-24 text-sky-300 transition-transform duration-500 ${
+                              active ? 'scale-110' : ''
+                            }`}
+                          />
+                        </>
+                      )}
                       <svg
                         viewBox="0 0 200 200"
-                        className="mx-tile-rings absolute -bottom-12 -right-12 w-40 h-40 text-sky-300/15 fill-none pointer-events-none"
+                        className={`mx-tile-rings absolute -bottom-12 -right-12 w-40 h-40 fill-none pointer-events-none ${
+                          p.image ? 'text-sky-200/35 mix-blend-screen' : 'text-sky-300/15'
+                        }`}
                         aria-hidden="true"
                       >
                         <circle cx="100" cy="100" r="45" stroke="currentColor" strokeWidth="1.2" strokeDasharray="6 5" />
                         <circle cx="100" cy="100" r="80" stroke="currentColor" strokeWidth="1" />
                       </svg>
-                      {p.image ? (
-                        <Image
-                          src={p.image}
-                          alt={p.name}
-                          fill
-                          sizes="(min-width: 1024px) 25vw, 50vw"
-                          className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                      ) : (
-                        <ProductIcon
-                          id={p.id}
-                          className={`mx-ico mx-ico-dark relative w-20 h-20 sm:w-24 sm:h-24 text-sky-300 transition-transform duration-500 ${
-                            active ? 'scale-110' : ''
-                          }`}
-                        />
-                      )}
+                      {/* Inner hairline — turns sky blue on the spotlighted card */}
                       <span
-                        className={`absolute top-2.5 left-3 font-mono text-[10px] transition-colors duration-500 ${
-                          active ? 'text-sky-300' : 'text-white/35'
+                        aria-hidden="true"
+                        className={`absolute inset-0 rounded-2xl ring-1 ring-inset transition-colors duration-500 pointer-events-none ${
+                          active ? 'ring-sky-400/45' : 'ring-white/[0.08]'
                         }`}
+                      />
+                      <span
+                        className={`absolute font-mono text-[10px] transition-colors duration-500 ${
+                          p.image
+                            ? 'z-[3] top-3.5 left-4 rounded-full bg-black/55 backdrop-blur-sm px-1.5 py-0.5 leading-none'
+                            : 'top-2.5 left-3'
+                        } ${active ? 'text-sky-300' : p.image ? 'text-white/70' : 'text-white/35'}`}
                       >
                         {String(i + 1).padStart(2, '0')}
                       </span>

@@ -1,17 +1,13 @@
 import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import PageHero from '@/components/sections/PageHero';
 import ProductRangeSection from '@/components/sections/ProductRangeSection';
 import CtaBand from '@/components/sections/CtaBand';
 
 const DESCRIPTION =
-  'PVC, CPVC, PPR, PVDF, ABS, copper and cast iron pipes & fittings, drainage, manhole covers, test plugs, mechanical couplings, metal valves and fire fighting valves.';
+  'PVC, CPVC, PPR, PVDF, ABS, copper and cast iron pipes & fittings, drainage, manhole covers, test plugs, couplings and valves — supplied across Saudi Arabia.';
 
-export const metadata: Metadata = {
-  title: 'Product Range',
-  description: DESCRIPTION,
-  alternates: { canonical: '/product-range' },
-  openGraph: { url: '/product-range', title: 'Product Range | Masar Arabia', description: DESCRIPTION },
-};
+export const metadata: Metadata = pageMetadata({ title: 'Pipes, Fittings, Valves & Civil Products', description: DESCRIPTION, path: '/product-range' });
 
 export default function ProductRangePage() {
   return (

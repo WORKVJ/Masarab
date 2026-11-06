@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import PageHero from '@/components/sections/PageHero';
 import ClientsSection from '@/components/sections/ClientsSection';
 import CtaBand from '@/components/sections/CtaBand';
@@ -6,12 +7,7 @@ import CtaBand from '@/components/sections/CtaBand';
 const DESCRIPTION =
   'Chosen by leading clients in Saudi Arabia for quality and reliability — developers, utilities and industrial groups across the Kingdom.';
 
-export const metadata: Metadata = {
-  title: 'Clients',
-  description: DESCRIPTION,
-  alternates: { canonical: '/clients' },
-  openGraph: { url: '/clients', title: 'Our Clients | Masar Arabia', description: DESCRIPTION },
-};
+export const metadata: Metadata = pageMetadata({ title: 'Our Clients – Trusted Across Saudi Arabia', description: DESCRIPTION, path: '/clients' });
 
 export default function ClientsPage() {
   return (

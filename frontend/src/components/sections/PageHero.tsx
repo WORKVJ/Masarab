@@ -99,7 +99,7 @@ export default function PageHero({ eyebrow, title, intro, crumbs, image, backgro
 
           <h1
             data-split-heading
-            className={`mt-5 text-4xl sm:text-5xl lg:text-[60px] font-black uppercase tracking-[-0.035em] leading-[0.98] ${
+            className={`mt-5 text-[34px] sm:text-5xl lg:text-[56px] font-black uppercase tracking-[-0.03em] leading-[1.02] text-balance ${
               dark ? 'text-white' : 'text-slate-950'
             }`}
           >
@@ -109,7 +109,7 @@ export default function PageHero({ eyebrow, title, intro, crumbs, image, backgro
           {intro && (
             <p
               data-anim="up"
-              className={`mt-6 text-[15px] sm:text-base leading-relaxed max-w-2xl ${dark ? 'text-white/75' : 'text-slate-600'}`}
+              className={`mt-6 text-base sm:text-[17px] leading-[1.75] max-w-2xl ${dark ? 'text-white/75' : 'text-slate-600'}`}
             >
               {intro}
             </p>

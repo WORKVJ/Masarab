@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { submitRfq } from '@/lib/api';
 import { CATEGORIES, CONTACT, PRODUCT_RANGE } from '@/lib/masarContent';
 
@@ -17,13 +17,12 @@ const labelCls = 'block text-xs font-bold text-slate-700 mb-1.5';
 /**
  * Contact details + quote form. A product/category can be pre-filled via the URL:
  * /contact?product=Metal%20Valves (every "Enquire" / "Request a Quote" button links here).
- * Must be rendered inside <Suspense> because it reads search params.
+ * The contact page reads ?product= on the server and passes it in, so the whole section is in the
+ * server HTML (address, phone, email and form visible to search engines) and hydrates in one pass —
+ * no Suspense boundary that the motion engine could alter before it hydrates.
  */
-export default function RfqSection() {
-  const searchParams = useSearchParams();
+export default function RfqSection({ prefilledProduct = '' }: { prefilledProduct?: string }) {
   const router = useRouter();
-  const prefilledProduct = searchParams.get('product') ?? '';
-  const onClearPrefill = () => router.replace('/contact', { scroll: false });
   const [fullName, setFullName] = useState('');
   const [companyName, setCompanyName] = useState('');
   const [email, setEmail] = useState('');
@@ -106,7 +105,7 @@ export default function RfqSection() {
     setEstimatedQuantity('');
     setSpecificationsNotes('');
     setAppliedPrefill('');
-    onClearPrefill();
+    if (prefilledProduct) router.replace('/contact', { scroll: false });
   };
 
   const contactItems = [
@@ -259,3 +258,4 @@ export default function RfqSection() {
     </section>
   );
 }
+

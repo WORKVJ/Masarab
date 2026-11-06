@@ -57,10 +57,14 @@ class ProjectCaseViewSet(viewsets.ReadOnlyModelViewSet):
 class QuoteRequestViewSet(viewsets.ModelViewSet):
     queryset = QuoteRequest.objects.all().order_by('-created_at')
     serializer_class = QuoteRequestSerializer
-    http_method_names = ['get', 'post', 'head', 'options']
+    # Public endpoints accept new submissions only; the team reads them in Django admin.
+    # (Allowing GET here would let anyone list every customer's name, email and phone.)
+    http_method_names = ['post', 'options']
 
 
 class ContactInquiryViewSet(viewsets.ModelViewSet):
     queryset = ContactInquiry.objects.all().order_by('-created_at')
     serializer_class = ContactInquirySerializer
-    http_method_names = ['get', 'post', 'head', 'options']
+    # Public endpoints accept new submissions only; the team reads them in Django admin.
+    # (Allowing GET here would let anyone list every customer's name, email and phone.)
+    http_method_names = ['post', 'options']

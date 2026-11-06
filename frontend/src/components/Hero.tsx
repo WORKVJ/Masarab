@@ -5,26 +5,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import RollText from '@/components/motion/RollText';
 import CountUp from '@/components/motion/CountUp';
-import {
-  ArrowUpRight,
-  Play,
-  Star,
-  Building2,
-  ShieldCheck,
-  Layers,
-  Sparkles,
-  PhoneCall,
-  CheckCircle2,
-  Check,
-  Activity,
-  FileCheck2,
-  TrendingUp,
-  Droplet,
-  Flame,
-  Wrench,
-  Calendar
-} from 'lucide-react';
+import { ArrowUpRight, Play, Building2, PhoneCall, TrendingUp, Droplet, ShieldCheck, MapPin } from 'lucide-react';
 import { useRequestQuote } from '@/lib/useRequestQuote';
+import { ABOUT, CATEGORIES, CONTACT, CTA, STATS_BANNER } from '@/lib/masarContent';
+import { categoryHref } from '@/lib/routes';
 
 export default function Hero() {
   const onOpenRfq = useRequestQuote();
@@ -94,15 +78,15 @@ export default function Hero() {
             
             {/* Giant Bold Headline (Clean 2-Line Display Layout with Official Logo Blue) */}
             <h1 className="text-3xl sm:text-4xl lg:text-[48px] xl:text-[56px] font-black uppercase tracking-[-0.035em] leading-[0.98] text-slate-950">
-              <span className="block whitespace-nowrap">BEST SOLUTION FOR</span>
+              <span className="block whitespace-nowrap">LEADING SUPPLIER OF </span>
               <span className="mx-text-shine block text-transparent bg-clip-text bg-gradient-to-r from-[#0d7cae] via-[#38bdf8] to-[#0d7cae] mt-1 sm:mt-1.5">
-                YOUR BUSINESS
+                INDUSTRIAL SOLUTIONS
               </span>
             </h1>
 
             {/* Subtitle Paragraph */}
             <p className="text-xs sm:text-sm text-slate-600 max-w-lg leading-relaxed font-normal">
-              Supplying certified ASTM &amp; DIN industrial piping, high-pressure valves, and structural gratings to Saudi Arabia&apos;s premier contractors, Yanbu refineries, SWCC desalination plants, and national mega-projects.
+              {STATS_BANNER.text}
             </p>
 
             {/* Action Pill Buttons */}
@@ -130,11 +114,11 @@ export default function Hero() {
 
               {/* Direct Phone Line Pill */}
               <a
-                href="tel:+966126473020"
+                href={CONTACT.phoneHref}
                 className="group hidden xl:inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-slate-50 hover:bg-slate-100 border border-slate-200 hover:border-sky-300 text-xs font-mono font-bold text-slate-800 transition-colors"
               >
                 <PhoneCall className="w-3.5 h-3.5 text-[#0d7cae] group-hover:animate-[mxRing_0.6s_ease-in-out]" />
-                <span>+966 12 647 3020</span>
+                <span>{CONTACT.phoneDisplay}</span>
               </a>
 
             </div>
@@ -153,15 +137,15 @@ export default function Hero() {
               <div className="mx-shine group/stat relative overflow-hidden bg-gradient-to-br from-[#ebfcf3] to-[#d1fae5]/70 border border-emerald-300/60 rounded-[16px] p-2 sm:p-2.5 shadow-xs flex flex-col justify-between hover:shadow-md hover:-translate-y-0.5 transition-all min-h-[78px] sm:min-h-0 sm:h-[70px]">
                 <div className="flex items-center justify-between">
                   <span className="text-lg sm:text-xl font-normal text-slate-800 font-mono tracking-tight leading-none">
-                    <CountUp value={4.9} decimals={1} delay={350} duration={1400} afterIntro />
+                    <CountUp value={ABOUT.stats[0].value} suffix={ABOUT.stats[0].suffix} delay={350} duration={1400} afterIntro />
                   </span>
                   <div className="w-4.5 h-4.5 rounded-full bg-gradient-to-br from-amber-300 to-amber-500 shadow-2xs flex items-center justify-center transition-transform duration-500 group-hover/stat:rotate-[72deg] group-hover/stat:scale-110">
-                    <Star className="w-2.5 h-2.5 fill-white text-white" />
+                    <Building2 className="w-2.5 h-2.5 text-white" />
                   </div>
                 </div>
                 <div>
-                  <span className="text-[11px] sm:text-[9.5px] font-normal text-slate-700 block leading-tight">2.6K+ Verified Batches</span>
-                  <span className="text-[10px] sm:text-[7.5px] text-emerald-700 font-mono font-normal block leading-none">Aramco 9COM Validated</span>
+                  <span className="text-[11px] sm:text-[9.5px] font-normal text-slate-700 block leading-tight">{ABOUT.stats[0].label}</span>
+                  <span className="text-[10px] sm:text-[7.5px] text-emerald-700 font-mono font-normal block leading-none">{CTA.achievements[0]}</span>
                 </div>
               </div>
 
@@ -169,17 +153,17 @@ export default function Hero() {
               <div className="mx-shine mx-shine-late group/stat bg-gradient-to-br from-[#e0f2fe] via-[#d5eefe] to-[#bae6fd]/70 border border-sky-200/90 rounded-[16px] p-2 sm:p-2.5 shadow-xs flex flex-col justify-between hover:shadow-md hover:-translate-y-0.5 transition-all min-h-[78px] sm:min-h-0 sm:h-[70px] relative overflow-hidden">
                 <div className="flex items-center justify-between">
                   <span className="text-lg sm:text-xl font-normal text-slate-800 font-mono tracking-tight leading-none">
-                    <CountUp value={80} suffix="K+" delay={450} duration={1500} afterIntro />
+                    <CountUp value={ABOUT.stats[1].value} suffix={ABOUT.stats[1].suffix} delay={450} duration={1500} afterIntro />
                   </span>
                   <div className="w-4.5 h-4.5 rounded-full bg-[#0d7cae] shadow-2xs flex items-center justify-center transition-transform duration-500 group-hover/stat:-translate-y-0.5 group-hover/stat:scale-110">
                     <TrendingUp className="w-2.5 h-2.5 text-white" />
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-[10.5px] sm:text-[9px] font-normal text-slate-600 font-mono leading-none">Jeddah Stock</span>
+                  <span className="text-[10.5px] sm:text-[9px] font-normal text-slate-600 font-mono leading-none">{ABOUT.stats[1].label}</span>
                   <div className="inline-flex items-center gap-1 text-[10px] sm:text-[7.5px] font-mono font-normal bg-white/90 px-1.5 py-0.5 rounded-full border border-sky-200/60 shadow-2xs text-[#0d7cae]">
                     <span className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span>+18% Ready</span>
+                    <span>{CTA.achievements[2]}</span>
                   </div>
                 </div>
               </div>
@@ -234,7 +218,7 @@ export default function Hero() {
                 <div className="animate-float">
                 <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white/95 border border-slate-200 shadow-2xs text-[10px] sm:text-[8.5px] font-mono font-normal text-slate-700">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  <span>Aramco 9COM Ready</span>
+                  <span>{CTA.achievements[1]}</span>
                 </div>
                 </div>
               </div>
@@ -258,7 +242,7 @@ export default function Hero() {
               <div className="mx-depth-mid relative z-10 w-[90%] sm:w-[86%] max-w-[340px] sm:max-w-[370px] h-[410px] sm:h-[450px] lg:h-[480px] xl:h-[490px] flex items-end justify-center select-none pointer-events-none">
                 <Image
                   src="/images/industrial-engineer.png"
-                  alt="Masar Arabia Industrial Piping & Grating Technical Specialist"
+                  alt="Masar Arabia industrial engineer"
                   fill
                   priority
                   sizes="(max-width: 640px) 280px, 400px"
@@ -297,8 +281,8 @@ export default function Hero() {
                     <circle cx="100" cy="4" r="2" fill="#0d7cae" />
                   </svg>
                 </div>
-                <span className="text-[10px] sm:text-[8px] font-mono font-normal text-slate-700 block mt-0.5 leading-none">ASTM Deflection Pass</span>
-                <span className="text-[10px] sm:text-[7.5px] font-mono text-emerald-600 font-normal block leading-none">L/500 Ratio (99.8%)</span>
+                <span className="text-[10px] sm:text-[8px] font-mono font-normal text-slate-700 block mt-0.5 leading-none">{ABOUT.stats[2].value}{ABOUT.stats[2].suffix} Years</span>
+                <span className="text-[10px] sm:text-[7.5px] font-mono text-emerald-600 font-normal block leading-none">of Experience</span>
               </div>
               </div>
 
@@ -324,21 +308,23 @@ export default function Hero() {
             {/* Auto-Moving Cards Track */}
             <div className="animate-marquee flex items-center gap-3.5 sm:gap-4 hover:[animation-play-state:paused] py-2">
               
-              {/* Loop 1: Complete 6 Distinct Content Cards (1:1 with Reference Design) */}
-              <MovingCard1 key="c1-a" />
-              <MovingCard2 key="c2-a" />
-              <MovingCard3 key="c3-a" />
-              <MovingCard4 key="c4-a" />
-              <MovingCard5 key="c5-a" />
-              <MovingCard6 key="c6-a" />
+              {/* Loop 1: six content cards */}
+              <MovingCard1 />
+              <MovingCard2 />
+              <MovingCard3 />
+              <MovingCard4 />
+              <MovingCard5 />
+              <MovingCard6 />
 
-              {/* Loop 2: Duplicate Set for Seamless Continuous Loop */}
-              <MovingCard1 key="c1-b" />
-              <MovingCard2 key="c2-b" />
-              <MovingCard3 key="c3-b" />
-              <MovingCard4 key="c4-b" />
-              <MovingCard5 key="c5-b" />
-              <MovingCard6 key="c6-b" />
+              {/* Loop 2: duplicate set for the seamless loop (inert: not focusable, hidden from screen readers) */}
+              <div inert className="contents">
+                <MovingCard1 />
+                <MovingCard2 />
+                <MovingCard3 />
+                <MovingCard4 />
+                <MovingCard5 />
+                <MovingCard6 />
+              </div>
 
             </div>
           </div>
@@ -358,7 +344,7 @@ export default function Hero() {
 // CARD 1: MINIMAL TAG & METRIC CARD (Clean, regular weight typography)
 function MovingCard1() {
   return (
-    <div className="w-[230px] sm:w-[250px] h-[200px] shrink-0 rounded-[22px] bg-gradient-to-br from-[#e0f2fe] via-[#d5eefe] to-[#bae6fd]/60 border border-sky-200/90 p-5 shadow-sm hover:shadow-md hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between cursor-pointer group relative overflow-hidden">
+    <div className="w-[230px] sm:w-[250px] h-[200px] shrink-0 rounded-[22px] bg-gradient-to-br from-[#e0f2fe] via-[#d5eefe] to-[#bae6fd]/60 border border-sky-200/90 p-5 shadow-sm hover:shadow-md hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group relative overflow-hidden">
       {/* Subtle background radar curve */}
       <svg viewBox="0 0 200 200" className="absolute -bottom-8 -right-8 w-44 h-44 text-white/75 fill-none pointer-events-none">
         <circle cx="120" cy="120" r="50" stroke="currentColor" strokeWidth="1.2" />
@@ -367,12 +353,12 @@ function MovingCard1() {
 
       {/* Clean floating pills at top */}
       <div className="relative z-10 flex flex-wrap gap-2">
-        <span className="px-3 py-1.5 rounded-full bg-white/95 text-xs font-normal text-slate-700 shadow-2xs border border-white">
-          ASTM Standards
-        </span>
-        <span className="px-3 py-1.5 rounded-full bg-white/95 text-xs font-normal text-[#0d7cae] shadow-2xs border border-white">
-          DIN Valves
-        </span>
+        <Link href={categoryHref('cooling-solutions')} className="px-3 py-1.5 rounded-full bg-white/95 text-xs font-normal text-slate-700 shadow-2xs border border-white hover:text-[#0d7cae] transition-colors">
+          Cooling Solutions
+        </Link>
+        <Link href={categoryHref('water-treatment')} className="px-3 py-1.5 rounded-full bg-white/95 text-xs font-normal text-[#0d7cae] shadow-2xs border border-white hover:bg-white transition-colors">
+          Water Treatment
+        </Link>
       </div>
 
       {/* Clean regular bottom metric */}
@@ -381,33 +367,42 @@ function MovingCard1() {
           500+
         </span>
         <span className="text-xs text-slate-500 font-normal block mt-1">
-          Active Verified Specs
+          Customers
         </span>
       </div>
     </div>
   );
 }
 
-// CARD 2: SPECIALIST PHOTO WITH SINGLE CLEAN METRIC PILL (Clean regular weight)
+// CARD 2: HEAD OFFICE (light card, no photo)
 function MovingCard2() {
   return (
-    <div className="w-[230px] sm:w-[250px] h-[200px] shrink-0 rounded-[22px] overflow-hidden relative shadow-sm hover:shadow-md hover:-translate-y-1.5 transition-all duration-300 cursor-pointer group flex flex-col justify-end p-3.5 border border-sky-200/80">
-      {/* Full Bleed Authentic Specialist Photo */}
-      <Image
-        src="/images/card-engineer.jpg"
-        alt="Technical Specialist"
-        fill
-        sizes="250px"
-        className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
-      />
-      {/* Subtle Bottom Vignette */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
+    <div className="w-[230px] sm:w-[250px] h-[200px] shrink-0 rounded-[22px] bg-gradient-to-br from-[#e0f2fe] via-[#d5eefe] to-[#bae6fd]/60 border border-sky-200/90 p-5 shadow-sm hover:shadow-md hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group relative overflow-hidden">
+      {/* Subtle background radar curve */}
+      <svg viewBox="0 0 200 200" className="absolute -top-12 -right-12 w-44 h-44 text-white/75 fill-none pointer-events-none">
+        <circle cx="100" cy="100" r="40" stroke="currentColor" strokeWidth="1.2" strokeDasharray="5 4" />
+        <circle cx="100" cy="100" r="75" stroke="currentColor" strokeWidth="1" />
+      </svg>
 
-      {/* Single Clean Floating Pill at Bottom */}
-      <div className="relative z-10 bg-white/95 rounded-full px-4 py-2 shadow-md border border-white/90 flex items-center justify-between">
-        <span className="text-xs font-normal text-slate-700">Jeddah Stock</span>
-        <span className="text-xs font-normal text-[#0d7cae] font-mono">80,000+</span>
+      <div className="relative z-10 self-start bg-white/95 rounded-full px-3.5 py-1.5 shadow-sm border border-white/80 flex items-center gap-1.5">
+        <MapPin className="w-3 h-3 text-[#0d7cae]" />
+        <span className="text-xs font-normal text-slate-700">Head Office</span>
       </div>
+
+      <div className="relative z-10">
+        <span className="block text-sm font-normal text-slate-800 leading-snug">Jeddah, Saudi Arabia</span>
+        <span className="block text-xs text-slate-500 font-normal mt-1">Supplying across the Kingdom</span>
+      </div>
+
+      <a
+        href={CONTACT.mapUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="relative z-10 self-start bg-white/95 rounded-full px-3.5 py-1.5 shadow-sm border border-white flex items-center gap-1.5 text-xs font-normal text-[#0d7cae] hover:bg-white transition-colors"
+      >
+        <span>View on map</span>
+        <ArrowUpRight className="w-3 h-3" />
+      </a>
     </div>
   );
 }
@@ -415,7 +410,7 @@ function MovingCard2() {
 // CARD 3: STATEMENT CARD (Clean regular typography)
 function MovingCard3() {
   return (
-    <div className="w-[230px] sm:w-[250px] h-[200px] shrink-0 rounded-[22px] bg-gradient-to-br from-[#e0f2fe] via-[#d5eefe] to-[#bae6fd]/60 border border-sky-200/90 p-5 flex flex-col justify-between text-slate-950 shadow-sm hover:shadow-md hover:-translate-y-1.5 transition-all duration-300 relative overflow-hidden group cursor-pointer">
+    <div className="w-[230px] sm:w-[250px] h-[200px] shrink-0 rounded-[22px] bg-gradient-to-br from-[#e0f2fe] via-[#d5eefe] to-[#bae6fd]/60 border border-sky-200/90 p-5 flex flex-col justify-between text-slate-950 shadow-sm hover:shadow-md hover:-translate-y-1.5 transition-all duration-300 relative overflow-hidden group">
       {/* Concentric White Circular Arc Lines */}
       <svg viewBox="0 0 200 200" className="absolute inset-0 w-full h-full text-white/80 fill-none pointer-events-none">
         <circle cx="180" cy="20" r="50" stroke="currentColor" strokeWidth="1.2" opacity="0.9" />
@@ -426,19 +421,19 @@ function MovingCard3() {
       {/* Floating Pill 1 (Top Left) */}
       <div className="self-start bg-white/95 rounded-full px-3.5 py-1.5 shadow-sm border border-white/80 flex items-center gap-1.5 relative z-10">
         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-        <span className="text-xs font-normal text-slate-700">Aramco 9COM</span>
+        <span className="text-xs font-normal text-slate-700">Trusted by Leading Industries</span>
       </div>
 
       {/* Headline in Middle */}
       <div className="relative z-10">
         <h3 className="text-sm font-normal leading-relaxed text-slate-700">
-          Industrial Pipeline &amp; Structural Solutions
+          Safe, Reliable &amp; Prompt Service
         </h3>
       </div>
 
       {/* Floating Pill 2 (Bottom Right) */}
       <div className="self-end bg-white/95 rounded-full px-3.5 py-1.5 shadow-sm border border-white/80 flex items-center gap-1.5 text-xs font-normal text-[#0d7cae] relative z-10">
-        <span>ISO 9001 Pass</span>
+        <span>Superior Quality Products</span>
       </div>
     </div>
   );
@@ -447,22 +442,22 @@ function MovingCard3() {
 // CARD 4: ALLOCATION / FULFILLMENT (Clean regular typography)
 function MovingCard4() {
   return (
-    <div className="w-[230px] sm:w-[250px] h-[200px] shrink-0 rounded-[22px] bg-gradient-to-br from-[#e0f2fe] via-[#d5eefe] to-[#bae6fd]/60 border border-sky-200/90 p-5 shadow-sm hover:shadow-md hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between cursor-pointer group relative overflow-hidden">
+    <div className="w-[230px] sm:w-[250px] h-[200px] shrink-0 rounded-[22px] bg-gradient-to-br from-[#e0f2fe] via-[#d5eefe] to-[#bae6fd]/60 border border-sky-200/90 p-5 shadow-sm hover:shadow-md hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group relative overflow-hidden">
       {/* Top Header Pill */}
       <div className="flex items-center justify-between">
-        <span className="text-xs font-normal text-slate-600">Monthly Ready</span>
+        <span className="text-xs font-normal text-slate-600">Years of Experience</span>
         <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-normal">
-          97%
+          10+
         </span>
       </div>
 
       {/* Number in Middle */}
       <div>
         <span className="text-2xl font-normal text-slate-800 font-mono tracking-tight block leading-none">
-          $4,900
+          08
         </span>
         <span className="text-xs text-slate-500 font-mono font-normal block mt-1">
-          / $10,000 Allocation
+          Product Disciplines
         </span>
       </div>
 
@@ -479,7 +474,7 @@ function MovingCard4() {
 // CARD 5: RADAR CURVES & FLOATING PILLS (1:1 with Reference Design - Regular weight)
 function MovingCard5() {
   return (
-    <div className="w-[230px] sm:w-[250px] h-[200px] shrink-0 rounded-[22px] bg-gradient-to-br from-[#e0f2fe] via-[#d5eefe] to-[#bae6fd]/60 border border-sky-200/90 p-5 relative overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between cursor-pointer group">
+    <div className="w-[230px] sm:w-[250px] h-[200px] shrink-0 rounded-[22px] bg-gradient-to-br from-[#e0f2fe] via-[#d5eefe] to-[#bae6fd]/60 border border-sky-200/90 p-5 relative overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group">
       {/* Concentric White Circular Arc Lines */}
       <svg viewBox="0 0 200 200" className="absolute inset-0 w-full h-full text-white/80 fill-none pointer-events-none">
         <circle cx="20" cy="180" r="60" stroke="currentColor" strokeWidth="1.2" opacity="0.9" />
@@ -489,26 +484,26 @@ function MovingCard5() {
       </svg>
 
       {/* Floating Pill 1 (Top Right) */}
-      <div className="self-end bg-white/95 rounded-full px-4 py-2 shadow-sm border border-white/80 flex items-center gap-2 text-xs text-slate-700 relative z-10 transition-transform group-hover:scale-105">
+      <Link href={categoryHref('water-treatment')} className="self-end bg-white/95 rounded-full px-4 py-2 shadow-sm border border-white/80 flex items-center gap-2 text-xs text-slate-700 relative z-10 transition-transform hover:scale-105">
         <div className="w-4 h-4 rounded-full bg-[#0d7cae] text-white flex items-center justify-center text-[10.5px] sm:text-[9px]">
-          <Calendar className="w-2.5 h-2.5" />
+          <Droplet className="w-2.5 h-2.5" />
         </div>
-        <span className="text-xs font-normal text-slate-700">Calendar</span>
+        <span className="text-xs font-normal text-slate-700">Water Treatment</span>
         <span className="px-1.5 py-0.2 rounded-full bg-emerald-100 text-emerald-800 text-[10.5px] sm:text-[9px] font-mono font-normal">
-          100
+          {CATEGORIES.find((c) => c.id === 'water')?.products.length}
         </span>
-      </div>
+      </Link>
 
       {/* Floating Pill 2 (Bottom Right / Center) */}
-      <div className="self-center bg-white/95 rounded-full px-4 py-2 shadow-sm border border-white/80 flex items-center gap-2 text-xs text-slate-700 relative z-10 transition-transform group-hover:scale-105">
+      <Link href={categoryHref('safety-equipment')} className="self-center bg-white/95 rounded-full px-4 py-2 shadow-sm border border-white/80 flex items-center gap-2 text-xs text-slate-700 relative z-10 transition-transform hover:scale-105">
         <div className="w-4 h-4 rounded-full bg-[#0d7cae] text-white flex items-center justify-center text-[10.5px] sm:text-[9px]">
-          <CheckCircle2 className="w-2.5 h-2.5" />
+          <ShieldCheck className="w-2.5 h-2.5" />
         </div>
-        <span className="text-xs font-normal text-slate-700">Messages</span>
+        <span className="text-xs font-normal text-slate-700">Safety Equipments</span>
         <span className="px-1.5 py-0.2 rounded-full bg-emerald-100 text-emerald-800 text-[10.5px] sm:text-[9px] font-mono font-normal">
-          200
+          {CATEGORIES.find((c) => c.id === 'safety')?.products.length}
         </span>
-      </div>
+      </Link>
     </div>
   );
 }
@@ -516,7 +511,7 @@ function MovingCard5() {
 // CARD 6: INDUSTRIAL HARDWARE & SPECIFIER (Regular weight)
 function MovingCard6() {
   return (
-    <div className="w-[230px] sm:w-[250px] h-[200px] shrink-0 rounded-[22px] bg-gradient-to-br from-[#e0f2fe] via-[#d5eefe] to-[#bae6fd]/60 border border-sky-200/90 p-5 shadow-sm hover:shadow-md hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between cursor-pointer group relative overflow-hidden">
+    <div className="w-[230px] sm:w-[250px] h-[200px] shrink-0 rounded-[22px] bg-gradient-to-br from-[#e0f2fe] via-[#d5eefe] to-[#bae6fd]/60 border border-sky-200/90 p-5 shadow-sm hover:shadow-md hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group relative overflow-hidden">
       {/* Subtle background radar curve */}
       <svg viewBox="0 0 200 200" className="absolute -top-10 -right-10 w-40 h-40 text-white/60 fill-none pointer-events-none">
         <circle cx="100" cy="100" r="45" stroke="currentColor" strokeWidth="1" />
@@ -526,24 +521,24 @@ function MovingCard6() {
       {/* Clean Top Badge */}
       <div className="relative z-10 flex items-center justify-between">
         <span className="px-3 py-1 rounded-full bg-white/95 text-[#0d7cae] text-xs font-normal shadow-2xs border border-white">
-          API 600 • BS EN 124
+          FRP • Steel • Stainless
         </span>
-        <span className="text-xs font-normal text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/60">Ready</span>
+        <span className="text-xs font-normal text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/60">Gratings</span>
       </div>
 
       {/* Title in Middle */}
       <div className="relative z-10">
-        <h4 className="text-sm font-normal text-slate-700 leading-snug">
-          Industrial Valves &amp; Gratings
-        </h4>
-        <span className="text-xs text-slate-500 block mt-1 font-normal">Hydro-Tested Class 150-600#</span>
+        <Link href={categoryHref('electrical')} className="block text-sm font-normal text-slate-700 leading-snug hover:text-[#0d7cae] transition-colors">
+          Gratings, Handrails &amp; Ladders
+        </Link>
+        <span className="text-xs text-slate-500 block mt-1 font-normal">FRP/GRP, Steel and Stainless Steel</span>
       </div>
 
       {/* Clean Bottom Pill */}
-      <div className="relative z-10 self-start bg-white/95 rounded-full px-3.5 py-1.5 shadow-sm border border-white flex items-center gap-1.5 text-xs font-normal text-[#0d7cae]">
-        <span>Specifier Ready</span>
+      <Link href="/contact" className="relative z-10 self-start bg-white/95 rounded-full px-3.5 py-1.5 shadow-sm border border-white flex items-center gap-1.5 text-xs font-normal text-[#0d7cae] hover:bg-white transition-colors">
+        <span>Request a Quote</span>
         <ArrowUpRight className="w-3 h-3" />
-      </div>
+      </Link>
     </div>
   );
 }

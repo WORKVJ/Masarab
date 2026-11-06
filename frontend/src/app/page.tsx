@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import Hero from '@/components/Hero';
 import KineticMarquee from '@/components/KineticMarquee';
 import ProductRangeSection from '@/components/sections/ProductRangeSection';
@@ -9,9 +10,10 @@ import WhyMasar from '@/components/sections/WhyMasar';
 import ClientsSection from '@/components/sections/ClientsSection';
 import CtaBand from '@/components/sections/CtaBand';
 
-export const metadata: Metadata = {
-  alternates: { canonical: '/' },
-};
+const DESCRIPTION =
+  'Leading industrial supplier in Saudi Arabia: cooling towers, water treatment, chemicals, electrical, instrumentation, mechanical, pipe fittings & safety gear.';
+
+export const metadata: Metadata = pageMetadata({ title: 'Leading Industrial Supplier in Saudi Arabia | Masar Arabia', absoluteTitle: true, description: DESCRIPTION, path: '/' });
 
 export default function HomePage() {
   return (

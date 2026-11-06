@@ -36,10 +36,9 @@ export default function ClientsSection() {
           eyebrow="Our Clients"
           title={
             <>
-              Chosen by <span className="text-[#0d7cae]">Leading Clients</span> in Saudi Arabia
+              Chosen by <span className="text-[#0d7cae]">leading clients</span> in Saudi Arabia for quality and reliability
             </>
           }
-          intro="Trusted for quality and reliability by the Kingdom's leading developers, utilities and industrial groups."
         />
       </div>
       <div className="space-y-4" data-anim="up">

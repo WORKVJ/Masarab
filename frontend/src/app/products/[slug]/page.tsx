@@ -3,7 +3,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowUpRight, LayoutGrid } from 'lucide-react';
 import { CATEGORIES } from '@/lib/masarContent';
-import { categoryHref, quoteHref } from '@/lib/routes';
+import { categoryHref, quoteHref, SITE_URL } from '@/lib/routes';
+import { CATEGORY_SEO, pageMetadata } from '@/lib/seo';
 import PageHero from '@/components/sections/PageHero';
 import CategoryProducts from '@/components/sections/CategoryProducts';
 import CategoryCards from '@/components/sections/CategoryCards';
@@ -21,13 +22,13 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const { slug } = await params;
   const c = CATEGORIES.find((x) => x.slug === slug);
   if (!c) return {};
-  const href = categoryHref(c.slug);
-  return {
-    title: c.name,
-    description: c.intro,
-    alternates: { canonical: href },
-    openGraph: { url: href, title: `${c.name} | Masar Arabia`, description: c.intro, images: [{ url: c.image }] },
-  };
+  const seo = CATEGORY_SEO[c.id] ?? { title: c.name, description: c.summary };
+  return pageMetadata({
+    title: seo.title,
+    description: seo.description,
+    path: categoryHref(c.slug),
+    image: { url: c.image, alt: `${c.name} — Masar Arabia` },
+  });
 }
 
 export default async function CategoryPage({ params }: { params: Promise<Params> }) {
@@ -40,7 +41,7 @@ export default async function CategoryPage({ params }: { params: Promise<Params>
       <PageHero
         eyebrow={category.headline}
         title={category.name}
-        intro={category.intro}
+        intro={category.summary}
         crumbs={[
           { label: 'Products', href: '/products' },
           { label: category.name, href: categoryHref(category.slug) },
@@ -63,6 +64,28 @@ export default async function CategoryPage({ params }: { params: Promise<Params>
       </PageHero>
 
       <CategoryProducts category={category} />
+
+      {/* Structured data: the category's product list, so search engines understand the page */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'ItemList',
+            name: `${category.name} — Masar Arabia`,
+            description: category.summary,
+            url: `${SITE_URL}${categoryHref(category.slug)}`,
+            numberOfItems: category.products.length,
+            itemListElement: category.products.map((p, i) => ({
+              '@type': 'ListItem',
+              position: i + 1,
+              name: p.name,
+              ...(p.description ? { description: p.description } : {}),
+              ...(p.image ? { image: `${SITE_URL}${p.image}` } : {}),
+            })),
+          }).replace(/</g, '\\u003c'),
+        }}
+      />
 
       <CategoryCards
         id="other-categories"

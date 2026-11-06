@@ -3,7 +3,7 @@
 /**
  * MotionEngine — lightweight site-wide animation layer.
  *
- *  • Lenis smooth scroll driven by the GSAP ticker, synced to ScrollTrigger
+ *  • Native scrolling (no smooth-scroll layer — it was measured to cause scroll lag)
  *  • Hero intro timeline + gentle hero scroll-out (the part of the page the client loves)
  *  • Word-by-word reveal for every section <h2>
  *  • [data-anim="up"] batched fade-up reveals
@@ -16,10 +16,8 @@
  */
 
 import { useEffect } from 'react';
-import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { NAV_OFFSET } from '@/lib/motion';
 import { heroIntroDelay, shouldShowPreloader } from '@/lib/preloader';
 
 function splitWords(el: HTMLElement) {
@@ -54,28 +52,31 @@ function splitWords(el: HTMLElement) {
   walk(el);
 }
 
+/** True once the engine has run on this document — later runs are client-side page navigations. */
+let booted = false;
+
 export default function MotionEngine() {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    const cleanups: Array<() => void> = [];
+    // Set asynchronously so React's dev double-run of effects still counts as the first boot
+    const firstBoot = !booted;
+    const bootTimer = setTimeout(() => {
+      booted = true;
+    }, 0);
+    const notPageHero = (el: Element) => !el.closest('#page-hero');
 
-    // ── 1. Smooth scroll ───────────────────────────────────────────────
-    // Wheel/trackpad: soft inertial glide (lerp 0.1). Touch: native scrolling is kept (syncTouch off) —
-    // it is already smooth on phones and avoids fighting the OS momentum.
-    const lenis = new Lenis({
-      lerp: 0.1,
-      smoothWheel: true,
-      syncTouch: false,
-      wheelMultiplier: 1,
-      anchors: { offset: NAV_OFFSET, duration: 1.2 },
-    });
+    const cleanups: Array<() => void> = [() => clearTimeout(bootTimer)];
+
+    // ── 1. Scrolling ───────────────────────────────────────────────────
+    // Native browser scrolling everywhere (wheel, trackpad, touch). The Lenis smooth-scroll layer
+    // kept the page gliding for up to ~2 s after each wheel flick (≈0.3 s native) and dropped far
+    // more frames — visitors felt it as lag — so it is not used. Animated jumps (scroll-to-top,
+    // section links) use the browser's own smooth scrolling via lib/motion scrollToTarget().
     // Mobile address-bar show/hide resizes the viewport constantly — don't recalculate triggers for it
     ScrollTrigger.config({ ignoreMobileResize: true });
-    window.__lenis = lenis;
     document.documentElement.classList.add('mx-motion');
-    lenis.on('scroll', ScrollTrigger.update);
 
     // Hero intro waits for the branded loader only when it is actually showing
     const introDelay = heroIntroDelay();
@@ -83,19 +84,17 @@ export default function MotionEngine() {
     const go = setTimeout(() => document.documentElement.classList.add('mx-intro-go'), introDelay * 1000);
     cleanups.push(() => clearTimeout(go));
     if (shouldShowPreloader()) {
-      lenis.stop();
-      const unlock = setTimeout(() => lenis.start(), (introDelay - 0.2) * 1000);
-      cleanups.push(() => clearTimeout(unlock));
+      // keep the page still while the branded loader covers it
+      const html = document.documentElement;
+      const prev = html.style.overflow;
+      html.style.overflow = 'hidden';
+      const unlock = setTimeout(() => (html.style.overflow = prev), Math.max(0, introDelay - 0.2) * 1000);
+      cleanups.push(() => {
+        clearTimeout(unlock);
+        html.style.overflow = prev;
+      });
     }
-    const tick = (time: number) => lenis.raf(time * 1000);
-    gsap.ticker.add(tick);
-    gsap.ticker.lagSmoothing(0);
-    cleanups.push(() => {
-      gsap.ticker.remove(tick);
-      lenis.destroy();
-      delete window.__lenis;
-      document.documentElement.classList.remove('mx-motion');
-    });
+    cleanups.push(() => document.documentElement.classList.remove('mx-motion'));
 
     const ctx = gsap.context(() => {
       // ── 3. Hero intro + scroll-out ───────────────────────────────────
@@ -150,8 +149,41 @@ export default function MotionEngine() {
         }
       }
 
+      // ── 3b. Inner-page header (PageHero) intro ───────────────────────
+      // Above the fold, so it plays as a timed intro rather than on scroll. On a hard load where the
+      // content has already been on screen (no loader covering it), it is left as-is: hiding it now
+      // would flash. On client-side navigation the page-enter fade covers the brief hidden state.
+      const pageHero = document.getElementById('page-hero');
+      if (pageHero && !(firstBoot && introDelay <= 0.15)) {
+        const tl = gsap.timeline({ delay: introDelay, defaults: { ease: 'expo.out' } });
+        const heading = pageHero.querySelector<HTMLElement>('[data-split-heading]');
+        if (heading) {
+          splitWords(heading);
+          const words = heading.querySelectorAll('.mx-word-inner');
+          if (words.length) tl.fromTo(words, { yPercent: 110 }, { yPercent: 0, duration: 1, stagger: 0.05 }, 0);
+        }
+        const items = Array.from(pageHero.querySelectorAll<HTMLElement>('[data-anim]'));
+        if (items.length) {
+          tl.fromTo(
+            items,
+            { opacity: 0, y: (_i: number, el: HTMLElement) => (el.dataset.anim === 'up' ? 30 : 0), x: (_i: number, el: HTMLElement) => (el.dataset.anim === 'right' ? 60 : el.dataset.anim === 'left' ? -60 : 0) },
+            {
+              opacity: 1,
+              y: 0,
+              x: 0,
+              duration: 1,
+              stagger: 0.08,
+              onComplete: () => {
+                gsap.set(items, { clearProps: 'transform,opacity' });
+              },
+            },
+            0.1
+          );
+        }
+      }
+
       // ── 4. Split-word headings ───────────────────────────────────────
-      gsap.utils.toArray<HTMLElement>('section:not(#hero) h2, [data-split-heading]').forEach((heading) => {
+      gsap.utils.toArray<HTMLElement>('section:not(#hero) h2, [data-split-heading]').filter(notPageHero).forEach((heading) => {
         if (heading.closest('[data-no-split]')) return;
         splitWords(heading);
         const words = heading.querySelectorAll('.mx-word-inner');
@@ -175,6 +207,11 @@ export default function MotionEngine() {
 
         const tl = gsap.timeline({ scrollTrigger: { trigger: heading, start: 'top 90%', toggleActions: 'play none none none' } });
         tl.fromTo(words, { yPercent: 110 }, { yPercent: 0, duration: 0.9, ease: 'power4.out', stagger: 0.04 });
+        // once finished, drop every inline transform so the words don't stay on GPU layers
+        tl.eventCallback('onComplete', () => {
+          gsap.set(words, { clearProps: 'transform' });
+          if (accentChars.length) gsap.set(accentChars, { clearProps: 'transform,opacity' });
+        });
         if (accentChars.length) {
           tl.fromTo(
             accentChars,
@@ -224,18 +261,28 @@ export default function MotionEngine() {
       });
 
       // ── 5. Batched fade-up reveals ───────────────────────────────────
-      const revealEls = gsap.utils.toArray<HTMLElement>('[data-anim="up"]');
+      const revealEls = gsap.utils.toArray<HTMLElement>('[data-anim="up"]').filter(notPageHero);
       gsap.set(revealEls, { y: 36, opacity: 0 });
       ScrollTrigger.batch(revealEls, {
         start: 'top 98%', // anything visible on screen reveals, even near the bottom edge
         // no once:true — a self-killing trigger can corrupt ScrollTrigger's list mid-refresh (crash on reload mid-page)
         onEnter: (batch) =>
-          gsap.to(batch, { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', stagger: 0.06, overwrite: true }),
+          gsap.to(batch, {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            ease: 'power3.out',
+            stagger: 0.06,
+            overwrite: true,
+            onComplete: () => {
+              gsap.set(batch, { clearProps: 'transform,opacity' });
+            },
+          }),
       });
 
       // ── 5a. Side reveals with a small overshoot (slide in 70px, pass 5px, settle) ──
       (['left', 'right'] as const).forEach((side) => {
-        const els = gsap.utils.toArray<HTMLElement>(`[data-anim="${side}"]`);
+        const els = gsap.utils.toArray<HTMLElement>(`[data-anim="${side}"]`).filter(notPageHero);
         if (!els.length) return;
         const from = side === 'left' ? -70 : 70;
         gsap.set(els, { x: from, opacity: 0, scale: 0.96 });
@@ -259,7 +306,7 @@ export default function MotionEngine() {
       });
 
       // ── 5b. 3D wave entrance + line-drawn illustrations (Product Range cards) ──
-      const flipEls = gsap.utils.toArray<HTMLElement>('[data-anim="flip"]');
+      const flipEls = gsap.utils.toArray<HTMLElement>('[data-anim="flip"]').filter(notPageHero);
       if (flipEls.length) {
         // Prepare each illustration: every stroke starts "undrawn", fills start transparent
         const prepDraw = (root: Element) => {
@@ -280,6 +327,43 @@ export default function MotionEngine() {
         };
         const shapeMap = new Map(flipEls.map((el) => [el, prepDraw(el)]));
 
+        // Photo tiles: hidden behind their shutter until the card scrolls in (transform/opacity only)
+        const photoMap = new Map<HTMLElement, { photo: HTMLElement; shutter: HTMLElement }>();
+        flipEls.forEach((el) => {
+          const photo = el.querySelector<HTMLElement>('.mx-tile-photo');
+          const shutter = el.querySelector<HTMLElement>('.mx-tile-shutter');
+          if (!photo || !shutter) return;
+          photoMap.set(el, { photo, shutter });
+          gsap.set(photo, { opacity: 0, scale: 1.3 });
+        });
+        const revealed = new WeakSet<Element>();
+        const revealPhoto = (el: HTMLElement, i: number) => {
+          const tile = photoMap.get(el);
+          if (!tile || revealed.has(el)) return; // once per card: scrolling back past it never replays the wipe
+          revealed.add(el);
+          const { photo, shutter } = tile;
+          gsap
+            .timeline({ delay: 0.15 + i * 0.08 })
+            .fromTo(shutter, { scaleX: 0, transformOrigin: '0% 50%' }, { scaleX: 1, duration: 0.45, ease: 'power3.in' })
+            .set(photo, { opacity: 1 })
+            .set(shutter, { transformOrigin: '100% 50%' })
+            .to(shutter, { scaleX: 0, duration: 0.65, ease: 'expo.out' })
+            .to(
+              photo,
+              {
+                scale: 1,
+                duration: 1.5,
+                ease: 'expo.out',
+                onComplete: () => {
+                  gsap.set(photo, { clearProps: 'transform,opacity' });
+                  gsap.set(shutter, { clearProps: 'transform' });
+                },
+              },
+              '<'
+            );
+        };
+        cleanups.push(() => photoMap.forEach(({ photo, shutter }) => gsap.set([photo, shutter], { clearProps: 'all' })));
+
         gsap.set(flipEls, { opacity: 0, y: 50, rotateX: -28, transformOrigin: '50% 100%' });
         ScrollTrigger.batch(flipEls, {
           start: 'top 98%', // anything visible on screen reveals, even near the bottom edge
@@ -298,6 +382,7 @@ export default function MotionEngine() {
               },
             });
             batch.forEach((el, i) => {
+              revealPhoto(el as HTMLElement, i);
               const shapes = shapeMap.get(el as HTMLElement) ?? [];
               if (!shapes.length) return;
               gsap.to(shapes, {
@@ -323,6 +408,35 @@ export default function MotionEngine() {
           },
         });
       }
+
+      // ── 5c. Shutter photo reveals ([data-shutter], e.g. About bento) ──
+      // A brand-blue panel rises over the frame, the photo appears behind it, then the panel lifts
+      // away while the photo settles from a slow zoom. Transform/opacity only; the panel is
+      // collapsed in CSS, so without JavaScript the photo is simply visible.
+      gsap.utils.toArray<HTMLElement>('[data-shutter]').filter(notPageHero).forEach((el) => {
+        const photo = el.querySelector<HTMLElement>('.mx-shutter-photo');
+        const panel = el.querySelector<HTMLElement>('.mx-shutter-panel');
+        if (!photo || !panel) return;
+        gsap.set(photo, { opacity: 0, scale: 1.25 });
+        const tl = gsap
+          .timeline({ paused: true })
+          .fromTo(panel, { scaleY: 0, transformOrigin: '50% 100%' }, { scaleY: 1, duration: 0.55, ease: 'power3.in' })
+          .set(photo, { opacity: 1 })
+          .set(panel, { transformOrigin: '50% 0%' })
+          .to(panel, { scaleY: 0, duration: 0.8, ease: 'expo.out' })
+          .to(photo, { scale: 1, duration: 1.6, ease: 'expo.out' }, '<');
+        const delay = parseFloat(el.dataset.shutterDelay || '0');
+        let started = false;
+        ScrollTrigger.create({
+          trigger: el,
+          start: 'top 92%',
+          onEnter: () => {
+            if (started) return;
+            started = true;
+            gsap.delayedCall(delay, () => tl.play());
+          },
+        });
+      });
 
       // ── 6. Parallax layers ───────────────────────────────────────────
       gsap.utils.toArray<HTMLElement>('[data-speed]').forEach((el) => {

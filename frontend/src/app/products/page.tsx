@@ -1,17 +1,13 @@
 import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import PageHero from '@/components/sections/PageHero';
 import SolutionsExplorer from '@/components/sections/SolutionsExplorer';
 import CtaBand from '@/components/sections/CtaBand';
 
 const DESCRIPTION =
-  'Cooling solutions, water treatment, chemicals, electrical, instrumentation, mechanical, pipe fittings & alloys and safety equipment — high-quality industrial products from Masar Arabia.';
+  "Explore Masar Arabia's industrial products: cooling solutions, water treatment, chemicals, electrical, instrumentation, mechanical, pipe fittings & safety.";
 
-export const metadata: Metadata = {
-  title: 'Products',
-  description: DESCRIPTION,
-  alternates: { canonical: '/products' },
-  openGraph: { url: '/products', title: 'Masar Arabia Products Catalog', description: DESCRIPTION },
-};
+export const metadata: Metadata = pageMetadata({ title: 'Industrial Products Catalog – 8 Disciplines', description: DESCRIPTION, path: '/products' });
 
 export default function ProductsPage() {
   return (

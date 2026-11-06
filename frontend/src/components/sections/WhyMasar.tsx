@@ -35,12 +35,12 @@ export default function WhyMasar() {
               eyebrow="Why Masar Arabia"
               title={
                 <>
-                  Why Choose <span className="text-sky-400">Masar Arabia</span>
+                  Why Choose <span className="text-sky-400">Masar Arabia!</span>
                 </>
               }
               intro={WHY_CHOOSE.intro}
             />
-            <p data-anim="up" className="mt-4 text-sm text-white/60 leading-relaxed max-w-md">
+            <p data-anim="up" className="mt-5 text-[15px] text-white/70 leading-[1.75] max-w-md">
               {WHY_CHOOSE.closing}
             </p>
             <button
@@ -70,8 +70,8 @@ export default function WhyMasar() {
                   </div>
                   <span className="font-mono text-xs text-white/25">{String(i + 1).padStart(2, '0')}</span>
                 </div>
-                <h3 className="mt-3 sm:mt-5 text-[13px] sm:text-base font-bold leading-snug">{item.title}</h3>
-                <p className="mt-1 sm:mt-1.5 text-xs sm:text-sm text-white/55 leading-relaxed">{item.text}</p>
+                <h3 className="mt-3 sm:mt-5 text-sm sm:text-[17px] font-bold leading-snug">{item.title}</h3>
+                <p className="mt-1.5 sm:mt-2 text-[13px] sm:text-[15px] text-white/70 leading-[1.65]">{item.text}</p>
               </div>
             );
           })}

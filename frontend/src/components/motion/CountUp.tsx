@@ -8,6 +8,8 @@ interface CountUpProps {
   prefix?: string;
   suffix?: string;
   decimals?: number;
+  /** zero-pad to at least this many digits, e.g. 2 → "08" */
+  minDigits?: number;
   /** ms to wait after entering the viewport (e.g. to sync with an intro animation) */
   delay?: number;
   /** when true, `delay` is counted from the start of the hero intro (after the branded loader) */
@@ -25,6 +27,7 @@ export default function CountUp({
   prefix = '',
   suffix = '',
   decimals = 0,
+  minDigits = 0,
   delay = 0,
   duration = 1600,
   afterIntro = false,
@@ -69,7 +72,7 @@ export default function CountUp({
   return (
     <span ref={ref} className="tabular-nums">
       {prefix}
-      {display.toFixed(decimals)}
+      {display.toFixed(decimals).padStart(minDigits, '0')}
       {suffix}
     </span>
   );

@@ -552,6 +552,7 @@ export async function submitRfq(data: RfqPayload): Promise<RfqResponse> {
 }
 
 export async function submitContact(data: ContactPayload): Promise<{ status: string }> {
+  if (!API_BASE) throw new Error('No backend configured');
   const res = await fetch(`${API_BASE}/contact/`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
