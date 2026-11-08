@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
 import { SITE_URL } from '@/lib/routes';
+import { type DivisionTheme, themeVars } from '@/lib/divisionThemes';
 
 export interface Crumb {
   label: string;
@@ -19,6 +20,8 @@ interface PageHeroProps {
   image?: { src: string; alt: string };
   /** dark variant with a full-bleed background photo */
   backgroundImage?: string;
+  /** division identity (colour, pattern, icon) — used on the /products/<slug> pages */
+  theme?: DivisionTheme;
   children?: React.ReactNode;
 }
 
@@ -27,15 +30,17 @@ interface PageHeroProps {
  * eyebrow pill, word-split <h1>, intro, breadcrumbs, blueprint grid + parallax glows.
  * Emits BreadcrumbList structured data for search engines.
  */
-export default function PageHero({ eyebrow, title, intro, crumbs, image, backgroundImage, children }: PageHeroProps) {
+export default function PageHero({ eyebrow, title, intro, crumbs, image, backgroundImage, theme, children }: PageHeroProps) {
   const dark = Boolean(backgroundImage);
   const trail = [{ label: 'Home', href: '/' }, ...crumbs];
+  const Icon = theme?.icon;
 
   return (
     <section
       id="page-hero"
       data-label={crumbs[crumbs.length - 1]?.label ?? 'Overview'}
-      className={`relative overflow-hidden pt-32 sm:pt-36 lg:pt-40 pb-14 sm:pb-20 ${dark ? 'bg-[#04121f] text-white' : 'bg-white'}`}
+      style={themeVars(theme)}
+      className={`relative overflow-hidden pt-32 sm:pt-36 lg:pt-40 ${theme ? 'pb-24 sm:pb-32' : 'pb-14 sm:pb-20'} ${dark ? 'bg-[#04121f] text-white' : 'bg-white'}`}
     >
       {/* background */}
       {dark ? (
@@ -43,8 +48,64 @@ export default function PageHero({ eyebrow, title, intro, crumbs, image, backgro
           <div data-parallax-img className="absolute -inset-y-[12%] inset-x-0">
             <Image src={backgroundImage!} alt="" fill priority sizes="100vw" className="object-cover" />
           </div>
-          <div className="absolute inset-0 bg-gradient-to-r from-[#04121f] via-[#04121f]/85 to-[#04121f]/40" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#04121f] via-transparent to-transparent" />
+          {theme ? (
+            <>
+              {/* division colour wash over the photo */}
+              <div
+                className="absolute inset-0"
+                style={{
+                  background: `linear-gradient(90deg, rgba(${theme.deep},0.97) 0%, rgba(${theme.deep},0.86) 45%, rgba(${theme.deep},0.35) 100%)`,
+                }}
+              />
+              <div
+                className="absolute inset-0"
+                style={{ background: `radial-gradient(55% 65% at 82% 40%, ${theme.accent}55, transparent 70%)` }}
+              />
+              <div
+                className="absolute inset-0"
+                style={{ background: `linear-gradient(to top, rgba(${theme.deep},0.9), transparent 45%)` }}
+              />
+              {/* division pattern (frost, waves, molecules, circuit …), fading out toward the text */}
+              <div
+                aria-hidden="true"
+                className={`absolute inset-0 pointer-events-none ${theme.hazard ? 'opacity-[0.07]' : 'opacity-[0.16]'}`}
+                style={{
+                  backgroundImage: theme.pattern,
+                  backgroundSize: theme.patternSize,
+                  maskImage: 'linear-gradient(to left, black 25%, transparent 75%)',
+                  WebkitMaskImage: 'linear-gradient(to left, black 25%, transparent 75%)',
+                }}
+              />
+              {/* oversized division icon watermark */}
+              {Icon && (
+                <Icon
+                  aria-hidden="true"
+                  strokeWidth={0.7}
+                  className="hidden md:block absolute -right-10 lg:right-[4%] top-1/2 -translate-y-1/2 w-[380px] h-[380px] lg:w-[460px] lg:h-[460px] pointer-events-none opacity-[0.13]"
+                  style={{ color: theme.light }}
+                />
+              )}
+              {/* signature band along the bottom edge */}
+              {theme.hazard ? (
+                <div
+                  aria-hidden="true"
+                  className="absolute bottom-0 inset-x-0 h-3"
+                  style={{ backgroundImage: 'repeating-linear-gradient(-45deg, #facc15 0 16px, #111827 16px 32px)' }}
+                />
+              ) : (
+                <div
+                  aria-hidden="true"
+                  className="absolute bottom-0 inset-x-0 h-1"
+                  style={{ background: `linear-gradient(90deg, ${theme.accent}, ${theme.light}, transparent)` }}
+                />
+              )}
+            </>
+          ) : (
+            <>
+              <div className="absolute inset-0 bg-gradient-to-r from-[#04121f] via-[#04121f]/85 to-[#04121f]/40" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#04121f] via-transparent to-transparent" />
+            </>
+          )}
         </>
       ) : (
         <>
@@ -72,7 +133,11 @@ export default function PageHero({ eyebrow, title, intro, crumbs, image, backgro
                 return (
                   <li key={c.href} className="flex items-center gap-1.5">
                     {last ? (
-                      <span aria-current="page" className={dark ? 'text-sky-300' : 'text-[#0d7cae]'}>
+                      <span
+                        aria-current="page"
+                        className={dark ? 'text-sky-300' : 'text-[#0d7cae]'}
+                        style={theme ? { color: theme.light } : undefined}
+                      >
                         {c.label}
                       </span>
                     ) : (
@@ -93,7 +158,13 @@ export default function PageHero({ eyebrow, title, intro, crumbs, image, backgro
               dark ? 'border-white/20 bg-white/10 text-sky-200' : 'border-slate-200 bg-white text-[#0d7cae] shadow-xs'
             }`}
           >
-            <span className="mx-ping-dot w-1.5 h-1.5 rounded-full bg-[#0d7cae]" />
+            {Icon ? (
+              <span className="-ml-1.5 w-6 h-6 rounded-full flex items-center justify-center" style={{ background: theme!.accent }}>
+                <Icon className="w-3.5 h-3.5 text-white" />
+              </span>
+            ) : (
+              <span className="mx-ping-dot w-1.5 h-1.5 rounded-full bg-[#0d7cae]" />
+            )}
             {eyebrow}
           </span>
 

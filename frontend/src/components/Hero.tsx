@@ -206,8 +206,8 @@ export default function Hero() {
               </div>
 
               {/* 3. SOFT BREATHING AMBIENT DEPTH GLOW ORBS (Directly Behind Hard Hat) */}
-              <div className="absolute top-2 left-1/2 -translate-x-1/2 w-56 h-56 rounded-full bg-[#0d7cae]/15 blur-3xl pointer-events-none animate-pulse-slow z-0" />
-              <div className="absolute bottom-28 right-2 w-48 h-48 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none animate-pulse-slow z-0" />
+              <div className="absolute top-2 left-1/2 -translate-x-1/2 w-56 h-56 rounded-full bg-[#0d7cae]/15 blur-3xl pointer-events-none z-0" />
+              <div className="absolute bottom-28 right-2 w-48 h-48 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none z-0" />
 
               {/* 4. CAD BLUEPRINT CORNER CROSSHAIRS */}
               <span className="absolute top-2.5 left-3 text-xs font-mono text-slate-400 font-bold select-none z-10">+</span>
@@ -277,7 +277,6 @@ export default function Hero() {
                       pathLength={1}
                       className="mx-draw"
                     />
-                    <circle cx="100" cy="4" r="2" fill="#0d7cae" className="animate-ping" />
                     <circle cx="100" cy="4" r="2" fill="#0d7cae" />
                   </svg>
                 </div>

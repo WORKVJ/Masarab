@@ -26,10 +26,10 @@ export default function SectionHeader({
       <span
         data-anim="up"
         className={`inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-xs ${
-          dark ? 'border-white/15 bg-white/5 text-sky-200' : 'border-slate-200 bg-white text-[#0d7cae] shadow-xs'
+          dark ? 'border-white/15 bg-white/5 text-sky-200' : 'border-slate-200 bg-white text-[var(--accent,#0d7cae)] shadow-xs'
         }`}
       >
-        <span className="mx-ping-dot w-1.5 h-1.5 rounded-full bg-[#0d7cae]" />
+        <span className="mx-ping-dot w-1.5 h-1.5 rounded-full bg-[var(--accent,#0d7cae)]" />
         {eyebrow}
       </span>
       <h2

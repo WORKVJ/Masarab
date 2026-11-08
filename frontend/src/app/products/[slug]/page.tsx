@@ -5,8 +5,12 @@ import { ArrowUpRight, LayoutGrid } from 'lucide-react';
 import { CATEGORIES } from '@/lib/masarContent';
 import { categoryHref, quoteHref, SITE_URL } from '@/lib/routes';
 import { CATEGORY_SEO, pageMetadata } from '@/lib/seo';
+import { DIVISION_THEMES } from '@/lib/divisionThemes';
+import DivisionHighlights from '@/components/sections/DivisionHighlights';
 import PageHero from '@/components/sections/PageHero';
-import CategoryProducts from '@/components/sections/CategoryProducts';
+import DivisionStatement from '@/components/division/DivisionStatement';
+import DivisionShowcase from '@/components/division/DivisionShowcase';
+import DivisionCta from '@/components/division/DivisionCta';
 import CategoryCards from '@/components/sections/CategoryCards';
 import CtaBand from '@/components/sections/CtaBand';
 
@@ -35,23 +39,34 @@ export default async function CategoryPage({ params }: { params: Promise<Params>
   const { slug } = await params;
   const category = CATEGORIES.find((c) => c.slug === slug);
   if (!category) notFound();
+  // each division has its own colour, pattern, icon and highlights
+  const theme = DIVISION_THEMES[category.id];
+  const words = category.name.split(' ');
+  const lastWord = words.pop();
 
   return (
     <>
       <PageHero
         eyebrow={category.headline}
-        title={category.name}
+        title={
+          <>
+            {words.length > 0 && `${words.join(' ')} `}
+            <span style={theme ? { color: theme.light } : undefined}>{lastWord}</span>
+          </>
+        }
         intro={category.summary}
         crumbs={[
           { label: 'Products', href: '/products' },
           { label: category.name, href: categoryHref(category.slug) },
         ]}
         backgroundImage={category.image}
+        theme={theme}
       >
         <Link
           href={quoteHref(category.name)}
           data-magnetic
-          className="group inline-flex items-center gap-2 rounded-full bg-white text-slate-950 px-6 py-3 text-sm font-bold hover:bg-sky-50 transition-colors"
+          style={theme ? { background: theme.accent } : undefined}
+          className={`group inline-flex items-center gap-2 rounded-full ${theme ? 'text-white' : 'bg-white text-slate-950'} px-6 py-3 text-sm font-bold shadow-[0_12px_30px_-12px_rgba(0,0,0,0.6)] hover:brightness-110 transition-[filter]`}
         >
           Request a Quote <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:rotate-45" />
         </Link>
@@ -63,7 +78,12 @@ export default async function CategoryPage({ params }: { params: Promise<Params>
         </Link>
       </PageHero>
 
-      <CategoryProducts category={category} />
+      {theme && <DivisionHighlights theme={theme} name={category.name} />}
+
+      {theme && <DivisionStatement category={category} theme={theme} />}
+
+      {/* every division shows its products in its own layout (gallery, flow, periodic table, panel …) */}
+      <DivisionShowcase category={category} />
 
       {/* Structured data: the category's product list, so search engines understand the page */}
       <script
@@ -93,13 +113,13 @@ export default async function CategoryPage({ params }: { params: Promise<Params>
         eyebrow="Explore More"
         title={
           <>
-            Other <span className="text-[#0d7cae]">Disciplines</span>
+            Other <span className="text-[#0d7cae]">Divisions</span>
           </>
         }
         intro="One trusted supplier for every part of your plant."
       />
 
-      <CtaBand />
+      {theme ? <DivisionCta category={category} theme={theme} /> : <CtaBand />}
     </>
   );
 }

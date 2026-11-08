@@ -5,26 +5,31 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  ChevronDown, ArrowUpRight, Menu, X, Layers, Wrench, Wind, Droplet, FlaskConical, Zap, Gauge, ShieldCheck,
+  ChevronDown, ArrowUpRight, Menu, X,
   PhoneCall, Mail, LayoutGrid,
 } from 'lucide-react';
 import { CATEGORIES, CONTACT } from '@/lib/masarContent';
+import { DIVISION_THEMES } from '@/lib/divisionThemes';
 import { NAV, categoryHref, isActive } from '@/lib/routes';
 import RollText from '@/components/motion/RollText';
 
-const CATEGORY_META: Record<string, { desc: string; icon: React.ElementType; color: string }> = {
-  cooling: { desc: 'Cooling Towers, Chillers & AHUs', icon: Wind, color: 'text-cyan-500' },
-  water: { desc: 'EDI, EDR & Membrane Degassing', icon: Droplet, color: 'text-blue-500' },
-  chemical: { desc: 'Alcohols, Aromatics & Ketones', icon: FlaskConical, color: 'text-emerald-500' },
-  electrical: { desc: 'Gratings, Breakers & VFDs', icon: Zap, color: 'text-amber-500' },
-  instrumentation: { desc: 'Flow Meters, Gauges & Sensors', icon: Gauge, color: 'text-indigo-500' },
-  mechanical: { desc: 'Pumps, Valves & Actuators', icon: Wrench, color: 'text-orange-500' },
-  'pipe-fittings': { desc: 'Plates, Sheets & Special Fittings', icon: Layers, color: 'text-purple-500' },
-  safety: { desc: 'PPE, Fall Protection & FR Gear', icon: ShieldCheck, color: 'text-rose-500' },
+/** One-line summary per division in the Products dropdown (icon + colour come from the division themes). */
+const CATEGORY_DESC: Record<string, string> = {
+  cooling: 'Cooling Towers, Chillers & AHUs',
+  water: 'EDI, EDR & Membrane Degassing',
+  chemical: 'Alcohols, Aromatics & Ketones',
+  electrical: 'Gratings, Breakers & VFDs',
+  instrumentation: 'Moisture, Air Quality & Calibrators',
+  mechanical: 'Pumps, Valves & Actuators',
+  'pipe-fittings': 'Plates, Sheets & Special Fittings',
+  safety: 'PPE, Fall Protection & FR Gear',
 };
 
 export default function Navbar() {
   const pathname = usePathname() || '/';
+  // on a division page the quote buttons take that division's colour
+  const division = CATEGORIES.find((c) => pathname === categoryHref(c.slug));
+  const quoteStyle = division ? { background: DIVISION_THEMES[division.id]?.accent } : undefined;
   const [solutionsOpen, setSolutionsOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -193,8 +198,8 @@ export default function Navbar() {
                       <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 w-[340px] mx-dropdown-in">
                         <div className="bg-white rounded-2xl p-2.5 border border-slate-200/90 shadow-xl grid grid-cols-1 gap-1">
                           {CATEGORIES.map((c, i) => {
-                            const meta = CATEGORY_META[c.id];
-                            const Icon = meta.icon;
+                            const theme = DIVISION_THEMES[c.id];
+                            const Icon = theme.icon;
                             const here = pathname === categoryHref(c.slug);
                             return (
                               <Link
@@ -205,10 +210,10 @@ export default function Navbar() {
                                   here ? 'bg-[#f0f9ff]' : 'hover:bg-slate-50'
                                 }`}
                               >
-                                <Icon className={`w-4 h-4 ${meta.color} transition-transform group-hover/item:scale-125 group-hover/item:-rotate-12`} />
+                                <Icon style={{ color: theme.accent }} className="w-4 h-4 transition-transform group-hover/item:scale-125 group-hover/item:-rotate-12" />
                                 <div className="transition-transform group-hover/item:translate-x-1">
                                   <div className={`font-medium ${here ? 'text-[#0d7cae]' : 'text-slate-900'}`}>{c.name}</div>
-                                  <div className="text-[10px] text-slate-400">{meta.desc}</div>
+                                  <div className="text-[10px] text-slate-400">{CATEGORY_DESC[c.id]}</div>
                                 </div>
                               </Link>
                             );
@@ -231,6 +236,7 @@ export default function Navbar() {
           <div className="shrink-0 flex items-center pointer-events-auto">
             <Link
               href="/contact"
+              style={quoteStyle}
               className="group flex items-center gap-1.5 bg-[#0d7cae] hover:bg-[#0b6a95] text-white px-4 sm:px-5 py-2 rounded-full text-xs font-normal shadow-md shadow-[#0d7cae]/25 transition-all transform hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap"
             >
               <RollText>Get a Quote</RollText>
@@ -254,6 +260,7 @@ export default function Navbar() {
           <div className="flex items-center gap-2">
             <Link
               href="/contact"
+              style={quoteStyle}
               className="flex items-center gap-1.5 h-10 bg-[#0d7cae] text-white px-4 rounded-full text-[13px] font-bold shadow-[0_8px_20px_-8px_rgba(13,124,174,0.8)] active:scale-95 transition-transform"
             >
               <span>Quote</span>

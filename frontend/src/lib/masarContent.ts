@@ -338,8 +338,7 @@ export const CATEGORIES: Category[] = [
 
 /**
  * Product Range — the 16 lines on the client's showroom display board, in the same 4×4 order.
- * `icon` keys map to the line illustrations in components/sections/ProductIcons.tsx.
- * Set `image` to a real product photo path to show a photo instead of the illustration.
+ * `image` is the product photo shown in the grid; `blurb` is the hover tooltip.
  */
 export type RangeGroup = 'piping' | 'drainage' | 'valves' | 'civil' | 'accessories';
 
@@ -350,15 +349,6 @@ export interface RangeProduct {
   blurb: string;
   image?: string;
 }
-
-export const RANGE_GROUPS: { id: RangeGroup | 'all'; label: string }[] = [
-  { id: 'all', label: 'All Products' },
-  { id: 'piping', label: 'Pipes & Fittings' },
-  { id: 'drainage', label: 'Drainage' },
-  { id: 'valves', label: 'Valves' },
-  { id: 'civil', label: 'Covers & Testing' },
-  { id: 'accessories', label: 'Couplings & Adhesives' },
-];
 
 export const PRODUCT_RANGE: RangeProduct[] = [
   { id: 'pvc-cpvc', image: '/images/products/pvc-cpvc.jpg', name: 'PVC CPVC Pipes & Fittings', group: 'piping', blurb: 'Pressure pipes and solvent-weld fittings for water and chemical lines.' },
