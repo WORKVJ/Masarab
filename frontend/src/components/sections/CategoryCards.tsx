@@ -15,6 +15,8 @@ interface CategoryCardsProps {
   /** show the "View all products" button */
   showAllLink?: boolean;
   id?: string;
+  /** section name shown in the scroll dial */
+  label?: string;
 }
 
 /** Grid of the product categories, each linking to its own page. */
@@ -29,11 +31,12 @@ export default function CategoryCards({
   intro = 'From cooling and water treatment to chemicals, instrumentation and workforce safety — sourced from renowned manufacturers and delivered across the Kingdom.',
   showAllLink = true,
   id = 'categories',
+  label = 'Products',
 }: CategoryCardsProps) {
   const list = CATEGORIES.filter((c) => c.id !== excludeId);
 
   return (
-    <section id={id} data-label="Products" className="relative py-20 sm:py-28 bg-[#f6f9fc]">
+    <section id={id} data-label={label} className="relative py-20 sm:py-28 bg-[#f6f9fc]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <SectionHeader eyebrow={eyebrow} title={title} intro={intro} />

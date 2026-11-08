@@ -20,6 +20,7 @@ export default function HomePage() {
     <>
       <Hero />
 
+      {/* Scrolling division-names strip — stays directly under the hero */}
       <KineticMarquee
         rows={[
           ['Cooling Solutions', 'Water Treatment', 'Chemical', 'Electrical'],
@@ -27,13 +28,14 @@ export default function HomePage() {
         ]}
       />
 
-      {/* Showroom product range (16 lines from the client's display board) */}
+      {/* Client request: the 8 divisions come next. Each card opens its own
+          division page (/products/<slug>) listing only that division's products. */}
+      <CategoryCards eyebrow="Our Divisions" label="Divisions" />
+
+      {/* …then the products: showroom product range (16 lines from the client's display board) */}
       <ProductRangeSection />
 
       <AboutSection showMore />
-
-      {/* The 8 disciplines — each card opens its own category page */}
-      <CategoryCards />
 
       <IndustriesSection />
 
