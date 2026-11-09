@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useRef } from 'react';
-import Image from 'next/image';
+import React, { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import RollText from '@/components/motion/RollText';
 import CountUp from '@/components/motion/CountUp';
@@ -12,35 +11,21 @@ import { categoryHref } from '@/lib/routes';
 
 export default function Hero() {
   const onOpenRfq = useRequestQuote();
-  // 3D tilt + depth parallax for the person card.
-  // Writes CSS variables straight onto the card (one rAF per frame) instead of React state,
-  // so moving the mouse never re-renders the hero or its 12 marquee cards.
-  const cardRef = useRef<HTMLDivElement>(null);
-  const rafRef = useRef(0);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const card = cardRef.current;
-    if (!card) return;
-    const { clientX, clientY } = e;
-    cancelAnimationFrame(rafRef.current);
-    rafRef.current = requestAnimationFrame(() => {
-      const rect = card.getBoundingClientRect();
-      const nx = ((clientX - rect.left) / rect.width) * 2 - 1; // -1 … 1
-      const ny = ((clientY - rect.top) / rect.height) * 2 - 1;
-      card.style.setProperty('--tilt-x', `${(-ny * 4).toFixed(2)}deg`);
-      card.style.setProperty('--tilt-y', `${(nx * 4).toFixed(2)}deg`);
-      card.style.setProperty('--px', nx.toFixed(3));
-      card.style.setProperty('--py', ny.toFixed(3));
+  // Client video: plays muted while the hero is on screen, pauses when scrolled away (saves CPU/battery),
+  // and stays on its poster frame for visitors who prefer reduced motion.
+  const videoRef = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = true; // required for autoplay in every browser
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const io = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) video.play().catch(() => {});
+      else video.pause();
     });
-  };
-
-  const handleMouseLeave = () => {
-    const card = cardRef.current;
-    if (!card) return;
-    cancelAnimationFrame(rafRef.current);
-    ['--tilt-x', '--tilt-y'].forEach((v) => card.style.setProperty(v, '0deg'));
-    ['--px', '--py'].forEach((v) => card.style.setProperty(v, '0'));
-  };
+    io.observe(video);
+    return () => io.disconnect();
+  }, []);
 
   return (
     <section
@@ -171,120 +156,21 @@ export default function Hero() {
             </div>
 
             {/* =============================================================== */}
-            {/* MAIN PERSON CARD WITH CONTENT-ALIGNED INDUSTRIAL ENGINEER       */}
-            {/* (Extends all the way down to the cards baseline: 1:1 Reference) */}
+            {/* CLIENT VIDEO — replaces the engineer photo card. Clean frame,    */}
+            {/* no overlays and no controls; nothing overlaps it.                */}
             {/* =============================================================== */}
-            <div
-              ref={cardRef}
-              onMouseMove={handleMouseMove}
-              onMouseLeave={handleMouseLeave}
-              className="mx-tilt relative rounded-[24px] border border-sky-200/80 shadow-[0_16px_40px_-12px_rgba(13,124,174,0.08)] bg-gradient-to-b from-[#f0f9ff]/90 via-white to-[#e0f2fe]/60 overflow-hidden h-[420px] sm:h-[460px] lg:h-[490px] xl:h-[500px] flex items-end justify-center group"
-            >
-              
-              {/* 1. ANIMATED ROTATING RADAR RINGS (Centered Behind Engineer's Head & Helmet) */}
-              <div className="mx-depth-back absolute inset-0 flex items-center justify-center pointer-events-none z-0 -top-8 sm:-top-12">
-                <div className="relative w-[300px] h-[300px] sm:w-[350px] sm:h-[350px] animate-spin-slow">
-                  <svg viewBox="0 0 320 320" className="w-full h-full text-slate-300 fill-none">
-                    {/* Outer dashed ring */}
-                    <circle cx="160" cy="160" r="145" stroke="currentColor" strokeWidth="1.2" strokeDasharray="8 5" opacity="0.65" />
-                    {/* Middle accent ring with orange dashes */}
-                    <circle cx="160" cy="160" r="105" stroke="#0d7cae" strokeWidth="1.5" strokeDasharray="12 6" opacity="0.5" />
-                    {/* Inner precision ring */}
-                    <circle cx="160" cy="160" r="65" stroke="currentColor" strokeWidth="1" strokeDasharray="4 4" opacity="0.6" />
-                    {/* Radar crosshairs */}
-                    <line x1="160" y1="15" x2="160" y2="305" stroke="currentColor" strokeWidth="0.8" strokeDasharray="4 4" opacity="0.35" />
-                    <line x1="15" y1="160" x2="305" y2="160" stroke="currentColor" strokeWidth="0.8" strokeDasharray="4 4" opacity="0.35" />
-                  </svg>
-                </div>
-              </div>
-
-              {/* 2. RADAR SWEEPING BEAM ANIMATION */}
-              <div className="mx-depth-back absolute inset-0 flex items-center justify-center pointer-events-none opacity-50 z-0 -top-8 sm:-top-12">
-                <div className="w-[300px] h-[300px] sm:w-[350px] sm:h-[350px] rounded-full animate-radar">
-                  <div className="w-full h-full rounded-full bg-[conic-gradient(from_0deg,transparent_0_300deg,rgba(13,124,174,0.20)_360deg)]" />
-                </div>
-              </div>
-
-              {/* 3. SOFT BREATHING AMBIENT DEPTH GLOW ORBS (Directly Behind Hard Hat) */}
-              <div className="absolute top-2 left-1/2 -translate-x-1/2 w-56 h-56 rounded-full bg-[#0d7cae]/15 blur-3xl pointer-events-none z-0" />
-              <div className="absolute bottom-28 right-2 w-48 h-48 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none z-0" />
-
-              {/* 4. CAD BLUEPRINT CORNER CROSSHAIRS */}
-              <span className="absolute top-2.5 left-3 text-xs font-mono text-slate-400 font-bold select-none z-10">+</span>
-              <span className="absolute top-2.5 right-3 text-xs font-mono text-slate-400 font-bold select-none z-10">+</span>
-
-              {/* 5. FLOATING UPPER-LEFT MTC QUALITY BADGE */}
-              <div className="mx-depth-front absolute top-3 left-3 z-20 pointer-events-none hidden sm:block">
-                <div className="animate-float">
-                <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white/95 border border-slate-200 shadow-2xs text-[10px] sm:text-[8.5px] font-mono font-normal text-slate-700">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  <span>{CTA.achievements[1]}</span>
-                </div>
-                </div>
-              </div>
-
-              {/* 6. FLOATING WIREFRAME TRIANGLE ACCENT (Positioned Above the Carousel Overlap) */}
-              <div className="absolute bottom-[210px] sm:bottom-[215px] lg:bottom-[220px] left-3.5 z-20 pointer-events-none animate-float">
-                <svg width="18" height="18" viewBox="0 0 24 24" className="text-slate-800 fill-none stroke-current" strokeWidth="2.2">
-                  <polygon points="12 4 21 20 3 20" />
-                </svg>
-              </div>
-
-              {/* 7. FLOATING PULSING RADAR BEACON */}
-              <div className="absolute right-3.5 top-1/3 -translate-y-1/2 z-20 flex items-center justify-center pointer-events-none">
-                <span className="relative flex h-2.5 w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-                </span>
-              </div>
-
-              {/* 8. THE PERSON: MASAR ARABIA INDUSTRIAL ENGINEER (Starts from the down of the cards 1:1) */}
-              <div className="mx-depth-mid relative z-10 w-[90%] sm:w-[86%] max-w-[340px] sm:max-w-[370px] h-[410px] sm:h-[450px] lg:h-[480px] xl:h-[490px] flex items-end justify-center select-none pointer-events-none">
-                <Image
-                  src="/images/industrial-engineer.png"
-                  alt="Masar Arabia industrial engineer"
-                  fill
-                  priority
-                  sizes="(max-width: 640px) 280px, 400px"
-                  className="object-contain object-bottom drop-shadow-[0_16px_25px_rgba(0,0,0,0.22)] transition-transform duration-500 group-hover:scale-105"
-                />
-              </div>
-
-              {/* 9. FLOATING MINI ANALYTICS / DEFLECTION CHART (Floats Directly Above the Carousel Overlap) */}
-              <div className="mx-depth-front absolute bottom-[210px] sm:bottom-[215px] lg:bottom-[220px] right-3 sm:right-4 z-20 pointer-events-none">
-              <div className="bg-white/95 border border-slate-200/90 shadow-lg rounded-xl p-1.5 sm:p-2 max-w-[135px] animate-float">
-                {/* Mini Header Bars */}
-                <div className="flex items-center gap-1 mb-0.5">
-                  <span className="w-3 h-0.5 rounded-full bg-[#0d7cae]"></span>
-                  <span className="w-1.5 h-0.5 rounded-full bg-blue-500"></span>
-                  <span className="w-1 h-0.5 rounded-full bg-emerald-500"></span>
-                </div>
-                {/* Glowing SVG Flexure Curve with Gradient */}
-                <div className="h-4 w-full">
-                  <svg viewBox="0 0 100 24" className="w-full h-full overflow-visible">
-                    <defs>
-                      <linearGradient id="chartGrad" x1="0" y1="0" x2="1" y2="0">
-                        <stop offset="0%" stopColor="#0d7cae" />
-                        <stop offset="100%" stopColor="#0f172a" />
-                      </linearGradient>
-                    </defs>
-                    <path
-                      d="M 0 18 Q 30 20, 55 7 T 100 4"
-                      fill="none"
-                      stroke="url(#chartGrad)"
-                      strokeWidth="2.2"
-                      strokeLinecap="round"
-                      pathLength={1}
-                      className="mx-draw"
-                    />
-                    <circle cx="100" cy="4" r="2" fill="#0d7cae" />
-                  </svg>
-                </div>
-                <span className="text-[10px] sm:text-[8px] font-mono font-normal text-slate-700 block mt-0.5 leading-none">{ABOUT.stats[2].value}{ABOUT.stats[2].suffix} Years</span>
-                <span className="text-[10px] sm:text-[7.5px] font-mono text-emerald-600 font-normal block leading-none">of Experience</span>
-              </div>
-              </div>
-
+            <div className="relative overflow-hidden rounded-[24px] aspect-video bg-slate-900 ring-1 ring-sky-200/80 shadow-[0_30px_60px_-30px_rgba(13,124,174,0.55)]">
+              <video
+                ref={videoRef}
+                src="/videos/masar-hero.mp4"
+                poster="/videos/masar-hero-poster.jpg"
+                muted
+                loop
+                playsInline
+                preload="auto"
+                aria-label="Masar Arabia industries: pumps, valves, electrical panels, laboratory chemicals and workforce safety"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
             </div>
 
           </div>
@@ -295,7 +181,7 @@ export default function Hero() {
         {/* AUTO-MOVING CARD TRACK DOCKED AT THE BASELINE OF THE PERSON & CARD    */}
         {/* (No dividing line, overlapping the person's base 1:1 like reference) */}
         {/* ===================================================================== */}
-        <div className="-mt-[195px] sm:-mt-[205px] lg:-mt-[215px] relative z-20 -mx-4 sm:-mx-6 lg:-mx-8">
+        <div className="mt-6 sm:mt-8 relative z-20 -mx-4 sm:-mx-6 lg:-mx-8">
           
           {/* Marquee Wrapper with Smooth Left & Right Gradient Shadows */}
           <div className="relative overflow-hidden py-1">
