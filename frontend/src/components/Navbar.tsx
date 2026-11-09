@@ -33,6 +33,9 @@ export default function Navbar() {
   const [solutionsOpen, setSolutionsOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  // Home (video hero) and division pages open on a dark header: show the white logo until the bar docks
+  const darkTop = pathname === '/' || pathname.startsWith('/products/');
+  const logoSrc = darkTop && !isScrolled ? '/images/logo-white.png' : '/images/logo-dark.png';
   const [pill, setPill] = useState({ x: 0, width: 0 });
   const navRef = useRef<HTMLElement>(null);
   const linkRefs = useRef<Record<string, HTMLElement | null>>({});
@@ -49,14 +52,12 @@ export default function Navbar() {
   // Lock page scroll while the mobile menu is open; Escape closes it
   useEffect(() => {
     if (!mobileMenuOpen) return;
-    window.__lenis?.stop();
     const html = document.documentElement;
     const prev = html.style.overflow;
     html.style.overflow = 'hidden';
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setMobileMenuOpen(false);
     window.addEventListener('keydown', onKey);
     return () => {
-      window.__lenis?.start();
       html.style.overflow = prev;
       window.removeEventListener('keydown', onKey);
     };
@@ -119,7 +120,7 @@ export default function Navbar() {
           <div className="shrink-0 flex items-center pointer-events-auto">
             <Link href="/" aria-label="Masar Arabia — home" className="flex items-center group py-0.5">
               <Image
-                src="/images/logo-dark.png"
+                src={logoSrc}
                 alt="Masar Arabia"
                 width={150}
                 height={34}
@@ -254,7 +255,7 @@ export default function Navbar() {
           }`}
         >
           <Link href="/" aria-label="Masar Arabia — home" className="flex items-center py-1.5 pr-2">
-            <Image src="/images/logo-dark.png" alt="Masar Arabia" width={130} height={30} style={{ width: 'auto' }} className="h-7 w-auto object-contain" priority />
+            <Image src={logoSrc} alt="Masar Arabia" width={130} height={30} style={{ width: 'auto' }} className="h-7 w-auto object-contain" priority />
           </Link>
 
           <div className="flex items-center gap-2">
@@ -292,7 +293,7 @@ export default function Navbar() {
             </button>
           </div>
 
-          <nav className="flex-1 overflow-y-auto px-5 py-4" data-lenis-prevent aria-label="Mobile">
+          <nav className="flex-1 overflow-y-auto px-5 py-4" aria-label="Mobile">
             {[{ href: '/', label: 'Home' }, ...NAV].map((l, i) => {
               const on = l.href === '/' ? pathname === '/' : isActive(pathname, l.href);
               return (

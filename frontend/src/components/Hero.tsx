@@ -28,33 +28,32 @@ export default function Hero() {
   }, []);
 
   return (
-    <section
-      id="hero"
-      className="relative bg-white pt-28 sm:pt-32 lg:pt-36 pb-3 sm:pb-4 overflow-hidden border-b border-slate-200/80"
-    >
-      {/* ── LUXURY ARCHITECTURAL BACKGROUND WATERMARK & AMBIENT AURA ── */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute top-4 left-1/2 -translate-x-1/2 select-none font-black uppercase text-slate-100/70 whitespace-nowrap text-center -z-10 tracking-[0.24em]"
-        style={{ fontSize: 'clamp(38px, 10vw, 140px)', lineHeight: 0.8 }}
-      >
-        MASAR ARABIA
+    <>
+    <section id="hero" className="relative isolate overflow-hidden bg-[#04121f] text-white min-h-[100svh] flex flex-col">
+      {/* ── CLIENT VIDEO covering the whole hero ── */}
+      <div className="absolute inset-0 -z-10">
+        <video
+          ref={videoRef}
+          src="/videos/masar-hero.mp4"
+          poster="/videos/masar-hero-poster.jpg"
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-label="Masar Arabia industries: pumps, valves, electrical panels, laboratory chemicals and workforce safety"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        {/* readability: shade only behind the text (left + bottom); the right side of the video stays bright */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#04121f]/85 via-[#04121f]/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#04121f]/70 via-transparent to-[#04121f]/35" />
       </div>
 
-      {/* Subtle CAD Blueprint Grid */}
-      <div className="absolute inset-0 cad-blueprint-grid opacity-25 pointer-events-none -z-10" />
-
-      {/* Radiant Sunrise Orange & Amber Ambient Mesh Orbs */}
-      <div data-speed="-0.35" className="absolute -top-16 left-1/2 -translate-x-1/2 w-[900px] h-[450px] bg-gradient-to-b from-[#0d7cae]/12 via-[#0284c7]/6 to-transparent rounded-full blur-3xl pointer-events-none -z-10" />
-      <div data-speed="0.5" className="absolute top-1/4 -right-32 w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-3xl pointer-events-none -z-10" />
-      <div data-speed="0.25" className="absolute bottom-0 -left-40 w-[520px] h-[520px] bg-orange-400/10 rounded-full blur-3xl pointer-events-none -z-10" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-1 flex flex-col justify-center pt-28 sm:pt-32 lg:pt-36 pb-10 sm:pb-14">
         
         {/* ===================================================================== */}
         {/* 2-COLUMN SPLIT HERO (COMPACT & BALANCED FOR FULL VIEWPORT VISIBILITY) */}
         {/* ===================================================================== */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-8 items-start mb-0">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-end mb-0">
           
           {/* ───────────────────────────────────────────────────────────────── */}
           {/* LEFT COLUMN: HIGH-IMPACT HEADLINE & CTAS (Span 7)                 */}
@@ -62,15 +61,15 @@ export default function Hero() {
           <div className="lg:col-span-7 space-y-4 sm:space-y-5 relative z-30 pt-1 sm:pt-3 pb-4 lg:pb-8">
             
             {/* Giant Bold Headline (Clean 2-Line Display Layout with Official Logo Blue) */}
-            <h1 className="text-3xl sm:text-4xl lg:text-[48px] xl:text-[56px] font-black uppercase tracking-[-0.035em] leading-[0.98] text-slate-950">
+            <h1 className="text-3xl sm:text-4xl lg:text-[48px] xl:text-[56px] font-black uppercase tracking-[-0.035em] leading-[0.98] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.35)]">
               <span className="block whitespace-nowrap">LEADING SUPPLIER OF </span>
-              <span className="mx-text-shine block text-transparent bg-clip-text bg-gradient-to-r from-[#0d7cae] via-[#38bdf8] to-[#0d7cae] mt-1 sm:mt-1.5">
+              <span className="mx-text-shine block text-transparent bg-clip-text bg-gradient-to-r from-[#38bdf8] via-[#bae6fd] to-[#38bdf8] mt-1 sm:mt-1.5">
                 INDUSTRIAL SOLUTIONS
               </span>
             </h1>
 
             {/* Subtitle Paragraph */}
-            <p className="text-xs sm:text-sm text-slate-600 max-w-lg leading-relaxed font-normal">
+            <p className="text-sm sm:text-base text-white/80 max-w-lg leading-relaxed font-normal">
               {STATS_BANNER.text}
             </p>
 
@@ -89,10 +88,10 @@ export default function Hero() {
               {/* Secondary Pill Button with Dark Circle & Play Icon */}
               <Link
                 href="/products"
-                className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-white hover:bg-slate-50 border-2 border-slate-200 hover:border-slate-300 text-slate-900 font-bold text-xs sm:text-sm shadow-2xs transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer flex items-center gap-2 group"
+                className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-white/10 hover:bg-white/20 border border-white/30 text-white font-bold text-xs sm:text-sm shadow-2xs transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer flex items-center gap-2 group"
               >
-                <div className="mx-play-ring relative w-6 h-6 rounded-full bg-slate-950 text-white flex items-center justify-center shrink-0 group-hover:bg-[#0d7cae] group-hover:scale-110 transition-[background-color,scale] duration-300 shadow-2xs">
-                  <Play className="w-2.5 h-2.5 fill-current ml-0.5 text-white" />
+                <div className="mx-play-ring relative w-6 h-6 rounded-full bg-white text-slate-950 flex items-center justify-center shrink-0 group-hover:bg-[#0d7cae] group-hover:scale-110 transition-[background-color,scale] duration-300 shadow-2xs">
+                  <Play className="w-2.5 h-2.5 fill-current ml-0.5" />
                 </div>
                 <RollText>Explore Products</RollText>
               </Link>
@@ -100,23 +99,16 @@ export default function Hero() {
               {/* Direct Phone Line Pill */}
               <a
                 href={CONTACT.phoneHref}
-                className="group hidden xl:inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-slate-50 hover:bg-slate-100 border border-slate-200 hover:border-sky-300 text-xs font-mono font-bold text-slate-800 transition-colors"
+                className="group hidden xl:inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/25 text-xs font-mono font-bold text-white transition-colors"
               >
-                <PhoneCall className="w-3.5 h-3.5 text-[#0d7cae] group-hover:animate-[mxRing_0.6s_ease-in-out]" />
+                <PhoneCall className="w-3.5 h-3.5 text-sky-300 group-hover:animate-[mxRing_0.6s_ease-in-out]" />
                 <span>{CONTACT.phoneDisplay}</span>
               </a>
 
             </div>
 
-          </div>
-
-          {/* ───────────────────────────────────────────────────────────────── */}
-          {/* RIGHT COLUMN: 3-CARD COMPOSITION (BALANCED & PROPORTIONAL)        */}
-          {/* ───────────────────────────────────────────────────────────────── */}
-          <div className="lg:col-span-5 space-y-2 relative z-20">
-            
-            {/* Top Row: Two Floating Stat Cards Side-by-Side (Clean Light & No Bold) */}
-            <div className="grid grid-cols-2 gap-2.5">
+            {/* Two stat cards — left-aligned under the buttons */}
+            <div className="grid grid-cols-2 gap-2.5 max-w-md pt-2">
               
               {/* Card 1: 4.9 Rating Card (Luminous Mint Glass) */}
               <div className="mx-shine group/stat relative overflow-hidden bg-gradient-to-br from-[#ebfcf3] to-[#d1fae5]/70 border border-emerald-300/60 rounded-[16px] p-2 sm:p-2.5 shadow-xs flex flex-col justify-between hover:shadow-md hover:-translate-y-0.5 transition-all min-h-[78px] sm:min-h-0 sm:h-[70px]">
@@ -154,34 +146,22 @@ export default function Hero() {
               </div>
 
             </div>
-
-            {/* =============================================================== */}
-            {/* CLIENT VIDEO — replaces the engineer photo card. Clean frame,    */}
-            {/* no overlays and no controls; nothing overlaps it.                */}
-            {/* =============================================================== */}
-            <div className="relative overflow-hidden rounded-[24px] aspect-video bg-slate-900 ring-1 ring-sky-200/80 shadow-[0_30px_60px_-30px_rgba(13,124,174,0.55)]">
-              <video
-                ref={videoRef}
-                src="/videos/masar-hero.mp4"
-                poster="/videos/masar-hero-poster.jpg"
-                muted
-                loop
-                playsInline
-                preload="auto"
-                aria-label="Masar Arabia industries: pumps, valves, electrical panels, laboratory chemicals and workforce safety"
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-            </div>
-
           </div>
 
         </div>
 
+      </div>
+
+    </section>
+
+    {/* moving cards band, directly under the video hero */}
+    <div data-pause-offscreen className="relative bg-white border-b border-slate-200/80 py-4 sm:py-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* ===================================================================== */}
         {/* AUTO-MOVING CARD TRACK DOCKED AT THE BASELINE OF THE PERSON & CARD    */}
         {/* (No dividing line, overlapping the person's base 1:1 like reference) */}
         {/* ===================================================================== */}
-        <div className="mt-6 sm:mt-8 relative z-20 -mx-4 sm:-mx-6 lg:-mx-8">
+        <div className="relative -mx-4 sm:-mx-6 lg:-mx-8">
           
           {/* Marquee Wrapper with Smooth Left & Right Gradient Shadows */}
           <div className="relative overflow-hidden py-1">
@@ -217,8 +197,8 @@ export default function Hero() {
         </div>
 
       </div>
-
-    </section>
+    </div>
+    </>
   );
 }
 

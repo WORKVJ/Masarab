@@ -103,41 +103,27 @@ export default function MotionEngine() {
         const h1 = hero.querySelector('h1');
         const lines = h1 ? Array.from(h1.children) : [];
         const leftRest = h1?.parentElement ? Array.from(h1.parentElement.children).filter((c) => c !== h1) : [];
-        const rightCol = hero.querySelector<HTMLElement>('.lg\\:col-span-5');
-        const rightItems = rightCol ? Array.from(rightCol.children) : [];
-        const watermark = hero.querySelector<HTMLElement>(':scope > [aria-hidden="true"]');
 
         const intro = gsap.timeline({ delay: introDelay, defaults: { ease: 'expo.out' } });
         if (lines.length) {
           intro.fromTo(lines, { yPercent: 105, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 1.2, stagger: 0.12 });
         }
         if (leftRest.length) {
-          intro.fromTo(leftRest, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1, stagger: 0.08 }, '-=0.85');
-        }
-        if (rightItems.length) {
           intro.fromTo(
-            rightItems,
-            { y: 50, opacity: 0 },
+            leftRest,
+            { y: 30, opacity: 0 },
             {
               y: 0,
               opacity: 1,
-              duration: 1.2,
-              stagger: 0.1,
-              // hand transform back to CSS so the person card's mouse tilt (.mx-tilt) takes over
+              duration: 1,
+              stagger: 0.08,
+              // drop the inline transforms afterwards so these elements don't stay on GPU layers
               onComplete: () => {
-                gsap.set(rightItems, { clearProps: 'transform,opacity' });
+                gsap.set(leftRest, { clearProps: 'transform,opacity' });
               },
             },
-            '-=0.95'
+            '-=0.85'
           );
-        }
-        if (watermark) {
-          intro.fromTo(watermark, { opacity: 0 }, { opacity: 1, duration: 1.6 }, 0);
-          gsap.to(watermark, {
-            yPercent: 80,
-            ease: 'none',
-            scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true },
-          });
         }
         const heroGrid = hero.querySelector<HTMLElement>('.grid');
         if (heroGrid) {
@@ -184,7 +170,6 @@ export default function MotionEngine() {
 
       // ── 4. Split-word headings ───────────────────────────────────────
       gsap.utils.toArray<HTMLElement>('section:not(#hero) h2, [data-split-heading]').filter(notPageHero).forEach((heading) => {
-        if (heading.closest('[data-no-split]')) return;
         splitWords(heading);
         const words = heading.querySelectorAll('.mx-word-inner');
         if (!words.length) return;
@@ -235,39 +220,16 @@ export default function MotionEngine() {
         );
       });
 
-      // ── 4c. Decorative wordmarks: letters rise one by one (aria-hidden, no SEO impact) ──
-      gsap.utils.toArray<HTMLElement>('[data-letters]').forEach((el) => {
-        if (!el.dataset.lettersDone) {
-          el.dataset.lettersDone = '1';
-          const text = el.textContent ?? '';
-          el.textContent = '';
-          for (const ch of text) {
-            const c = document.createElement('span');
-            c.className = 'mx-letter';
-            c.textContent = ch === ' ' ? ' ' : ch;
-            el.appendChild(c);
-          }
-        }
-        gsap.fromTo(
-          el.querySelectorAll('.mx-letter'),
-          { yPercent: 100 },
-          {
-            yPercent: 0,
-            ease: 'none',
-            stagger: 0.05,
-            scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom 85%', scrub: 0.6 },
-          }
-        );
-      });
-
       // ── 5. Batched fade-up reveals ───────────────────────────────────
       const revealEls = gsap.utils.toArray<HTMLElement>('[data-anim="up"]').filter(notPageHero);
-      gsap.set(revealEls, { y: 36, opacity: 0 });
+      const UP_FROM = { y: 36, opacity: 0 };
+      gsap.set(revealEls, UP_FROM);
       ScrollTrigger.batch(revealEls, {
         start: 'top 98%', // anything visible on screen reveals, even near the bottom edge
         // no once:true — a self-killing trigger can corrupt ScrollTrigger's list mid-refresh (crash on reload mid-page)
+        // fromTo (not to): starting from known values means GSAP never reads computed styles mid-scroll
         onEnter: (batch) =>
-          gsap.to(batch, {
+          gsap.fromTo(batch, UP_FROM, {
             y: 0,
             opacity: 1,
             duration: 0.8,
@@ -284,13 +246,13 @@ export default function MotionEngine() {
       (['left', 'right'] as const).forEach((side) => {
         const els = gsap.utils.toArray<HTMLElement>(`[data-anim="${side}"]`).filter(notPageHero);
         if (!els.length) return;
-        const from = side === 'left' ? -70 : 70;
-        gsap.set(els, { x: from, opacity: 0, scale: 0.96 });
+        const SIDE_FROM = { x: side === 'left' ? -70 : 70, opacity: 0, scale: 0.96 };
+        gsap.set(els, SIDE_FROM);
         ScrollTrigger.batch(els, {
           start: 'top 98%',
-          // (see note above: no once:true)
+          // (see notes above: no once:true, fromTo)
           onEnter: (batch) =>
-            gsap.to(batch, {
+            gsap.fromTo(batch, SIDE_FROM, {
               x: 0,
               opacity: 1,
               scale: 1,
@@ -304,110 +266,6 @@ export default function MotionEngine() {
             }),
         });
       });
-
-      // ── 5b. 3D wave entrance + line-drawn illustrations (Product Range cards) ──
-      const flipEls = gsap.utils.toArray<HTMLElement>('[data-anim="flip"]').filter(notPageHero);
-      if (flipEls.length) {
-        // Prepare each illustration: every stroke starts "undrawn", fills start transparent
-        const prepDraw = (root: Element) => {
-          const shapes = Array.from(root.querySelectorAll<SVGGeometryElement>('.mx-ico path, .mx-ico rect, .mx-ico circle'));
-          shapes.forEach((s) => {
-            let len = 0;
-            try {
-              len = s.getTotalLength();
-            } catch {
-              len = 0;
-            }
-            if (!len) return;
-            s.style.strokeDasharray = `${len}`;
-            s.style.strokeDashoffset = `${len}`;
-            s.style.fillOpacity = '0';
-          });
-          return shapes;
-        };
-        const shapeMap = new Map(flipEls.map((el) => [el, prepDraw(el)]));
-
-        // Photo tiles: hidden behind their shutter until the card scrolls in (transform/opacity only)
-        const photoMap = new Map<HTMLElement, { photo: HTMLElement; shutter: HTMLElement }>();
-        flipEls.forEach((el) => {
-          const photo = el.querySelector<HTMLElement>('.mx-tile-photo');
-          const shutter = el.querySelector<HTMLElement>('.mx-tile-shutter');
-          if (!photo || !shutter) return;
-          photoMap.set(el, { photo, shutter });
-          gsap.set(photo, { opacity: 0, scale: 1.3 });
-        });
-        const revealed = new WeakSet<Element>();
-        const revealPhoto = (el: HTMLElement, i: number) => {
-          const tile = photoMap.get(el);
-          if (!tile || revealed.has(el)) return; // once per card: scrolling back past it never replays the wipe
-          revealed.add(el);
-          const { photo, shutter } = tile;
-          gsap
-            .timeline({ delay: 0.15 + i * 0.08 })
-            .fromTo(shutter, { scaleX: 0, transformOrigin: '0% 50%' }, { scaleX: 1, duration: 0.45, ease: 'power3.in' })
-            .set(photo, { opacity: 1 })
-            .set(shutter, { transformOrigin: '100% 50%' })
-            .to(shutter, { scaleX: 0, duration: 0.65, ease: 'expo.out' })
-            .to(
-              photo,
-              {
-                scale: 1,
-                duration: 1.5,
-                ease: 'expo.out',
-                onComplete: () => {
-                  gsap.set(photo, { clearProps: 'transform,opacity' });
-                  gsap.set(shutter, { clearProps: 'transform' });
-                },
-              },
-              '<'
-            );
-        };
-        cleanups.push(() => photoMap.forEach(({ photo, shutter }) => gsap.set([photo, shutter], { clearProps: 'all' })));
-
-        gsap.set(flipEls, { opacity: 0, y: 50, rotateX: -28, transformOrigin: '50% 100%' });
-        ScrollTrigger.batch(flipEls, {
-          start: 'top 98%', // anything visible on screen reveals, even near the bottom edge
-          // (see note above: no once:true)
-          onEnter: (batch) => {
-            gsap.to(batch, {
-              opacity: 1,
-              y: 0,
-              rotateX: 0,
-              duration: 1,
-              ease: 'expo.out',
-              stagger: 0.08,
-              overwrite: true,
-              onComplete: () => {
-                gsap.set(batch, { clearProps: 'transform' });
-              },
-            });
-            batch.forEach((el, i) => {
-              revealPhoto(el as HTMLElement, i);
-              const shapes = shapeMap.get(el as HTMLElement) ?? [];
-              if (!shapes.length) return;
-              gsap.to(shapes, {
-                strokeDashoffset: 0,
-                duration: 1.1,
-                ease: 'power2.inOut',
-                stagger: 0.05,
-                delay: 0.25 + i * 0.08,
-              });
-              gsap.to(shapes, {
-                fillOpacity: 1,
-                duration: 0.6,
-                delay: 0.9 + i * 0.08,
-                onComplete: () => {
-                  shapes.forEach((s) => {
-                    s.style.strokeDasharray = '';
-                    s.style.strokeDashoffset = '';
-                    s.style.fillOpacity = '';
-                  });
-                },
-              });
-            });
-          },
-        });
-      }
 
       // ── 5c. Shutter photo reveals ([data-shutter], e.g. About bento) ──
       // A brand-blue panel rises over the frame, the photo appears behind it, then the panel lifts
@@ -453,18 +311,20 @@ export default function MotionEngine() {
       });
 
       // ── 7. Velocity skew (marquee band) ──────────────────────────────
-      const skewTargets = gsap.utils.toArray<HTMLElement>('[data-velocity]');
-      if (skewTargets.length) {
-        const setters = skewTargets.map((el) => gsap.quickTo(el, 'skewY', { duration: 0.5, ease: 'power3.out' }));
+      // Only while the band is on screen — a page-wide trigger would write a transform to it on
+      // every scroll frame even when nobody can see it.
+      gsap.utils.toArray<HTMLElement>('[data-velocity]').forEach((el) => {
+        const setSkew = gsap.quickTo(el, 'skewY', { duration: 0.5, ease: 'power3.out' });
         ScrollTrigger.create({
-          start: 0,
-          end: 'max',
-          onUpdate: (self) => {
-            const skew = gsap.utils.clamp(-4, 4, self.getVelocity() / -400);
-            setters.forEach((set) => set(skew));
+          trigger: el,
+          start: 'top bottom',
+          end: 'bottom top',
+          onUpdate: (self) => setSkew(gsap.utils.clamp(-4, 4, self.getVelocity() / -400)),
+          onToggle: (self) => {
+            if (!self.isActive) gsap.set(el, { skewY: 0 });
           },
         });
-      }
+      });
     });
     cleanups.push(() => ctx.revert());
 
@@ -499,7 +359,7 @@ export default function MotionEngine() {
       (entries) => entries.forEach((e) => e.target.classList.toggle('mx-offscreen', !e.isIntersecting)),
       { rootMargin: '100px 0px' }
     );
-    document.querySelectorAll('[data-page] > section, [data-page] > .mx-marquee, footer').forEach((el) => offscreenIO.observe(el));
+    document.querySelectorAll('[data-page] > section, [data-page] > .mx-marquee, [data-pause-offscreen], footer').forEach((el) => offscreenIO.observe(el));
     cleanups.push(() => offscreenIO.disconnect());
 
     // ── 9. Keep trigger positions fresh as images/data load ────────────

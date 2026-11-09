@@ -193,7 +193,7 @@ ${form.message}`;
       </div>
 
       {/* conversation */}
-      <div ref={listRef} data-lenis-prevent className="flex-1 overflow-y-auto overscroll-contain bg-[#f6f9fc] px-4 py-4 space-y-2.5" aria-live="polite">
+      <div ref={listRef} className="flex-1 overflow-y-auto overscroll-contain bg-[#f6f9fc] px-4 py-4 space-y-2.5" aria-live="polite">
         {msgs.map((m) => (
           <div key={m.id} className={`mx-chat-in flex ${m.from === 'user' ? 'justify-end' : 'justify-start'}`}>
             <p

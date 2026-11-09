@@ -61,7 +61,7 @@ export default function CategoryCards({
             const Icon = t?.icon;
             const deep = t?.deep ?? '4,18,31';
             return (
-              <li key={c.id} data-anim="flip" className="[perspective:900px]">
+              <li key={c.id} data-anim="up">
                 <Link
                   href={categoryHref(c.slug)}
                   style={{ boxShadow: `0 26px 50px -30px ${t?.accent ?? 'rgba(13,124,174,0.6)'}` }}

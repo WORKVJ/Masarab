@@ -79,7 +79,9 @@ export default function RootLayout({
         {/* Runs before first paint: skip the branded loader if it was already seen this session */}
         <script dangerouslySetInnerHTML={{ __html: PRELOADER_HEAD_SCRIPT }} />
       </head>
-      <body className="min-h-full flex flex-col font-sans bg-white text-slate-900">
+      {/* suppressHydrationWarning: browser extensions (Grammarly, password managers, ColorZilla …) add
+          attributes to <body> before React hydrates; this ignores only <body>'s own attributes */}
+      <body className="min-h-full flex flex-col font-sans bg-white text-slate-900" suppressHydrationWarning>
         <Preloader />
         {/* Structured data so search engines understand the business, location and contact details */}
         <script

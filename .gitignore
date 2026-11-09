@@ -19,18 +19,6 @@ backend/staticfiles/
 .env.*
 !.env.example
 
-# ── Local research & scratch files (not part of the site) ───
-# saved copies of third-party reference websites
-growmedlink*
-hirelinks*
-competitor.html
-all_snippets.txt
-# one-off image-inspection scripts
-check_*.py
-inspect_*.py
-get_step.py
-frontend/public/images/products/temp_*/
-
 # ── OS / editor ──────────────────────────────────────────────
 .DS_Store
 Thumbs.db
