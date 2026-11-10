@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { pageMetadata } from '@/lib/seo';
-import Hero from '@/components/Hero';
+import Hero, { HeroCardsBand } from '@/components/Hero';
 import KineticMarquee from '@/components/KineticMarquee';
 import ProductRangeSection from '@/components/sections/ProductRangeSection';
 import AboutSection from '@/components/sections/AboutSection';
@@ -20,16 +20,10 @@ export default function HomePage() {
     <>
       <Hero />
 
-      {/* Scrolling division-names strip — stays directly under the hero */}
-      <KineticMarquee
-        rows={[
-          ['Cooling Solutions', 'Water Treatment', 'Chemical', 'Electrical'],
-          ['Instrumentation', 'Mechanical', 'Pipe Fittings & Alloys', 'Safety Equipments'],
-        ]}
-      />
+      {/* Client request: the client logos come straight after the hero */}
+      <ClientsSection />
 
-      {/* Client request: the 8 divisions come next. Each card opens its own
-          division page (/products/<slug>) listing only that division's products. */}
+      {/* The 8 divisions; each card opens its own division page (/products/<slug>) */}
       <CategoryCards eyebrow="Our Divisions" label="Divisions" />
 
       {/* …then the products: showroom product range (16 lines from the client's display board) */}
@@ -41,7 +35,14 @@ export default function HomePage() {
 
       <WhyMasar />
 
-      <ClientsSection />
+      {/* Client request: moving cards + scrolling division names moved down here */}
+      <HeroCardsBand />
+      <KineticMarquee
+        rows={[
+          ['Cooling Solutions', 'Water Treatment', 'Chemical', 'Electrical'],
+          ['Instrumentation', 'Mechanical', 'Pipe Fittings & Alloys', 'Safety Equipments'],
+        ]}
+      />
 
       <CtaBand />
     </>

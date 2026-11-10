@@ -28,21 +28,23 @@ export default function Hero() {
   }, []);
 
   return (
-    <>
     <section id="hero" className="relative isolate overflow-hidden bg-[#04121f] text-white min-h-[100svh] flex flex-col">
       {/* ── CLIENT VIDEO covering the whole hero ── */}
       <div className="absolute inset-0 -z-10">
         <video
           ref={videoRef}
-          src="/videos/masar-hero.mp4"
           poster="/videos/masar-hero-poster.jpg"
           muted
           loop
           playsInline
           preload="auto"
-          aria-label="Masar Arabia industries: pumps, valves, electrical panels, laboratory chemicals and workforce safety"
+          aria-label="Masar Arabia industries: cooling towers, process piping, laboratories, control panels, valves and site engineers"
           className="absolute inset-0 w-full h-full object-cover"
-        />
+        >
+          {/* phones get the 720p file (2.4 MB), larger screens the 1080p file (4.7 MB) */}
+          <source src="/videos/masar-hero-720.mp4" type="video/mp4" media="(max-width: 767px)" />
+          <source src="/videos/masar-hero-1080.mp4" type="video/mp4" />
+        </video>
         {/* readability: shade only behind the text (left + bottom); the right side of the video stays bright */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#04121f]/85 via-[#04121f]/40 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#04121f]/70 via-transparent to-[#04121f]/35" />
@@ -153,8 +155,12 @@ export default function Hero() {
       </div>
 
     </section>
+  );
+}
 
-    {/* moving cards band, directly under the video hero */}
+/* Moving cards band: placed further down the home page (above the division-names strip). */
+export function HeroCardsBand() {
+  return (
     <div data-pause-offscreen className="relative bg-white border-b border-slate-200/80 py-4 sm:py-6">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* ===================================================================== */}
@@ -198,7 +204,6 @@ export default function Hero() {
 
       </div>
     </div>
-    </>
   );
 }
 
