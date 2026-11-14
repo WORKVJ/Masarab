@@ -103,7 +103,7 @@ export default function SafetyShowcase({
                   </span>
                   <span className="flex flex-1 flex-col p-3.5 sm:p-4 border-t border-slate-100">
                     <span className="text-[13.5px] sm:text-[15px] font-bold leading-snug text-slate-900">{p.name}</span>
-                    {p.description && <span className="mt-1.5 max-sm:hidden text-[13px] leading-relaxed text-slate-500 line-clamp-2">{p.description}</span>}
+                    {p.description && <span className="mt-1.5 text-[13px] leading-relaxed text-slate-500">{p.description}</span>}
                     <span className="mt-auto pt-3 inline-flex items-center gap-1 text-xs font-bold text-[var(--accent)]">
                       Enquire <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:rotate-45" />
                     </span>

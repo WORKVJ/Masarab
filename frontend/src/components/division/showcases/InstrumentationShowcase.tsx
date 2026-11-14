@@ -83,7 +83,7 @@ export default function InstrumentationShowcase({ category }: { category: Catego
                           <span className="text-[15px] font-bold leading-snug text-slate-900">{p.name}</span>
                           <Dial f={0.25 + ((i * 0.37) % 0.65)} />
                         </span>
-                        <span className="mt-1.5 text-[13px] leading-relaxed text-slate-500 line-clamp-3">{p.description}</span>
+                        <span className="mt-1.5 text-[13px] leading-relaxed text-slate-500">{p.description}</span>
                         <span className="mt-auto pt-3 inline-flex items-center gap-1 text-[11px] font-bold text-slate-400 group-hover:text-[var(--accent)] transition-colors">
                           {detail ? 'View details' : 'Enquire'} <ArrowUpRight className="w-3 h-3" />
                         </span>
@@ -158,7 +158,7 @@ export default function InstrumentationShowcase({ category }: { category: Catego
                         </span>
                         <span className="flex min-w-0 flex-col py-0.5">
                           <span className="text-[15px] font-bold leading-snug text-slate-900">{s.name}</span>
-                          <span className="mt-1 text-[12.5px] leading-relaxed text-slate-500 line-clamp-3">{s.description}</span>
+                          <span className="mt-1 text-[12.5px] leading-relaxed text-slate-500">{s.description}</span>
                           <span className="mt-auto pt-2 inline-flex items-center gap-1 text-[11px] font-bold text-slate-400 group-hover:text-[var(--accent)] transition-colors">
                             Enquire <ArrowUpRight className="w-3 h-3" />
                           </span>

@@ -6,10 +6,9 @@ import { productHref, productLink } from '@/lib/productRoutes';
 import { DIVISION_THEMES, themeColors, themeVars } from '@/lib/divisionThemes';
 import ShowcaseHeader from '../ShowcaseHeader';
 
-/** Cooling — a dark, icy bento gallery: one feature tile, one wide tile, the rest square. */
+/** Cooling — dark, icy product cards: photo, name and the full description of every product. */
 export default function CoolingShowcase({ category }: { category: Category }) {
   const t = DIVISION_THEMES.cooling;
-  const Icon = t.icon;
   return (
     <section
       id="products"
@@ -36,51 +35,39 @@ export default function CoolingShowcase({ category }: { category: Category }) {
           intro={category.summary}
         />
 
-        <ul className="mt-12 sm:mt-14 grid grid-cols-2 lg:grid-cols-4 auto-rows-[210px] sm:auto-rows-[250px] gap-3 sm:gap-4 [grid-auto-flow:dense]">
+        {/* every product as on the client's site: photo, name, full description, link */}
+        <ul className="mt-12 sm:mt-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
           {category.products.map((p, i) => {
-            const feature = i === 0;
-            const wide = i === 1;
+            const detail = productHref(category, p.name);
             return (
-              <li key={p.name} data-anim="up" className={feature ? 'col-span-2 row-span-2' : wide ? 'col-span-2' : ''}>
+              <li key={p.name} data-anim="up">
                 <Link
                   href={productLink(category, p.name)}
-                  aria-label={productHref(category, p.name) ? `${p.name} — view details` : `${p.name} — request a quote`}
-                  className="group relative block h-full overflow-hidden rounded-[22px] ring-1 ring-white/10 hover:ring-[var(--accent-light)]/60 transition-[box-shadow]"
+                  aria-label={detail ? `${p.name} — view details` : `${p.name} — request a quote`}
+                  className="group flex h-full flex-col overflow-hidden rounded-[22px] bg-white/[0.06] ring-1 ring-white/10 hover:ring-[var(--accent-light)]/60 transition-[box-shadow]"
                 >
-                  {p.image && (
-                    <Image
-                      src={p.image}
-                      alt={p.name}
-                      fill
-                      sizes={feature ? '(min-width: 1024px) 50vw, 100vw' : '(min-width: 1024px) 25vw, 50vw'}
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                  )}
-                  <div
-                    className="absolute inset-0"
-                    style={{ background: `linear-gradient(to top, rgba(${t.deep},0.95) 0%, rgba(${t.deep},0.55) 40%, rgba(${t.deep},0.05) 75%)` }}
-                  />
-                  {feature && (
-                    <span className="absolute top-4 left-4 inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/20 px-3 py-1.5 text-[11px] font-semibold">
-                      <Icon className="w-3.5 h-3.5 text-[var(--accent-light)]" /> Featured
-                    </span>
-                  )}
-                  <span className="absolute top-3 right-3 sm:top-4 sm:right-4 w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center transition-[background-color,rotate] duration-300 group-hover:bg-[var(--accent)] group-hover:rotate-45">
-                    <ArrowUpRight className="w-4 h-4" />
-                  </span>
-                  <div className="absolute inset-x-0 bottom-0 p-4 sm:p-6">
-                    <span className="font-mono text-[10px] sm:text-[11px] tracking-[0.18em] text-[var(--accent-light)]">
-                      C-{String(i + 1).padStart(2, '0')}
-                    </span>
-                    <h3 className={`mt-1 font-black uppercase tracking-tight leading-tight ${feature ? 'text-2xl sm:text-4xl' : 'text-[15px] sm:text-lg'}`}>
-                      {p.name}
-                    </h3>
-                    {(feature || wide) && p.description && (
-                      <p className={`mt-2 text-white/70 leading-relaxed ${feature ? 'text-sm sm:text-base max-w-md' : 'max-sm:hidden text-sm max-w-sm line-clamp-2'}`}>
-                        {p.description}
-                      </p>
+                  <span className="relative block aspect-[4/3] overflow-hidden">
+                    {p.image && (
+                      <Image
+                        src={p.image}
+                        alt={p.name}
+                        fill
+                        sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
                     )}
-                  </div>
+                    <span className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/30 border border-white/25 backdrop-blur-sm flex items-center justify-center transition-[background-color,rotate] duration-300 group-hover:bg-[var(--accent)] group-hover:rotate-45">
+                      <ArrowUpRight className="w-4 h-4" />
+                    </span>
+                  </span>
+                  <span className="flex flex-1 flex-col p-5">
+                    <span className="font-mono text-[11px] tracking-[0.18em] text-[var(--accent-light)]">C-{String(i + 1).padStart(2, '0')}</span>
+                    <h3 className="mt-1 text-lg font-black uppercase tracking-tight leading-tight">{p.name}</h3>
+                    {p.description && <p className="mt-2 text-sm leading-relaxed text-white/70">{p.description}</p>}
+                    <span className="mt-auto pt-4 inline-flex items-center gap-1.5 text-sm font-bold text-[var(--accent-light)]">
+                      {detail ? 'Know More' : 'Request a Quote'} <ArrowUpRight className="w-4 h-4 transition-transform group-hover:rotate-45" />
+                    </span>
+                  </span>
                 </Link>
               </li>
             );

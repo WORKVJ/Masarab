@@ -67,7 +67,7 @@ export default function WaterShowcase({ category }: { category: Category }) {
                       </span>
                       <span className="mt-1 block text-[15px] sm:text-[17px] font-bold leading-snug text-slate-900">{p.name}</span>
                       {p.description && (
-                        <span className="mt-1.5 text-[13px] sm:text-sm leading-relaxed text-slate-500 line-clamp-3">{p.description}</span>
+                        <span className="mt-1.5 text-[13px] sm:text-sm leading-relaxed text-slate-500">{p.description}</span>
                       )}
                       <span className="mt-2.5 inline-flex items-center gap-1 text-xs font-bold text-[var(--accent)]">
                         {productHref(category, p.name) ? 'View details' : 'Enquire'} <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />

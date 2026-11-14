@@ -56,7 +56,7 @@ export default function ElectricalShowcase({ category }: { category: Category })
                       MODULE EL-{String(i + 1).padStart(2, '0')}
                     </span>
                     <span className="mt-2 text-base sm:text-lg font-bold leading-snug">{p.name}</span>
-                    {p.description && <span className="mt-1.5 text-[13px] sm:text-sm leading-relaxed text-white/55 line-clamp-3">{p.description}</span>}
+                    {p.description && <span className="mt-1.5 text-[13px] sm:text-sm leading-relaxed text-white/55">{p.description}</span>}
                     <span className="mt-auto pt-4">
                       <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--accent-light)] text-slate-950 px-4 py-2 text-xs font-bold transition-transform duration-300 group-hover:scale-105">
                         Enquire <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-45" />

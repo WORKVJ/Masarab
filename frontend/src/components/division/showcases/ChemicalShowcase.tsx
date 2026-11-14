@@ -61,7 +61,7 @@ export default function ChemicalShowcase({ category }: { category: Category }) {
                     {p.name}
                   </span>
                   {p.description && (
-                    <span className="mt-2 max-sm:hidden text-sm leading-relaxed text-slate-500 line-clamp-2">{p.description}</span>
+                    <span className="mt-2 text-sm leading-relaxed text-slate-500">{p.description}</span>
                   )}
                   <span className="mt-auto pt-4 inline-flex items-center gap-1 text-xs sm:text-sm font-bold text-[var(--accent)]">
                     Enquire <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:rotate-45" />
