@@ -4,18 +4,12 @@ from rest_framework.routers import DefaultRouter, SimpleRouter
 from . import blog, panel
 from .views import (
     ContactInquiryViewSet,
-    ProductCategoryViewSet,
-    ProductViewSet,
-    ProjectCaseViewSet,
     QuoteRequestViewSet,
     health_check,
     public_site_settings,
 )
 
 router = DefaultRouter()
-router.register(r'categories', ProductCategoryViewSet, basename='category')
-router.register(r'products', ProductViewSet, basename='product')
-router.register(r'projects', ProjectCaseViewSet, basename='project')
 router.register(r'rfq', QuoteRequestViewSet, basename='rfq')
 router.register(r'contact', ContactInquiryViewSet, basename='contact')
 

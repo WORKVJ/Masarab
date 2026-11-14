@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import LogoMark from '@/components/motion/LogoMark';
 import { markPreloaderSeen, shouldShowPreloader } from '@/lib/preloader';
 

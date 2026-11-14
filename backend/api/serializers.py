@@ -1,32 +1,5 @@
 from rest_framework import serializers
-from .models import ProductCategory, Product, ProjectCase, QuoteRequest, ContactInquiry
-
-class ProductCategorySerializer(serializers.ModelSerializer):
-    product_count = serializers.IntegerField(source='products.count', read_only=True)
-
-    class Meta:
-        model = ProductCategory
-        fields = ['id', 'name', 'slug', 'description', 'order', 'product_count']
-
-
-class ProductSerializer(serializers.ModelSerializer):
-    category_name = serializers.CharField(source='category.name', read_only=True)
-    category_slug = serializers.CharField(source='category.slug', read_only=True)
-
-    class Meta:
-        model = Product
-        fields = [
-            'id', 'title', 'slug', 'category', 'category_name', 'category_slug',
-            'material_type', 'short_description', 'full_description', 'standards',
-            'features', 'specifications', 'applications', 'is_featured', 'created_at'
-        ]
-
-
-class ProjectCaseSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProjectCase
-        fields = '__all__'
-
+from .models import QuoteRequest, ContactInquiry
 
 class QuoteRequestSerializer(serializers.ModelSerializer):
     rfq_number = serializers.CharField(read_only=True)
@@ -38,9 +11,13 @@ class QuoteRequestSerializer(serializers.ModelSerializer):
             'project_location', 'product_category', 'estimated_quantity',
             'specifications_notes', 'status', 'created_at'
         ]
+        # visitors fill in the form; status is set by the team in the admin panel
+        read_only_fields = ['status', 'created_at']
 
 
 class ContactInquirySerializer(serializers.ModelSerializer):
     class Meta:
         model = ContactInquiry
-        fields = '__all__'
+        # only what the visitor types; status, internal notes and read time belong to the team
+        fields = ['id', 'name', 'email', 'phone', 'subject', 'message', 'created_at']
+        read_only_fields = ['created_at']

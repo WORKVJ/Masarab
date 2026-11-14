@@ -7,7 +7,7 @@ import { CATEGORIES } from '@/lib/masarContent';
 import { imageSize, VALVES } from '@/lib/catalog';
 import { categoryHref, quoteHref, SITE_URL } from '@/lib/routes';
 import { VALVES_PAGE, valveHref } from '@/lib/productRoutes';
-import { pageMetadata } from '@/lib/seo';
+import { fitTitle, pageMetadata } from '@/lib/seo';
 import { DIVISION_THEMES, themeColors, themeVars } from '@/lib/divisionThemes';
 import PageHero from '@/components/sections/PageHero';
 import DivisionCta from '@/components/division/DivisionCta';
@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const v = find(await params);
   if (!v) return {};
   return pageMetadata({
-    title: `${v.name} | Valves Supplier in Saudi Arabia`,
+    title: fitTitle(`${v.name} | Valves Supplier in Saudi Arabia`, `${v.name} Supplier in Saudi Arabia`, `${v.name} in Saudi Arabia`, v.name),
     description: v.summary,
     path: valveHref(v.slug),
     image: { url: v.image, alt: `${v.name} — Masar Arabia` },

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import Image from 'next/image';
 import { ArrowUpRight, CheckCircle2, PhoneCall } from 'lucide-react';
 import { CTA } from '@/lib/masarContent';

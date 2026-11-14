@@ -1,10 +1,9 @@
 /**
- * Form submissions to the optional Django backend (quote requests + contact enquiries).
+ * Form submissions to the Django backend (quote requests + contact enquiries).
  * Site content is built in (lib/masarContent.ts); this module only POSTs.
  *
- * NEXT_PUBLIC_API_URL (e.g. https://api.masararabia.com/api) is set in Vercel → Project → Settings →
- * Environment Variables. Without it (and outside local development) every call fails fast and the
- * forms offer their pre-filled "send by email" fallback instead.
+ * NEXT_PUBLIC_API_URL is `/api` on the server (same domain, via Nginx). Without it (and outside local
+ * development) every call fails fast and the forms offer their pre-filled "send by email" fallback instead.
  */
 const API_BASE =
   process.env.NEXT_PUBLIC_API_URL || (process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:8000/api' : '');

@@ -2346,8 +2346,6 @@ export const VALVES: Valve[] = [
   }
 ];
 
-export const INSTRUMENTATION_INTRO = "";
-
 export interface InstrumentRange {
   slug: string;
   name: string;

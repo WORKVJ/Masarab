@@ -1,4 +1,3 @@
-import React from 'react';
 
 /**
  * Hover "roll" for link/button labels: the label slides up and an identical copy rolls in.

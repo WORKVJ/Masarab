@@ -11,7 +11,7 @@ import { ABOUT_PAGE } from '@/lib/masarContent';
 const DESCRIPTION =
   'Masar Arabia First Trading Company supplies Mechanical, Electrical and Instrumentation materials to Power, Oil & Gas, Water and industrial plants in KSA.';
 
-export const metadata: Metadata = pageMetadata({ title: 'About Us – Trusted Industrial Partner in Saudi Arabia', description: DESCRIPTION, path: '/about' });
+export const metadata: Metadata = pageMetadata({ title: 'About Us – Industrial Supplier in Saudi Arabia', description: DESCRIPTION, path: '/about' });
 
 export default function AboutPage() {
   return (

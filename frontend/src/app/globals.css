@@ -174,13 +174,6 @@ html.mx-motion { scroll-behavior: auto !important; }
   to   { opacity: 1; transform: none; }
 }
 
-/* Slow banner zoom */
-.mx-kenburns { animation: mxKenburns 14s ease-out both; }
-@keyframes mxKenburns {
-  from { transform: scale(1.12); }
-  to   { transform: scale(1); }
-}
-
 /* Client logo marquee */
 .mx-logo-mask {
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);

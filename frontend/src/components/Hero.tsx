@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import RollText from '@/components/motion/RollText';
 import CountUp from '@/components/motion/CountUp';
@@ -43,7 +43,7 @@ export default function Hero() {
           aria-label="Masar Arabia industries: cooling towers, process piping, laboratories, control panels, valves and site engineers"
           className="absolute inset-0 w-full h-full object-cover"
         >
-          {/* phones get the 720p file (2.4 MB), larger screens the 1080p file (4.7 MB) */}
+          {/* phones get the 720p file (2.4 MB), larger screens the 1080p file (5 MB) */}
           <source src="/videos/masar-hero-720.mp4" type="video/mp4" media="(max-width: 767px)" />
           <source src="/videos/masar-hero-1080.mp4" type="video/mp4" />
         </video>

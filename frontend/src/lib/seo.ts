@@ -5,12 +5,32 @@ import { SITE_URL } from './routes';
 /** Default share image (1700×1134). */
 export const DEFAULT_OG_IMAGE = { url: '/images/masar/about.webp', width: 1700, height: 1134, alt: 'Masar Arabia industrial solutions' };
 
+const TITLE_SUFFIX = ' | Masar Arabia';
+const MAX_TITLE = 60; // Google shows roughly the first 60 characters of a title
+const MAX_DESCRIPTION = 155; // …and about 155 of a description
+
+/** The first title that still fits in search results once " | Masar Arabia" is added (else the last, shortest one). */
+export function fitTitle(...candidates: string[]): string {
+  return candidates.find((c) => c.length + TITLE_SUFFIX.length <= MAX_TITLE) ?? candidates[candidates.length - 1];
+}
+
+/** Shortens a description to fit search results, ending at a full sentence when possible. */
+export function fitDescription(text: string, max = MAX_DESCRIPTION): string {
+  const t = text.replace(/\s+/g, ' ').trim();
+  if (t.length <= max) return t;
+  const cut = t.slice(0, max);
+  const sentenceEnd = Math.max(cut.lastIndexOf('. '), cut.endsWith('.') ? cut.length - 1 : -1);
+  if (sentenceEnd >= 90) return cut.slice(0, sentenceEnd + 1);
+  return `${cut.slice(0, cut.lastIndexOf(' ')).replace(/[\s,;:–—-]+$/, '')}…`;
+}
+
 /**
  * Complete metadata for one page.
  * Next.js replaces (not merges) a parent's `openGraph` / `twitter` objects, so a page that sets only
  * its own OG title silently loses the share image. Building every page through this helper keeps
  * title, description, canonical, Open Graph and Twitter card complete and consistent.
- * Titles: keep `title` ≤ ~45 characters (the layout appends " | Masar Arabia"); descriptions ≤ ~155.
+ * Titles: keep `title` ≤ ~45 characters (the layout appends " | Masar Arabia", see fitTitle);
+ * descriptions are shortened to ~155 characters automatically.
  */
 export function pageMetadata({
   title,
@@ -25,6 +45,7 @@ export function pageMetadata({
   image?: { url: string; alt?: string; width?: number; height?: number };
   absoluteTitle?: boolean;
 }): Metadata {
+  description = fitDescription(description);
   const fullTitle = absoluteTitle ? title : `${title} | Masar Arabia`;
   const img = image ?? DEFAULT_OG_IMAGE;
   return {
@@ -52,7 +73,7 @@ export const CATEGORY_SEO: Record<string, { title: string; description: string }
       'Cooling towers, FRP fans, chillers, AHUs, VRF, FAHU, FCU, exhaust fans and heat exchangers for industrial and commercial plants in Saudi Arabia.',
   },
   water: {
-    title: 'Water Treatment Systems & Solutions in Saudi Arabia',
+    title: 'Water Treatment Systems in Saudi Arabia',
     description:
       'EDI, EDR, membrane degassing, high purity water systems, VNX-Max and Ionpure modules — water treatment from Masar Arabia with Pure Water Group.',
   },

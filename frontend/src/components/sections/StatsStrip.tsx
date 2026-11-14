@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Users, PackageCheck, Award } from 'lucide-react';
 import { ABOUT } from '@/lib/masarContent';
 import { useCycle, useInView } from '@/lib/useCycle';

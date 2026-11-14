@@ -1,4 +1,3 @@
-import React from 'react';
 
 /**
  * Masar Arabia mark as crisp vector shapes (traced from the official logo artwork).

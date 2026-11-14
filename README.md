@@ -6,39 +6,18 @@ pipe fittings & alloys, and safety equipment.
 
 | Part | Stack | Folder |
 | --- | --- | --- |
-| Website (frontend) | Next.js 16 · React 19 · TypeScript · Tailwind CSS 4 · GSAP + Lenis | [`frontend/`](frontend/) |
-| RFQ / content API (optional) | Django 5 · Django REST Framework · SQLite (PostgreSQL-ready) | [`backend/`](backend/) |
+| Website + admin panel | Next.js 16 · React 19 · TypeScript · Tailwind CSS 4 · GSAP | [`frontend/`](frontend/) |
+| API (forms, admin panel, blog) | Django 5 · Django REST Framework · SQLite | [`backend/`](backend/) |
+| Server setup | Ubuntu Droplet · Nginx · systemd | [`deploy/`](deploy/) |
 
----
-
-## Deploy the website to Vercel
-
-1. In Vercel, **Add New → Project** and import this GitHub repository.
-2. Set **Root Directory** to **`frontend`** (Vercel then auto-detects Next.js — no other build settings needed).
-3. *(Optional)* Under **Environment Variables**, add `NEXT_PUBLIC_API_URL` pointing to a deployed Django backend,
-   e.g. `https://api.example.com/api`. See [`frontend/.env.example`](frontend/.env.example).
-4. Click **Deploy**.
-
-**Without a backend** the site is fully functional: all content is built in, and the quote form offers a
-pre-filled **"Send by email instead"** button (to `info@masararabia.com`) so no enquiry is lost.
-**With a backend**, quote requests are saved and get a reference number (`RFQ-MA-XXXXXX`).
-
-> The Django backend is a separate service — host it on a Python platform (Railway, Render, a VPS, …),
-> set `ALLOWED_HOSTS` and add the Vercel domain to `CORS_ALLOWED_ORIGINS` in its environment.
+The site is hosted on a DigitalOcean Droplet — setup, HTTPS and publishing updates are in
+[`deploy/README.md`](deploy/README.md).
 
 ---
 
 ## Run locally
 
-**Frontend**
-
-```bash
-cd frontend
-npm install
-npm run dev          # http://localhost:3000
-```
-
-**Backend (optional)**
+**Backend**
 
 ```bash
 cd backend
@@ -46,28 +25,37 @@ python -m venv venv
 venv\Scripts\activate            # macOS/Linux: source venv/bin/activate
 pip install -r requirements.txt
 python manage.py migrate
-python seed_data.py              # optional sample catalogue
-python manage.py createsuperuser # admin login for /admin
-python manage.py runserver 8000  # http://127.0.0.1:8000/api/
+python manage.py createsuperuser # login for the admin panel
+python manage.py runserver 8000
 ```
 
-Create `backend/.env` with:
+**Frontend** (proxies `/api` and `/media` to the backend in development)
+
+```bash
+cd frontend
+npm install
+npm run dev                      # http://localhost:3000 — admin panel at /admin
+```
+
+On Windows you can also use `run_backend.bat` / `run_frontend.bat`.
+
+Optional `backend/.env` for local work (defaults are fine for development):
 
 ```
 SECRET_KEY=change-me
 DEBUG=True
 ALLOWED_HOSTS=localhost,127.0.0.1
-CORS_ALLOWED_ORIGINS=http://localhost:3000
 ```
 
-On Windows you can also use `run_frontend.bat` / `run_backend.bat`.
+Run the backend tests with `python manage.py test api`.
 
-### API endpoints
+### API
 
+- `POST /api/rfq/` — quote request (returns an `RFQ-MA-XXXXXX` reference) · `POST /api/contact/` — general enquiry
+- `GET /api/site-settings/` — contact details shown on the website (edited in the admin panel)
+- `GET /api/blog/` · `GET /api/blog/<slug>/` · `GET /api/blog/categories/` — published blog posts
+- `/api/panel/…` — admin panel API (staff login required)
 - `GET /api/health/`
-- `GET /api/categories/` · `GET /api/products/` · `GET /api/projects/`
-- `POST /api/rfq/` — quote request (returns an `RFQ-MA-XXXXXX` reference)
-- `POST /api/contact/` — general enquiry
 
 ## Pages
 
@@ -75,16 +63,18 @@ On Windows you can also use `run_frontend.bat` / `run_backend.bat`.
 | --- | --- |
 | `/` | Home |
 | `/about` | About Us (+ Why Choose Us, clients) |
-| `/products` | Products catalog (8-category explorer) |
-| `/products/[slug]` | One page per category, e.g. `/products/water-treatment` (pre-rendered) |
-| `/product-range` | Showroom product range (16 lines) |
-| `/industries` | Industries served |
-| `/clients` | Client logos |
+| `/products` | Products catalogue (8 divisions) |
+| `/products/[slug]` · `/products/[slug]/[product]` · `…/valves/[valve]` | Division, product and valve pages (pre-rendered) |
+| `/product-range` | Showroom product range |
+| `/industries` · `/brands` · `/clients` | Industries served, brands, client logos |
+| `/blog` · `/blog/[slug]` | Blog, written and published in the admin panel |
 | `/contact` | Contact details + quote form — `/contact?product=Metal%20Valves` pre-fills the form |
+| `/admin` | Admin panel: enquiries, blog, contact details, team |
 
-Also generated: `/sitemap.xml`, `/robots.txt` and a branded 404 page. Every page shares the navbar,
-footer, smooth scrolling and animations (see `src/app/layout.tsx` and `src/components/motion/`).
+Also generated: `/sitemap.xml` (including blog posts), `/robots.txt` and a branded 404 page. Old
+`masararabia.com/*.php` addresses redirect to the matching new pages (`frontend/next.config.mjs`).
 
-Site content (categories, products, clients, contact details) lives in
-[`frontend/src/lib/masarContent.ts`](frontend/src/lib/masarContent.ts); the page list and URLs live in
-[`frontend/src/lib/routes.ts`](frontend/src/lib/routes.ts).
+Product content (divisions, products, clients) lives in
+[`frontend/src/lib/masarContent.ts`](frontend/src/lib/masarContent.ts) and
+[`frontend/src/lib/catalog.ts`](frontend/src/lib/catalog.ts); page titles, descriptions and structured
+data in [`frontend/src/lib/seo.ts`](frontend/src/lib/seo.ts).

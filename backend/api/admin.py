@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import BlogPost, ProductCategory, Product, ProjectCase, QuoteRequest, ContactInquiry, SiteSettings
+from .models import BlogPost, QuoteRequest, ContactInquiry, SiteSettings
 
 
 @admin.register(BlogPost)
@@ -8,26 +8,6 @@ class BlogPostAdmin(admin.ModelAdmin):
     list_filter = ('status', 'category')
     search_fields = ('title', 'excerpt')
     prepopulated_fields = {'slug': ('title',)}
-
-
-@admin.register(ProductCategory)
-class ProductCategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'order')
-    prepopulated_fields = {'slug': ('name',)}
-
-
-@admin.register(Product)
-class ProductAdmin(admin.ModelAdmin):
-    list_display = ('title', 'category', 'material_type', 'standards', 'is_featured', 'created_at')
-    list_filter = ('category', 'material_type', 'is_featured')
-    search_fields = ('title', 'short_description', 'standards')
-    prepopulated_fields = {'slug': ('title',)}
-
-
-@admin.register(ProjectCase)
-class ProjectCaseAdmin(admin.ModelAdmin):
-    list_display = ('title', 'client_or_sector', 'location', 'metrics', 'created_at')
-    search_fields = ('title', 'client_or_sector', 'solution_provided')
 
 
 @admin.register(QuoteRequest)

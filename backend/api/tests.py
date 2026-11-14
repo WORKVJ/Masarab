@@ -34,6 +34,15 @@ class PanelTests(TestCase):
         self.assertEqual(r.status_code, 201)
         self.assertEqual(anon.get('/api/contact/').status_code, 405)
 
+    def test_public_forms_cannot_set_internal_fields(self):
+        anon = APIClient()
+        r = anon.post('/api/contact/', {'name': 'X', 'email': 'x@example.com', 'subject': 'S', 'message': 'M', 'status': 'closed', 'notes': 'hacked', 'read_at': '2026-01-01T00:00:00Z'}, format='json')
+        m = ContactInquiry.objects.get(pk=r.json()['id'])
+        self.assertEqual((m.status, m.notes, m.read_at), ('new', '', None))
+        r = anon.post('/api/rfq/', {'full_name': 'Y', 'company_name': 'C', 'email': 'y@example.com', 'phone': '1', 'product_category': 'Valves', 'specifications_notes': 'Need 4 valves', 'status': 'closed'}, format='json')
+        self.assertEqual(r.status_code, 201, r.content)
+        self.assertEqual(QuoteRequest.objects.get(pk=r.json()['id']).status, 'pending')
+
     def test_panel_requires_staff(self):
         anon = APIClient()
         for url in ['/api/panel/dashboard', '/api/panel/quotes', '/api/panel/messages', '/api/panel/settings', '/api/panel/auth/me']:

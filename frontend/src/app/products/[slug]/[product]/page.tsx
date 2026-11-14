@@ -6,7 +6,7 @@ import { CATEGORIES } from '@/lib/masarContent';
 import { PRODUCT_DETAILS, VALVE_GROUPS, VALVES } from '@/lib/catalog';
 import { categoryHref, quoteHref, SITE_URL } from '@/lib/routes';
 import { VALVES_PAGE, productHref, valveHref } from '@/lib/productRoutes';
-import { pageMetadata } from '@/lib/seo';
+import { fitTitle, pageMetadata } from '@/lib/seo';
 import { DIVISION_THEMES, themeColors, themeVars } from '@/lib/divisionThemes';
 import PageHero from '@/components/sections/PageHero';
 import DivisionCta from '@/components/division/DivisionCta';
@@ -40,7 +40,12 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   if (!r) return {};
   const { category, product } = r;
   return pageMetadata({
-    title: `${product.name} Supplier in Saudi Arabia | ${category.name}`,
+    title: fitTitle(
+      `${product.name} Supplier in Saudi Arabia | ${category.name}`,
+      `${product.name} Supplier in Saudi Arabia`,
+      `${product.name} in Saudi Arabia`,
+      product.name,
+    ),
     description: product.description || category.summary,
     path: `${categoryHref(category.slug)}/${ps}`,
     image: { url: product.image ?? category.image, alt: `${product.name} — Masar Arabia` },

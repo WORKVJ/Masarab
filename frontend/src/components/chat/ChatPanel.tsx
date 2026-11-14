@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { ArrowUp, Mail, PhoneCall, RotateCcw, X } from 'lucide-react';
 import { CATEGORIES } from '@/lib/masarContent';

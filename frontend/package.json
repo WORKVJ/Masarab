@@ -9,7 +9,6 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@next/swc-wasm-nodejs": "^16.4.3",
     "@tiptap/extension-image": "3.32.2",
     "@tiptap/extensions": "3.32.2",
     "@tiptap/pm": "3.32.2",
