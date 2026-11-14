@@ -1,12 +1,10 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import {
-  ArrowRight, Factory, Zap, Droplets, Flame, Building, Sprout, Candy, FlaskConical, Anvil, Pickaxe, Pill, Wheat,
-} from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { INDUSTRIES } from '@/lib/masarContent';
+import CountUp from '@/components/motion/CountUp';
 import SectionHeader from './SectionHeader';
-
-const ICONS = [Factory, Zap, Droplets, Flame, Building, Sprout, Candy, FlaskConical, Anvil, Pickaxe, Pill, Wheat];
+import IndustryList from './IndustryList';
 
 /** What Masar supplies to each sector (keys match INDUSTRIES). */
 const SUPPLIES: Record<string, string> = {
@@ -31,6 +29,9 @@ export default function IndustriesSection({
 }) {
   return (
     <section id="industries" className="relative py-20 sm:py-28 bg-[#f6f9fc] overflow-hidden">
+      {/* slow drifting glows (transform-only, paused while off screen) */}
+      <div className="mx-orb-drift pointer-events-none absolute -top-32 right-[-10%] h-[460px] w-[460px] rounded-full bg-sky-200/50 blur-3xl" />
+      <div className="mx-orb-drift-rev pointer-events-none absolute -bottom-40 left-[-8%] h-[380px] w-[380px] rounded-full bg-sky-100/80 blur-3xl" />
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid gap-12 lg:grid-cols-12 lg:gap-16">
         {/* Left: heading + photo panel (stays in view while the list scrolls) */}
         <div className="lg:col-span-5">
@@ -46,25 +47,33 @@ export default function IndustriesSection({
             />
 
             <div data-anim="up" className="relative mt-8 aspect-[4/3] sm:aspect-[16/9] lg:aspect-[4/3] overflow-hidden rounded-3xl bg-[#04121f] shadow-[0_30px_60px_-30px_rgba(4,18,31,0.6)]">
-              <Image src={image.src} alt={image.alt} fill sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover" />
+              {/* photo: parallax on scroll + slow Ken Burns drift */}
+              <div data-parallax-img className="absolute -inset-y-[10%] inset-x-0">
+                <Image src={image.src} alt={image.alt} fill sizes="(min-width: 1024px) 40vw, 100vw" className="mx-kenburns object-cover" />
+              </div>
               <div className="absolute inset-0 bg-gradient-to-t from-[#04121f] via-[#04121f]/40 to-transparent" />
+              <div className="mx-sweep pointer-events-none absolute inset-y-0 -left-1/3 w-1/3" aria-hidden="true" />
               <div className="absolute inset-x-0 bottom-0 p-6 sm:p-7 text-white">
                 <div className="flex items-end gap-6">
                   <div>
-                    <p className="text-5xl sm:text-6xl font-black leading-none tracking-tight">{INDUSTRIES.length}</p>
+                    <p className="text-5xl sm:text-6xl font-black leading-none tracking-tight">
+                      <CountUp value={INDUSTRIES.length} duration={1400} />
+                    </p>
                     <p className="mt-2 text-xs uppercase tracking-[0.16em] text-sky-200">Sectors supplied</p>
                   </div>
                   <div className="h-14 w-px bg-white/20" />
                   <div>
-                    <p className="text-5xl sm:text-6xl font-black leading-none tracking-tight">8</p>
+                    <p className="text-5xl sm:text-6xl font-black leading-none tracking-tight">
+                      <CountUp value={8} duration={1400} delay={150} />
+                    </p>
                     <p className="mt-2 text-xs uppercase tracking-[0.16em] text-sky-200">Product divisions</p>
                   </div>
                 </div>
                 <Link
                   href="/contact"
-                  className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-[#04121f] transition-colors hover:bg-sky-100"
+                  className="group/cta mt-6 inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-[#04121f] transition-colors hover:bg-sky-100"
                 >
-                  Discuss your plant&apos;s needs <ArrowRight className="h-4 w-4" />
+                  Discuss your plant&apos;s needs <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/cta:translate-x-1" />
                 </Link>
               </div>
             </div>
@@ -72,22 +81,7 @@ export default function IndustriesSection({
         </div>
 
         {/* Right: every sector with what we supply to it */}
-        <ul className="lg:col-span-7 grid sm:grid-cols-2 gap-x-10 border-t border-slate-200 self-start">
-          {INDUSTRIES.map((name, i) => {
-            const Icon = ICONS[i % ICONS.length];
-            return (
-              <li key={name} data-anim="up" className="group flex items-start gap-4 border-b border-slate-200 py-6">
-                <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-white text-[#0d7cae] ring-1 ring-slate-200 transition-colors duration-300 group-hover:bg-[#0d7cae] group-hover:text-white group-hover:ring-[#0d7cae]">
-                  <Icon className="h-5 w-5" strokeWidth={1.75} />
-                </span>
-                <div className="min-w-0">
-                  <h3 className="text-[17px] font-bold leading-snug text-slate-950">{name}</h3>
-                  <p className="mt-1 text-sm leading-relaxed text-slate-600">{SUPPLIES[name]}</p>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
+        <IndustryList items={INDUSTRIES.map((name) => ({ name, supply: SUPPLIES[name] }))} />
       </div>
     </section>
   );
