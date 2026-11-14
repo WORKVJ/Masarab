@@ -359,7 +359,7 @@ export default function MotionEngine() {
       (entries) => entries.forEach((e) => e.target.classList.toggle('mx-offscreen', !e.isIntersecting)),
       { rootMargin: '100px 0px' }
     );
-    document.querySelectorAll('[data-page] > section, [data-page] > .mx-marquee, [data-pause-offscreen], footer').forEach((el) => offscreenIO.observe(el));
+    document.querySelectorAll('[data-page] > section, [data-page] > .contents > section, [data-page] > .mx-marquee, [data-pause-offscreen], footer').forEach((el) => offscreenIO.observe(el));
     cleanups.push(() => offscreenIO.disconnect());
 
     // ── 9. Keep trigger positions fresh as images/data load ────────────

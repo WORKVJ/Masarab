@@ -3,12 +3,14 @@
 import React, { useRef } from 'react';
 import Image from 'next/image';
 import { ArrowUpRight, CheckCircle2, PhoneCall } from 'lucide-react';
-import { CTA, CONTACT } from '@/lib/masarContent';
+import { CTA } from '@/lib/masarContent';
+import { useContact } from '@/components/SiteContactProvider';
 import { useCycle, useInView } from '@/lib/useCycle';
 import RollText from '@/components/motion/RollText';
 import { useRequestQuote } from '@/lib/useRequestQuote';
 
 export default function CtaBand() {
+  const CONTACT = useContact();
   const onOpenRfq = useRequestQuote();
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref);

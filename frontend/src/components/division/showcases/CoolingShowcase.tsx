@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import type { Category } from '@/lib/masarContent';
-import { quoteHref } from '@/lib/routes';
+import { productHref, productLink } from '@/lib/productRoutes';
 import { DIVISION_THEMES, themeColors, themeVars } from '@/lib/divisionThemes';
 import ShowcaseHeader from '../ShowcaseHeader';
 
@@ -43,8 +43,8 @@ export default function CoolingShowcase({ category }: { category: Category }) {
             return (
               <li key={p.name} data-anim="up" className={feature ? 'col-span-2 row-span-2' : wide ? 'col-span-2' : ''}>
                 <Link
-                  href={quoteHref(p.name)}
-                  aria-label={`${p.name} — request a quote`}
+                  href={productLink(category, p.name)}
+                  aria-label={productHref(category, p.name) ? `${p.name} — view details` : `${p.name} — request a quote`}
                   className="group relative block h-full overflow-hidden rounded-[22px] ring-1 ring-white/10 hover:ring-[var(--accent-light)]/60 transition-[box-shadow]"
                 >
                   {p.image && (

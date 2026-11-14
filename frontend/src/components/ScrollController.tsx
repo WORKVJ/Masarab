@@ -16,7 +16,7 @@ const labelFor = (el: HTMLElement) =>
 
 /** Reads the current page's sections from the DOM, so the dial works on every page. */
 function readSections(): ActiveSectionInfo[] {
-  return Array.from(document.querySelectorAll<HTMLElement>('[data-page] > section[id]')).map((el, i) => ({
+  return Array.from(document.querySelectorAll<HTMLElement>('[data-page] > section[id], [data-page] > .contents > section[id]')).map((el, i) => ({
     id: el.id,
     name: labelFor(el),
     num: String(i + 1).padStart(2, '0'),

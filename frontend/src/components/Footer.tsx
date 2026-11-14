@@ -1,10 +1,11 @@
 'use client';
 
-import React from 'react';
+import React, { useSyncExternalStore } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { MapPin, PhoneCall, Mail, ArrowUpRight, ArrowUp } from 'lucide-react';
-import { CATEGORIES, CONTACT } from '@/lib/masarContent';
+import { MapPin, PhoneCall, Mail, ArrowUpRight, ArrowUp, MessageCircle, Clock } from 'lucide-react';
+import { CATEGORIES } from '@/lib/masarContent';
+import { useContact } from '@/components/SiteContactProvider';
 import { scrollToTarget } from '@/lib/motion';
 import { categoryHref } from '@/lib/routes';
 import RollText from '@/components/motion/RollText';
@@ -15,10 +16,22 @@ const QUICK_LINKS = [
   { label: 'Products', href: '/products' },
   { label: 'Product Range', href: '/product-range' },
   { label: 'Industries', href: '/industries' },
+  { label: 'Brands', href: '/brands' },
   { label: 'Why Choose Us', href: '/about#why-us' },
   { label: 'Clients', href: '/clients' },
+  { label: 'Blog', href: '/blog' },
   { label: 'Contact', href: '/contact' },
 ];
+
+/**
+ * The developer credit stays hidden for the first 12 months and appears on its own
+ * from 12 Nov 2027 (00:00 Saudi time). The pages are pre-rendered, so the date is
+ * checked in the visitor's browser rather than at build time — no rebuild needed.
+ */
+const CREDIT_VISIBLE_FROM = Date.parse('2027-11-12T00:00:00+03:00');
+const noSubscribe = () => () => {};
+const useCreditVisible = () =>
+  useSyncExternalStore(noSubscribe, () => Date.now() >= CREDIT_VISIBLE_FROM, () => false);
 
 const linkCls =
   'group inline-flex items-center gap-1 py-1.5 text-white/65 hover:text-white transition-colors duration-300';
@@ -47,6 +60,8 @@ function SocialIcon({ href, label, children }: { href: string; label: string; ch
 }
 
 export default function Footer() {
+  const CONTACT = useContact();
+  const showCredit = useCreditVisible();
   return (
     <footer id="site-footer" className="relative bg-[#04121f] text-white overflow-hidden">
       <div className="mx-orb-drift absolute -top-40 -left-40 w-[480px] h-[480px] rounded-full bg-[#0d7cae]/15 blur-[120px] pointer-events-none" />
@@ -62,11 +77,14 @@ export default function Footer() {
               competitive rates.
             </p>
             <div className="mt-6 flex gap-2">
+              {CONTACT.facebook && (
               <SocialIcon href={CONTACT.facebook} label="Facebook">
                 <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current" aria-hidden="true">
                   <path d="M13.5 21v-7.5h2.5l.4-3h-2.9V8.6c0-.9.3-1.5 1.5-1.5h1.5V4.4c-.3 0-1.2-.1-2.2-.1-2.2 0-3.7 1.3-3.7 3.8v2.4H8v3h2.6V21h2.9z" />
                 </svg>
               </SocialIcon>
+              )}
+              {CONTACT.instagram && (
               <SocialIcon href={CONTACT.instagram} label="Instagram">
                 <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                   <rect x="3" y="3" width="18" height="18" rx="5" />
@@ -74,9 +92,24 @@ export default function Footer() {
                   <circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" />
                 </svg>
               </SocialIcon>
-              <SocialIcon href={CONTACT.mapUrl} label="Google Maps">
-                <MapPin className="w-4 h-4" />
-              </SocialIcon>
+              )}
+              {CONTACT.linkedin && (
+                <SocialIcon href={CONTACT.linkedin} label="LinkedIn">
+                  <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current" aria-hidden="true">
+                    <path d="M6.94 8.5H3.56V20h3.38V8.5zM5.25 3.5a1.96 1.96 0 100 3.92 1.96 1.96 0 000-3.92zM20.44 13.3c0-3.1-1.65-4.55-3.86-4.55-1.78 0-2.58.98-3.02 1.67V8.5H10.2c.04.95 0 11.5 0 11.5h3.37v-6.42c0-.34.02-.69.13-.93.27-.69.9-1.4 1.95-1.4 1.38 0 1.93 1.05 1.93 2.6V20h3.37l-.01-6.7z" />
+                  </svg>
+                </SocialIcon>
+              )}
+              {CONTACT.whatsappHref && (
+                <SocialIcon href={CONTACT.whatsappHref} label="WhatsApp">
+                  <MessageCircle className="w-4 h-4" />
+                </SocialIcon>
+              )}
+              {CONTACT.mapUrl && (
+                <SocialIcon href={CONTACT.mapUrl} label="Google Maps">
+                  <MapPin className="w-4 h-4" />
+                </SocialIcon>
+              )}
             </div>
           </div>
 
@@ -134,6 +167,12 @@ export default function Footer() {
                   {CONTACT.email}
                 </a>
               </li>
+              {CONTACT.workingHours && (
+                <li className="flex gap-3">
+                  <Clock className="w-4 h-4 mt-0.5 text-sky-300 shrink-0" />
+                  {CONTACT.workingHours}
+                </li>
+              )}
             </ul>
             <Link
               href="/contact"
@@ -174,6 +213,19 @@ export default function Footer() {
       <div className="relative border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/45">
           <span>© {new Date().getFullYear()} Masar Arabia First Trading Company. All rights reserved.</span>
+          {showCredit && (
+            <span>
+              Maintained and developed by{' '}
+              <a
+                href="https://scalarkinc.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-white/75 hover:text-sky-300 underline-offset-4 hover:underline transition-colors"
+              >
+                Scalark Inc.
+              </a>
+            </span>
+          )}
           <button
             onClick={() => scrollToTarget(0)}
             className="group inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-white/70 hover:text-white hover:border-sky-300/60 transition-colors cursor-pointer"

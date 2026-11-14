@@ -1,7 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, ArrowUpRight, PhoneCall } from 'lucide-react';
-import { CONTACT, PRODUCT_RANGE } from '@/lib/masarContent';
+import { PRODUCT_RANGE } from '@/lib/masarContent';
+import { getSiteContact } from '@/lib/siteSettings';
 import { quoteHref } from '@/lib/routes';
 
 /**
@@ -11,7 +12,8 @@ import { quoteHref } from '@/lib/routes';
  * Server-rendered and static: hover effects are plain CSS transitions and nothing loops,
  * so the section costs nothing while scrolling.
  */
-export default function ProductRangeSection() {
+export default async function ProductRangeSection() {
+  const CONTACT = await getSiteContact();
   return (
     <section
       id="product-range"

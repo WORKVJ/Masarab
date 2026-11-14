@@ -95,6 +95,11 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+# images uploaded in the admin panel (blog); served by Nginx at /media/
+MEDIA_URL = '/media/'
+MEDIA_ROOT = Path(os.getenv('MEDIA_ROOT') or BASE_DIR / 'media')
+DATA_UPLOAD_MAX_MEMORY_SIZE = 12 * 1024 * 1024
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Django REST Framework Settings
@@ -112,3 +117,34 @@ REST_FRAMEWORK = {
 cors_origins = os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:3000,http://127.0.0.1:3000')
 CORS_ALLOWED_ORIGINS = [origin.strip() for origin in cors_origins.split(',') if origin.strip()]
 CORS_ALLOW_CREDENTIALS = True
+
+# Production (behind Nginx on the Droplet): trust the HTTPS header Nginx sets, and the site's own origins
+# for the /admin login form. Set CSRF_TRUSTED_ORIGINS=https://masararabia.com,https://www.masararabia.com
+CSRF_TRUSTED_ORIGINS = [o.strip() for o in os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',') if o.strip()]
+if DEBUG:
+    # local admin panel: Next.js dev server proxies /api to Django
+    CSRF_TRUSTED_ORIGINS += ['http://localhost:3000', 'http://localhost:3001', 'http://127.0.0.1:3000', 'http://127.0.0.1:3001']
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SESSION_COOKIE_SECURE = os.getenv('HTTPS', 'True') == 'True'
+    CSRF_COOKIE_SECURE = SESSION_COOKIE_SECURE
+
+# Admin panel sessions: stay signed in for 7 days, cookie unreadable by page scripts
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 7
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+
+# Tell the website to refresh its cached contact details after they are edited in the panel
+NEXT_REVALIDATE_URL = os.getenv('NEXT_REVALIDATE_URL', '')
+REVALIDATE_SECRET = os.getenv('REVALIDATE_SECRET', '')
+PANEL_URL = os.getenv('PANEL_URL', 'https://masararabia.com/admin')
+
+# Email alerts for new enquiries — leave EMAIL_HOST empty to switch them off
+EMAIL_HOST = os.getenv('EMAIL_HOST', '')
+EMAIL_PORT = int(os.getenv('EMAIL_PORT') or '587')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
+EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL', 'False') == 'True'
+EMAIL_TIMEOUT = 15
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL') or EMAIL_HOST_USER or 'no-reply@masararabia.com'

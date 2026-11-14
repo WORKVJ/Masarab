@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import type { Category } from '@/lib/masarContent';
-import { quoteHref } from '@/lib/routes';
+import { productHref, productLink } from '@/lib/productRoutes';
 import { DIVISION_THEMES, themeColors, themeVars } from '@/lib/divisionThemes';
 import ShowcaseHeader from '../ShowcaseHeader';
 
@@ -34,7 +34,7 @@ export default function PipeShowcase({ category }: { category: Category }) {
             const flip = i % 2 === 1;
             return (
               <li key={p.name} data-anim="up">
-                <Link href={quoteHref(p.name)} className="group grid lg:grid-cols-12 gap-6 lg:gap-12 items-center">
+                <Link href={productLink(category, p.name)} className="group grid lg:grid-cols-12 gap-6 lg:gap-12 items-center">
                   {/* brushed steel plate */}
                   <div className={`lg:col-span-7 ${flip ? 'lg:order-2' : ''}`}>
                     <div className="relative aspect-[16/10] rounded-[24px] overflow-hidden bg-gradient-to-br from-[#e2e8f0] via-white to-[#cbd5e1] ring-1 ring-slate-300/70 shadow-[0_40px_70px_-45px_rgba(15,23,42,0.7)]">
@@ -67,7 +67,7 @@ export default function PipeShowcase({ category }: { category: Category }) {
                     <span className="mt-4 block h-[3px] w-14 rounded-full bg-gradient-to-r from-slate-400 to-slate-200" />
                     {p.description && <p className="mt-4 text-base leading-[1.8] text-slate-600">{p.description}</p>}
                     <span className="mt-6 inline-flex items-center gap-2 rounded-full bg-slate-900 text-white px-5 py-2.5 text-sm font-bold group-hover:bg-[var(--accent)] transition-colors">
-                      Request a Quote <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:rotate-45" />
+                      {productHref(category, p.name) ? 'View Details' : 'Request a Quote'} <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:rotate-45" />
                     </span>
                   </div>
                 </Link>

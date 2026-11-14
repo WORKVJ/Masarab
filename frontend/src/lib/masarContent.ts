@@ -1,7 +1,8 @@
 /**
  * Official site content for Masar Arabia First Trading Co.
- * Source: https://masararabia.com — home, about-us, contact-us, products and the 8 product pages
- * (plus masararabia.com/instrumentation/). Copy is verbatim from the client's site; only obvious
+ * Source: https://masararabia.com — home, about-us, contact-us, products and the 8 product pages.
+ * The deeper product pages, valves, instrument catalogue and brands are in ./catalog.ts.
+ * Copy is verbatim from the client's site; only obvious
  * typos were corrected ("Air Handing Units" → "Air Handling Units", a stray "...." and a lowercase
  * sentence start). Product photos are the client's own, saved under /public/images/masar/products/.
  */
@@ -88,6 +89,7 @@ const elec = photo('electrical');
 const mech = photo('mechanical');
 const pipe = photo('pipefittings');
 const safe = photo('safety-equipment');
+const instr = (file: string) => `/images/masar/live/products/instrumentation/${file}`;
 
 export const CATEGORIES: Category[] = [
   {
@@ -188,14 +190,20 @@ export const CATEGORIES: Category[] = [
     summary:
       'Precision instrumentation solutions including Flow Meters, Gas Detectors, Gauges, Sensors, and more, designed to enhance safety, accuracy, and operational efficiency across diverse industries.',
     intro: [
-      'Masar Arabia, a division of Masar Arabia First Trading Company, is the leading supplier of industrial products in Saudi Arabia. Masar Arabia is a leading supplier of high-quality instrumentation products, offering a comprehensive range of instrumentation products including moisture meters, thermometers, hygrometers, data loggers, and more. These products are designed to meet the diverse needs of various industries, ensuring accuracy, reliability, and efficiency.',
+      "Experience the pinnacle of accuracy and reliability with Masar Arabia's comprehensive range of quality-tested instrumentation solutions. Our offerings span Flow Meters, Gas Detectors, Gauges, Level Measurement tools, Sensors, Accelerometers, Probe Sets, Test & Measurement devices, Positioners, Valves, IP Converters, Pressure Measurement instruments, and Temperature Monitoring systems. Tailored to meet the unique demands of various industries, our precision instruments redefine measurement standards. Whether you seek enhanced safety with Gas Detectors, optimized operations with Level Monitoring, or precise control with Positioners, Masar Arabia is your trusted partner for innovation and excellence in instrumentation.",
       'With a commitment to exceptional customer service and timely delivery, Masar Arabia is your trusted partner for all your instrumentation needs.',
     ],
     image: '/images/masar/instrumentation.webp',
     products: [
-      'Moisture Temp Humidity', 'Indoor Air Quality', 'Environmental', 'HVAC', 'Condition Monitoring', 'Water Food',
-      'Non Destructive Testing', 'Electrical Electronics', 'Miscellaneous', 'Calibrators', 'Laboratory Scientific',
-    ].map((name) => ({ name, description: '' })),
+      { name: 'Flow Meters & Analyzers', image: instr('flow-meters-analyzers.webp'), description: "Ensure precise flow measurement and analysis with Masar Arabia's high-accuracy Flow Meters and Analyzers, tailored for reliable and efficient industrial operations." },
+      { name: 'Gas Detector', image: instr('gas-detector.webp'), description: 'Enhance workplace safety with advanced Gas Detectors from Masar Arabia, designed to provide accurate, real-time detection of hazardous gases.' },
+      { name: 'Gauges', image: instr('gauges.webp'), description: "Monitor pressure, temperature, and other critical parameters with Masar Arabia's durable and precision-engineered gauges for consistent performance." },
+      { name: 'Level Measurements', image: instr('level-measurements.webp'), description: 'Optimize processes with reliable Level Measurement tools, delivering accurate monitoring and control of fluid levels across various applications.' },
+      { name: 'Pressure Measurement', image: instr('pressure-measurment.webp'), description: "Achieve superior accuracy and control with Masar Arabia's robust Pressure Measurement instruments, designed for diverse industrial needs." },
+      { name: 'Temperature Monitoring', image: instr('temprature-monitoring.webp'), description: 'Maintain operational efficiency with advanced Temperature Monitoring systems, ensuring precise and consistent thermal regulation.' },
+      { name: 'Sensors, Accelerometers, Probe Sets, Test & Measurements', image: instr('sensors-accelerometers-probe-sets-test-measurements.webp'), description: 'Discover cutting-edge Sensors, Accelerometers, and Test & Measurement devices for accurate data acquisition and enhanced performance monitoring.' },
+      { name: 'Positioners, Valves & IP Converters', image: instr('positioners-valves-ip-converters.webp'), description: "Maximize control and reliability with Masar Arabia's Positioners, Valves, and IP Converters, engineered for seamless industrial automation." },
+    ],
   },
   {
     id: 'mechanical',

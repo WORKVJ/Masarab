@@ -3,10 +3,11 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { submitRfq } from '@/lib/api';
-import { CATEGORIES, CONTACT, PRODUCT_RANGE } from '@/lib/masarContent';
+import { CATEGORIES, PRODUCT_RANGE } from '@/lib/masarContent';
+import { useContact } from '@/components/SiteContactProvider';
 
 const RANGE_CATEGORY = 'Pipes, Fittings & Valves';
-import { Send, CheckCircle2, PhoneCall, AlertCircle, Mail, MapPin, ArrowUpRight } from 'lucide-react';
+import { Send, CheckCircle2, PhoneCall, AlertCircle, Mail, MapPin, ArrowUpRight, MessageCircle, Clock } from 'lucide-react';
 import SectionHeader from './sections/SectionHeader';
 import RollText from './motion/RollText';
 
@@ -22,6 +23,7 @@ const labelCls = 'block text-xs font-bold text-slate-700 mb-1.5';
  * no Suspense boundary that the motion engine could alter before it hydrates.
  */
 export default function RfqSection({ prefilledProduct = '' }: { prefilledProduct?: string }) {
+  const CONTACT = useContact();
   const router = useRouter();
   const [fullName, setFullName] = useState('');
   const [companyName, setCompanyName] = useState('');
@@ -112,6 +114,7 @@ export default function RfqSection({ prefilledProduct = '' }: { prefilledProduct
     { icon: MapPin, label: 'Head Office', value: [CONTACT.company, ...CONTACT.addressLines].join(', '), href: CONTACT.mapUrl },
     { icon: PhoneCall, label: 'Call Us', value: CONTACT.phoneDisplay, href: CONTACT.phoneHref },
     { icon: Mail, label: 'Email Us', value: CONTACT.email, href: `mailto:${CONTACT.email}` },
+    ...(CONTACT.whatsappHref ? [{ icon: MessageCircle, label: 'WhatsApp', value: CONTACT.whatsapp, href: CONTACT.whatsappHref }] : []),
   ];
 
   return (
@@ -149,6 +152,12 @@ export default function RfqSection({ prefilledProduct = '' }: { prefilledProduct
                 <ArrowUpRight className="ml-auto w-4 h-4 text-slate-300 group-hover:text-[#0d7cae] group-hover:rotate-45 transition-[color,rotate] duration-300 shrink-0" />
               </a>
             ))}
+            {CONTACT.workingHours && (
+              <p data-anim="left" className="flex items-center gap-2 px-1 text-sm text-slate-500">
+                <Clock className="w-4 h-4 text-[#0d7cae] shrink-0" />
+                {CONTACT.workingHours}
+              </p>
+            )}
           </div>
         </div>
 

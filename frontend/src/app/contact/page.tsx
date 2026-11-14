@@ -2,14 +2,17 @@ import type { Metadata } from 'next';
 import { pageMetadata } from '@/lib/seo';
 import PageHero from '@/components/sections/PageHero';
 import RfqSection from '@/components/RfqSection';
-import { CONTACT, CONTACT_PAGE } from '@/lib/masarContent';
+import { getSiteContact } from '@/lib/siteSettings';
 
-const DESCRIPTION = `Contact Masar Arabia, ${CONTACT.addressLines[0]}, Jeddah 22234. Call ${CONTACT.phoneDisplay} or email ${CONTACT.email} for quotes and product inquiries.`;
-
-export const metadata: Metadata = pageMetadata({ title: 'Contact Us – Industrial Product Inquiries', description: DESCRIPTION, path: '/contact' });
+export async function generateMetadata(): Promise<Metadata> {
+  const c = await getSiteContact();
+  const description = `Contact Masar Arabia, ${c.addressLines.join(', ')}. Call ${c.phoneDisplay} or email ${c.email} for quotes and product inquiries.`;
+  return pageMetadata({ title: 'Contact Us – Industrial Product Inquiries', description, path: '/contact' });
+}
 
 export default async function ContactPage({ searchParams }: { searchParams: Promise<{ product?: string | string[] }> }) {
   const { product } = await searchParams;
+  const contact = await getSiteContact();
   return (
     <>
       <PageHero
@@ -19,7 +22,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
             Contact <span className="text-[#0d7cae]">Us</span>
           </>
         }
-        intro={CONTACT_PAGE.text}
+        intro={contact.contactIntro}
         crumbs={[{ label: 'Contacts', href: '/contact' }]}
       />
       {/* ?product= (from any "Enquire" / "Request a Quote" button) pre-fills the form */}

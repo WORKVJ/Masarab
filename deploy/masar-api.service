@@ -1,0 +1,17 @@
+# Masar Arabia quote / contact form backend (Django + Gunicorn). Installed by setup.sh.
+[Unit]
+Description=Masar Arabia API (Django)
+After=network.target
+
+[Service]
+Type=simple
+User=masar
+Group=masar
+WorkingDirectory=/srv/masar/app/backend
+ExecStart=/srv/masar/venv/bin/gunicorn config.wsgi:application --bind 127.0.0.1:8000 --workers 2 --timeout 30 --access-logfile -
+Restart=always
+RestartSec=3
+MemoryMax=250M
+
+[Install]
+WantedBy=multi-user.target

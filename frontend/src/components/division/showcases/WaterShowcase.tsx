@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import type { Category } from '@/lib/masarContent';
-import { quoteHref } from '@/lib/routes';
+import { productHref, productLink } from '@/lib/productRoutes';
 import { DIVISION_THEMES, themeColors, themeVars } from '@/lib/divisionThemes';
 import ShowcaseHeader from '../ShowcaseHeader';
 
@@ -53,7 +53,7 @@ export default function WaterShowcase({ category }: { category: Category }) {
                     } w-5 h-5 rounded-full bg-white border-[5px] border-[var(--accent)] shadow-[0_0_0_6px_var(--accent-soft)]`}
                   />
                   <Link
-                    href={quoteHref(p.name)}
+                    href={productLink(category, p.name)}
                     className="group flex flex-col sm:flex-row overflow-hidden rounded-[22px] bg-white border border-slate-200/80 shadow-[0_18px_40px_-30px_rgba(23,37,84,0.5)] hover:border-[var(--accent-light)] hover:shadow-[0_24px_50px_-28px_rgba(37,99,235,0.45)] transition-[border-color,box-shadow] duration-300"
                   >
                     <span className="relative shrink-0 w-full sm:w-56 aspect-[16/10] sm:aspect-auto sm:min-h-[210px] bg-[var(--accent-soft)]">
@@ -70,7 +70,7 @@ export default function WaterShowcase({ category }: { category: Category }) {
                         <span className="mt-1.5 text-[13px] sm:text-sm leading-relaxed text-slate-500 line-clamp-3">{p.description}</span>
                       )}
                       <span className="mt-2.5 inline-flex items-center gap-1 text-xs font-bold text-[var(--accent)]">
-                        Enquire <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+                        {productHref(category, p.name) ? 'View details' : 'Enquire'} <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />
                       </span>
                     </span>
                   </Link>

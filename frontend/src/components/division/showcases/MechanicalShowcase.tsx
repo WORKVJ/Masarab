@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import type { Category } from '@/lib/masarContent';
-import { quoteHref } from '@/lib/routes';
+import { productHref, productLink } from '@/lib/productRoutes';
 import { DIVISION_THEMES, themeColors, themeVars } from '@/lib/divisionThemes';
 import ShowcaseHeader from '../ShowcaseHeader';
 
@@ -48,7 +48,7 @@ export default function MechanicalShowcase({ category }: { category: Category })
             return (
               <li key={p.name} data-anim="up">
                 <Link
-                  href={quoteHref(p.name)}
+                  href={productLink(category, p.name)}
                   className="group block h-full rounded-md border border-white/25 bg-white/[0.03] hover:border-[var(--accent-light)] hover:bg-white/[0.06] transition-colors font-mono"
                 >
                   {/* drawing area */}
@@ -85,7 +85,7 @@ export default function MechanicalShowcase({ category }: { category: Category })
                     <div className="col-span-2 flex items-center justify-between px-4 py-2.5 border-t border-white/25 tracking-[0.15em] text-white/45">
                       <span>MASAR ARABIA · MECHANICAL</span>
                       <span className="inline-flex items-center gap-1 font-bold text-[var(--accent-light)]">
-                        ENQUIRE <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:rotate-45" />
+                        {productHref(category, p.name) ? 'VIEW DETAILS' : 'ENQUIRE'} <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:rotate-45" />
                       </span>
                     </div>
                   </div>

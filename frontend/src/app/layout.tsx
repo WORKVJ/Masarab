@@ -8,6 +8,9 @@ import ChatContact from "@/components/chat/ChatContact";
 import { PRELOADER_HEAD_SCRIPT } from "@/lib/preloader";
 import { SITE_URL } from "@/lib/routes";
 import { siteJsonLd } from "@/lib/seo";
+import { getSiteContact } from "@/lib/siteSettings";
+import { SiteContactProvider } from "@/components/SiteContactProvider";
+import SiteShell from "@/components/SiteShell";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -68,11 +71,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // phone, email, address … as edited in the admin panel (built-in values if the backend is unreachable)
+  const contact = await getSiteContact();
   return (
     <html lang="en" className="h-full antialiased" suppressHydrationWarning>
       <head>
@@ -82,24 +87,32 @@ export default function RootLayout({
       {/* suppressHydrationWarning: browser extensions (Grammarly, password managers, ColorZilla …) add
           attributes to <body> before React hydrates; this ignores only <body>'s own attributes */}
       <body className="min-h-full flex flex-col font-sans bg-white text-slate-900" suppressHydrationWarning>
-        <Preloader />
-        {/* Structured data so search engines understand the business, location and contact details */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(siteJsonLd(SITE_DESCRIPTION)).replace(/</g, "\\u003c"),
-          }}
-        />
-        <Navbar />
-        <main
-          id="main"
-          className="min-h-screen flex flex-col overflow-x-clip bg-white text-slate-900 selection:bg-[#0d7cae] selection:text-white relative"
-        >
-          {children}
-          <Footer />
-        </main>
-        <MotionRoot />
-        <ChatContact />
+        <SiteContactProvider value={contact}>
+          <SiteShell
+            before={
+              <>
+                <Preloader />
+                {/* Structured data so search engines understand the business, location and contact details */}
+                <script
+                  type="application/ld+json"
+                  dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(siteJsonLd(SITE_DESCRIPTION, contact)).replace(/</g, "\\u003c"),
+                  }}
+                />
+                <Navbar />
+              </>
+            }
+            footer={<Footer />}
+            after={
+              <>
+                <MotionRoot />
+                <ChatContact />
+              </>
+            }
+          >
+            {children}
+          </SiteShell>
+        </SiteContactProvider>
       </body>
     </html>
   );

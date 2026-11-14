@@ -4,7 +4,8 @@ import React, { useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight, BadgeCheck, Cog, MapPin, PhoneCall, Truck } from 'lucide-react';
-import { ABOUT, ABOUT_PAGE, CATEGORIES, CONTACT } from '@/lib/masarContent';
+import { ABOUT, ABOUT_PAGE, CATEGORIES } from '@/lib/masarContent';
+import { useContact } from '@/components/SiteContactProvider';
 import RollText from '@/components/motion/RollText';
 import CountUp from '@/components/motion/CountUp';
 import { useCycle, useInView } from '@/lib/useCycle';
@@ -86,6 +87,7 @@ function RangeTile() {
  * variant "about": the About Us page section ("Empowering Industries with Premium Supplies.").
  */
 export default function AboutSection({ showMore = false, variant = 'home' }: { showMore?: boolean; variant?: 'home' | 'about' }) {
+  const CONTACT = useContact();
   const onOpenRfq = useRequestQuote();
   const isAbout = variant === 'about';
   const title = isAbout ? (

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { CONTACT } from './masarContent';
+import { DEFAULT_CONTACT, type SiteContact } from './contact';
 import { SITE_URL } from './routes';
 
 /** Default share image (1700×1134). */
@@ -69,7 +69,7 @@ export const CATEGORY_SEO: Record<string, { title: string; description: string }
   instrumentation: {
     title: 'Precision Instruments & Industrial Instrumentation',
     description:
-      'Moisture, humidity, indoor air quality, HVAC, condition monitoring, NDT, calibrators and laboratory instruments from Masar Arabia, Saudi Arabia.',
+      'Flow meters, gas detectors, gauges, level, pressure and temperature instruments, sensors, positioners and test & measurement equipment from Masar Arabia, Saudi Arabia.',
   },
   mechanical: {
     title: 'Pumps, Valves, Actuators & Expansion Joints',
@@ -89,23 +89,24 @@ export const CATEGORY_SEO: Record<string, { title: string; description: string }
 };
 
 /** Organization + WebSite structured data, emitted once in the root layout. */
-export function siteJsonLd(description: string) {
+export function siteJsonLd(description: string, contact: SiteContact = DEFAULT_CONTACT) {
+  const tel = contact.phoneHref.replace(/^tel:/, '');
   return [
     {
       '@context': 'https://schema.org',
       '@type': 'Organization',
       '@id': `${SITE_URL}/#organization`,
-      name: CONTACT.company,
+      name: contact.company,
       alternateName: 'Masar Arabia',
       url: SITE_URL,
       logo: `${SITE_URL}/images/logo-dark.png`,
       image: `${SITE_URL}${DEFAULT_OG_IMAGE.url}`,
       description,
-      email: CONTACT.email,
-      telephone: '+966126576896',
+      email: contact.email,
+      telephone: tel,
       address: {
         '@type': 'PostalAddress',
-        streetAddress: 'Othman Bin Afan Street, PO Box No. 16301',
+        streetAddress: contact.addressLines.slice(0, -1).join(', ') || contact.addressLines.join(', '),
         addressLocality: 'Jeddah',
         postalCode: '22234',
         addressCountry: 'SA',
@@ -115,12 +116,12 @@ export function siteJsonLd(description: string) {
         {
           '@type': 'ContactPoint',
           contactType: 'sales',
-          telephone: '+966126576896',
-          email: CONTACT.email,
+          telephone: tel,
+          email: contact.email,
           areaServed: 'SA',
         },
       ],
-      sameAs: [CONTACT.facebook, CONTACT.instagram],
+      sameAs: [contact.facebook, contact.instagram, contact.linkedin].filter(Boolean),
     },
     {
       '@context': 'https://schema.org',

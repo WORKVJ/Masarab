@@ -8,7 +8,8 @@ import {
   ChevronDown, ArrowUpRight, Menu, X,
   PhoneCall, Mail, LayoutGrid,
 } from 'lucide-react';
-import { CATEGORIES, CONTACT } from '@/lib/masarContent';
+import { CATEGORIES } from '@/lib/masarContent';
+import { useContact } from '@/components/SiteContactProvider';
 import { DIVISION_THEMES } from '@/lib/divisionThemes';
 import { NAV, categoryHref, isActive } from '@/lib/routes';
 import RollText from '@/components/motion/RollText';
@@ -19,16 +20,17 @@ const CATEGORY_DESC: Record<string, string> = {
   water: 'EDI, EDR & Membrane Degassing',
   chemical: 'Alcohols, Aromatics & Ketones',
   electrical: 'Gratings, Breakers & VFDs',
-  instrumentation: 'Moisture, Air Quality & Calibrators',
+  instrumentation: 'Flow, Gas, Gauges & Test Instruments',
   mechanical: 'Pumps, Valves & Actuators',
   'pipe-fittings': 'Plates, Sheets & Special Fittings',
   safety: 'PPE, Fall Protection & FR Gear',
 };
 
 export default function Navbar() {
+  const CONTACT = useContact();
   const pathname = usePathname() || '/';
   // on a division page the quote buttons take that division's colour
-  const division = CATEGORIES.find((c) => pathname === categoryHref(c.slug));
+  const division = CATEGORIES.find((c) => pathname === categoryHref(c.slug) || pathname.startsWith(`${categoryHref(c.slug)}/`));
   const quoteStyle = division ? { background: DIVISION_THEMES[division.id]?.accent } : undefined;
   const [solutionsOpen, setSolutionsOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

@@ -12,7 +12,7 @@ import SafetyShowcase from './showcases/SafetyShowcase';
 /**
  * Each division presents its products in its own layout:
  * cooling → icy bento gallery · water → purification flow · chemical → periodic table ·
- * electrical → switchgear panel · instrumentation → gauge dashboard · mechanical → blueprint sheets ·
+ * electrical → switchgear panel · instrumentation → instrument panel + catalogue · mechanical → blueprint sheets ·
  * pipe fittings → steel catalogue · safety → searchable PPE catalogue.
  */
 export default function DivisionShowcase({ category }: { category: Category }) {

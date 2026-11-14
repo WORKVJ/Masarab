@@ -6,10 +6,12 @@ import RollText from '@/components/motion/RollText';
 import CountUp from '@/components/motion/CountUp';
 import { ArrowUpRight, Play, Building2, PhoneCall, TrendingUp, Droplet, ShieldCheck, MapPin } from 'lucide-react';
 import { useRequestQuote } from '@/lib/useRequestQuote';
-import { ABOUT, CATEGORIES, CONTACT, CTA, STATS_BANNER } from '@/lib/masarContent';
+import { ABOUT, CATEGORIES, CTA, STATS_BANNER } from '@/lib/masarContent';
+import { useContact } from '@/components/SiteContactProvider';
 import { categoryHref } from '@/lib/routes';
 
 export default function Hero() {
+  const CONTACT = useContact();
   const onOpenRfq = useRequestQuote();
   // Client video: plays muted while the hero is on screen, pauses when scrolled away (saves CPU/battery),
   // and stays on its poster frame for visitors who prefer reduced motion.
@@ -246,6 +248,7 @@ function MovingCard1() {
 
 // CARD 2: HEAD OFFICE (light card, no photo)
 function MovingCard2() {
+  const CONTACT = useContact();
   return (
     <div className="w-[230px] sm:w-[250px] h-[200px] shrink-0 rounded-[22px] bg-gradient-to-br from-[#e0f2fe] via-[#d5eefe] to-[#bae6fd]/60 border border-sky-200/90 p-5 shadow-sm hover:shadow-md hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group relative overflow-hidden">
       {/* Subtle background radar curve */}

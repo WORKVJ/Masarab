@@ -3,7 +3,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { ArrowUp, Mail, PhoneCall, RotateCcw, X } from 'lucide-react';
-import { CATEGORIES, CONTACT } from '@/lib/masarContent';
+import { CATEGORIES } from '@/lib/masarContent';
+import { useContact } from '@/components/SiteContactProvider';
 import { submitContact } from '@/lib/api';
 
 /**
@@ -34,6 +35,7 @@ const PROMPTS: Partial<Record<Step, { placeholder: string; type: string; max: nu
 };
 
 export default function ChatPanel({ onClose }: { onClose: () => void }) {
+  const CONTACT = useContact();
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [step, setStep] = useState<Step>('topic');
   const [typing, setTyping] = useState(false);

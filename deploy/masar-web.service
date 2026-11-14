@@ -1,0 +1,24 @@
+# Masar Arabia website (Next.js standalone server). Installed to /etc/systemd/system/ by setup.sh.
+[Unit]
+Description=Masar Arabia website (Next.js)
+After=network.target
+
+[Service]
+Type=simple
+User=masar
+Group=masar
+# deploy.sh points this symlink at the newest build, then restarts the service
+WorkingDirectory=/srv/masar/web/current
+ExecStart=/usr/bin/node server.js
+Environment=NODE_ENV=production
+# INTERNAL_API_URL + REVALIDATE_SECRET (written by setup.sh)
+EnvironmentFile=-/srv/masar/app/frontend/.env.production.local
+Environment=PORT=3000
+Environment=HOSTNAME=127.0.0.1
+Restart=always
+RestartSec=3
+# keep the 1 GB Droplet healthy: restart if the site ever grows past this
+MemoryMax=600M
+
+[Install]
+WantedBy=multi-user.target

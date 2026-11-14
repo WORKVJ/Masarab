@@ -1,12 +1,13 @@
 import Link from 'next/link';
 import { ArrowUpRight, Mail, PhoneCall } from 'lucide-react';
 import type { Category } from '@/lib/masarContent';
-import { CONTACT } from '@/lib/masarContent';
+import { getSiteContact } from '@/lib/siteSettings';
 import { quoteHref } from '@/lib/routes';
 import { type DivisionTheme, themeColors, themeVars } from '@/lib/divisionThemes';
 
 /** Closing call to action in the division's colours (replaces the generic CTA band on division pages). */
-export default function DivisionCta({ category, theme }: { category: Category; theme: DivisionTheme }) {
+export default async function DivisionCta({ category, theme }: { category: Category; theme: DivisionTheme }) {
+  const CONTACT = await getSiteContact();
   const Icon = theme.icon;
   return (
     <section id="enquire" data-label="Enquire" style={themeVars(themeColors(theme))} className="relative py-16 sm:py-24 bg-white">

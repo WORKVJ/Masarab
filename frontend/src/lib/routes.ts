@@ -1,4 +1,3 @@
-import { CATEGORIES } from './masarContent';
 
 export const SITE_URL = 'https://masararabia.com';
 
@@ -15,7 +14,9 @@ export const NAV: NavItem[] = [
   { href: '/products', label: 'Products', dropdown: true },
   { href: '/product-range', label: 'Product Range' },
   { href: '/industries', label: 'Industries' },
+  { href: '/brands', label: 'Brands' },
   { href: '/clients', label: 'Clients' },
+  { href: '/blog', label: 'Blog' },
   { href: '/contact', label: 'Contact' },
 ];
 
@@ -28,15 +29,3 @@ export const quoteHref = (product?: string) =>
 /** True when `pathname` is this nav item's page (or one of its sub-pages). */
 export const isActive = (pathname: string, href: string) =>
   href === '/' ? pathname === '/' : pathname === href || pathname.startsWith(`${href}/`);
-
-/** Every page URL, for the sitemap. */
-export const ALL_ROUTES = [
-  '/',
-  '/about',
-  '/products',
-  ...CATEGORIES.map((c) => categoryHref(c.slug)),
-  '/product-range',
-  '/industries',
-  '/clients',
-  '/contact',
-];

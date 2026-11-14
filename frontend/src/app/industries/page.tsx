@@ -24,7 +24,7 @@ export default function IndustriesPage() {
         crumbs={[{ label: 'Industries', href: '/industries' }]}
         image={{ src: '/images/cooling-tower.jpg', alt: 'Industrial plant with cooling towers' }}
       />
-      <IndustriesSection />
+      <IndustriesSection image={{ src: '/images/frp-marine.jpg', alt: 'FRP walkway and piping at a coastal plant in Saudi Arabia' }} />
       <WhyMasar />
       <CtaBand />
     </>

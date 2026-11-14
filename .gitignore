@@ -25,3 +25,6 @@ Thumbs.db
 desktop.ini
 .vscode/
 .idea/
+
+# images uploaded in the admin panel (blog)
+backend/media/
