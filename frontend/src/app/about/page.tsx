@@ -17,7 +17,7 @@ export default function AboutPage() {
   return (
     <>
       <PageHero
-        eyebrow="About Us"
+        eyebrow={ABOUT_PAGE.heading}
         title={
           <>
             Your Trusted Partner for <span className="text-[#0d7cae]">Industrial Solutions</span>

@@ -4,7 +4,7 @@ import { useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight, BadgeCheck, Cog, MapPin, PhoneCall, Truck } from 'lucide-react';
-import { ABOUT, ABOUT_PAGE, CATEGORIES } from '@/lib/masarContent';
+import { ABOUT, ABOUT_PAGE, CATEGORIES, STATS_BANNER } from '@/lib/masarContent';
 import { useContact } from '@/components/SiteContactProvider';
 import RollText from '@/components/motion/RollText';
 import CountUp from '@/components/motion/CountUp';
@@ -17,17 +17,17 @@ const STRENGTHS = [
   {
     icon: Cog,
     title: 'Mechanical, Electrical & Instrumentation',
-    text: 'Materials and equipment for every plant discipline.',
+    text: 'We specialize in the procurement and supply of Mechanical, Electrical, and Instrumentation materials and equipment.',
   },
   {
     icon: BadgeCheck,
     title: 'Reputable Manufacturers',
-    text: 'Quality products from trusted global brands.',
+    text: 'A wide range of high-quality industrial products sourced from reputable manufacturers.',
   },
   {
     icon: Truck,
     title: 'Timely Delivery, Competitive Rates',
-    text: 'Prompt, reliable supply across the Kingdom.',
+    text: 'High-quality products, excellent service, and timely delivery at competitive rates.',
   },
 ];
 
@@ -172,7 +172,7 @@ export default function AboutSection({ showMore = false, variant = 'home' }: { s
                 Head Office
               </span>
               <span className="block mt-1 text-sm sm:text-base font-bold text-slate-900 leading-tight">Jeddah, Saudi Arabia</span>
-              <span className="block mt-0.5 text-[11px] text-slate-500">Supplying across the Kingdom</span>
+              <span className="block mt-0.5 text-[11px] text-slate-500">{CONTACT.addressLines[0]}</span>
             </div>
           </a>
         </div>
@@ -210,6 +210,16 @@ export default function AboutSection({ showMore = false, variant = 'home' }: { s
               );
             })}
           </ul>
+
+          {/* the old home page's stats block: heading + text, then the three numbers */}
+          {variant === 'home' && (
+            <p data-anim="up" className="mt-6 text-sm leading-relaxed text-slate-600">
+              <strong className="font-bold text-slate-900">
+                {STATS_BANNER.heading[0]} · {STATS_BANNER.heading[1]}.
+              </strong>{' '}
+              {STATS_BANNER.text}
+            </p>
+          )}
 
           {/* stats strip — active card glides between the three stats */}
           <StatsStrip />

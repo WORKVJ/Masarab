@@ -24,13 +24,13 @@ export default function WaterShowcase({ category }: { category: Category }) {
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <ShowcaseHeader
           center
-          eyebrow={`${category.products.length} Water Treatment Solutions`}
+          eyebrow={`${category.products.length} Products`}
           title={
             <>
-              From Feed Water to <span className="text-[var(--accent)]">Ultra Pure</span>
+              Our <span className="text-[var(--accent)]">Products</span>
             </>
           }
-          intro="Every stage of purification — deionization, dialysis, degassing and high-purity systems — with Pure Water Group."
+          intro={category.summary}
         />
 
         <div className="relative mt-14 sm:mt-16">

@@ -45,13 +45,13 @@ export default function InstrumentationShowcase({ category }: { category: Catego
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ShowcaseHeader
             center
-            eyebrow={`${category.products.length} Instrumentation Lines`}
+            eyebrow={`${category.products.length} Products`}
             title={
               <>
-                Precision on <span className="text-[var(--accent)]">Every Dial</span>
+                Our <span className="text-[var(--accent)]">Products</span>
               </>
             }
-            intro="Flow meters, gas detectors, gauges, level, pressure and temperature instruments, sensors and positioners — quality-tested for accuracy and reliability."
+            intro={category.summary}
           />
 
           <div data-anim="up" className="mt-12 sm:mt-14 rounded-[28px] bg-white border border-slate-200/80 p-3 sm:p-4 shadow-[0_40px_80px_-50px_rgba(2,44,34,0.55)]">
@@ -106,13 +106,13 @@ export default function InstrumentationShowcase({ category }: { category: Catego
       >
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ShowcaseHeader
-            eyebrow={`${INSTRUMENT_RANGES.length} Categories · ${subCount} Instrument Ranges`}
+            eyebrow={`${INSTRUMENT_RANGES.length} Categories · ${subCount} Ranges`}
             title={
               <>
-                Instrument <span className="text-[var(--accent)]">Catalogue</span>
+                Precision at Its Best. <span className="text-[var(--accent)]">Excellence in Every Measure.</span>
               </>
             }
-            intro="Moisture meters, thermometers, hygrometers, data loggers and more — a comprehensive range of precision test and measurement instruments for every industry."
+            intro="Discover our advanced range of precision instruments, engineered to provide unmatched accuracy and control. Designed to enhance performance, ensure safety, and drive efficiency in diverse industries."
           />
 
           {/* category index */}

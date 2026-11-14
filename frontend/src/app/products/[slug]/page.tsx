@@ -6,7 +6,6 @@ import { CATEGORIES } from '@/lib/masarContent';
 import { categoryHref, quoteHref, SITE_URL } from '@/lib/routes';
 import { CATEGORY_SEO, pageMetadata } from '@/lib/seo';
 import { DIVISION_THEMES } from '@/lib/divisionThemes';
-import DivisionHighlights from '@/components/sections/DivisionHighlights';
 import PageHero from '@/components/sections/PageHero';
 import DivisionStatement from '@/components/division/DivisionStatement';
 import DivisionShowcase from '@/components/division/DivisionShowcase';
@@ -39,7 +38,7 @@ export default async function CategoryPage({ params }: { params: Promise<Params>
   const { slug } = await params;
   const category = CATEGORIES.find((c) => c.slug === slug);
   if (!category) notFound();
-  // each division has its own colour, pattern, icon and highlights
+  // each division has its own colour, pattern and icon
   const theme = DIVISION_THEMES[category.id];
   const words = category.name.split(' ');
   const lastWord = words.pop();
@@ -78,7 +77,6 @@ export default async function CategoryPage({ params }: { params: Promise<Params>
         </Link>
       </PageHero>
 
-      {theme && <DivisionHighlights theme={theme} name={category.name} />}
 
       {theme && <DivisionStatement category={category} theme={theme} />}
 
@@ -116,7 +114,6 @@ export default async function CategoryPage({ params }: { params: Promise<Params>
             Other <span className="text-[#0d7cae]">Divisions</span>
           </>
         }
-        intro="One trusted supplier for every part of your plant."
       />
 
       {theme ? <DivisionCta category={category} theme={theme} /> : <CtaBand />}

@@ -1,15 +1,10 @@
 import type { CSSProperties } from 'react';
-import {
-  Activity, Atom, BadgeCheck, Beaker, Clock, Cog, Cylinder, Droplet, Droplets, Factory, Fan, Flame,
-  FlaskConical, Gauge, Grid3x3, HardHat, Layers, Leaf, PlugZap, Recycle, Ruler, Settings, ShieldCheck,
-  Snowflake, Thermometer, Truck, Wind, Wrench, Zap, type LucideIcon,
-} from 'lucide-react';
+import { Cog, Droplets, FlaskConical, Gauge, HardHat, Snowflake, Wrench, Zap, type LucideIcon } from 'lucide-react';
 
 /**
  * Visual identity for each division page (/products/<slug>), keyed by Category.id.
- * Each division gets its own colour, icon, background pattern and four highlights,
+ * Each division gets its own colour, icon and background pattern,
  * so opening "Cooling Solutions" feels like cooling and "Safety Equipment" feels like safety.
- * Highlight wording is taken from the client's own copy for that division.
  */
 export interface DivisionTheme {
   /** main colour on light backgrounds (icons, links, buttons) */
@@ -26,7 +21,6 @@ export interface DivisionTheme {
   patternSize: string;
   /** hazard-tape band at the bottom of the hero instead of the usual accent line */
   hazard?: boolean;
-  highlights: { icon: LucideIcon; title: string; text: string }[];
 }
 
 const svg = (w: number, h: number, body: string) =>
@@ -57,82 +51,34 @@ export const DIVISION_THEMES: Record<string, DivisionTheme> = {
   cooling: {
     accent: '#0891b2', light: '#67e8f9', soft: '#ecfeff', deep: '8,51,68',
     icon: Snowflake, pattern: PATTERNS.frost, patternSize: '56px 56px',
-    highlights: [
-      { icon: Fan, title: 'Effective Heat Dissipation', text: 'Cooling towers, FRP fans and heat exchangers for optimal heat exchange.' },
-      { icon: Leaf, title: 'Energy Efficiency', text: 'Designed for peak performance with lower energy costs.' },
-      { icon: Wind, title: 'Clean, Controlled Air', text: 'AHUs, FAHUs, FCUs and VRF for precise climate control.' },
-      { icon: Clock, title: 'Less Downtime', text: 'Reliable equipment that keeps your processes running.' },
-    ],
   },
   water: {
     accent: '#2563eb', light: '#93c5fd', soft: '#eff6ff', deep: '23,37,84',
     icon: Droplets, pattern: PATTERNS.waves, patternSize: '64px 24px',
-    highlights: [
-      { icon: Atom, title: 'Chemical-Free EDI', text: 'Continuous high-purity water without hazardous chemicals.' },
-      { icon: Recycle, title: 'EDR Desalination', text: 'Efficient desalination and wastewater recovery.' },
-      { icon: Droplet, title: 'High & Ultra Pure Water', text: 'For pharmaceuticals, hemodialysis and critical uses.' },
-      { icon: BadgeCheck, title: 'With Pure Water Group', text: 'State-of-the-art systems, modules and parts.' },
-    ],
   },
   chemical: {
     accent: '#7c3aed', light: '#c4b5fd', soft: '#f5f3ff', deep: '46,16,101',
     icon: FlaskConical, pattern: PATTERNS.molecules, patternSize: '52px 60px',
-    highlights: [
-      { icon: Beaker, title: 'Alcohols & Aromatics', text: 'High-quality base chemicals for diverse industries.' },
-      { icon: FlaskConical, title: 'Ketones & Solvents', text: 'Including chlorinated solvents, esters and glycols.' },
-      { icon: Leaf, title: 'Oleo Chemicals', text: 'Plus plasticizers and specialty grades.' },
-      { icon: Truck, title: 'Supplied Across KSA', text: 'A reliable chemical supplier and distributor in Saudi Arabia.' },
-    ],
   },
   electrical: {
     accent: '#ca8a04', light: '#fde047', soft: '#fefce8', deep: '66,32,6',
     icon: Zap, pattern: PATTERNS.circuit, patternSize: '72px 72px',
-    highlights: [
-      { icon: PlugZap, title: 'Power & Control', text: 'Battery chargers, relays, breakers, VFDs and MCBs.' },
-      { icon: Grid3x3, title: 'Industrial Gratings', text: 'FRP, steel and stainless steel gratings, handrails and ladders.' },
-      { icon: Factory, title: 'Every Plant Sector', text: 'Power, oil & gas, desalination, cement, steel, mining and more.' },
-      { icon: Truck, title: 'Timely Delivery', text: 'Competitive rates and on-time supply for plant needs.' },
-    ],
   },
   instrumentation: {
     accent: '#059669', light: '#6ee7b7', soft: '#ecfdf5', deep: '2,44,34',
     icon: Gauge, pattern: PATTERNS.gauge, patternSize: '80px 80px',
-    highlights: [
-      { icon: Thermometer, title: 'Moisture, Temp & Humidity', text: 'Moisture meters, thermometers, hygrometers and data loggers.' },
-      { icon: Wind, title: 'Air Quality & HVAC', text: 'Indoor air quality and environmental instruments.' },
-      { icon: Activity, title: 'Condition Monitoring', text: 'Plus non-destructive testing instruments.' },
-      { icon: Ruler, title: 'Calibration & Lab', text: 'Calibrators and laboratory scientific equipment.' },
-    ],
   },
   mechanical: {
     accent: '#4f46e5', light: '#a5b4fc', soft: '#eef2ff', deep: '30,27,75',
     icon: Cog, pattern: PATTERNS.gears, patternSize: '70px 70px',
-    highlights: [
-      { icon: Settings, title: 'Ball & Expansion Joints', text: 'Smooth movement and absorbed thermal expansion.' },
-      { icon: Cylinder, title: 'Pumps', text: 'High-performance pumps for efficient fluid transfer.' },
-      { icon: Gauge, title: 'Valves & Actuators', text: 'Precise flow control and automation.' },
-      { icon: ShieldCheck, title: 'Built to Last', text: 'Precision-engineered for durability and seamless operation.' },
-    ],
   },
   'pipe-fittings': {
     accent: '#475569', light: '#cbd5e1', soft: '#f1f5f9', deep: '15,23,42',
     icon: Wrench, pattern: PATTERNS.pipes, patternSize: '80px 48px',
-    highlights: [
-      { icon: Layers, title: 'Plates & Sheets', text: 'Premium alloys for industrial piping systems.' },
-      { icon: Wrench, title: 'Special Fittings', text: 'Tailored to your unique requirements.' },
-      { icon: Settings, title: 'Nuts & Bolts', text: 'Everything needed to complete the line.' },
-      { icon: BadgeCheck, title: 'Seamless Integration', text: 'Quality and precision for optimal performance.' },
-    ],
   },
   safety: {
     accent: '#ea580c', light: '#fdba74', soft: '#fff7ed', deep: '67,20,7',
     icon: HardHat, pattern: PATTERNS.hazard, patternSize: 'auto', hazard: true,
-    highlights: [
-      { icon: ShieldCheck, title: 'Rigorously Tested', text: 'Reliable protection that meets workplace safety needs.' },
-      { icon: HardHat, title: 'Head-to-Toe PPE', text: 'Helmets, gloves, respirators, SCBA and coveralls.' },
-      { icon: Flame, title: 'Fire & Arc Flash', text: 'Fire-retardant coveralls, fire suits and arc flash suits.' },
-      { icon: Activity, title: 'Fall Protection & Lifting', text: 'Fall protection equipment and lifting equipment.' },
-    ],
   },
 };
 

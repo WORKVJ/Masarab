@@ -95,10 +95,10 @@ export default function SolutionsExplorer() {
             eyebrow="Our Products"
             title={
               <>
-                Eight Disciplines. <span className="text-[#0d7cae]">One Trusted Supplier.</span>
+                High-Quality Products to <span className="text-[#0d7cae]">Elevate Your Industry</span>
               </>
             }
-            intro="From cooling and water treatment to chemicals, instrumentation and workforce safety — sourced from renowned manufacturers and delivered across the Kingdom."
+            intro="Innovative Industrial Products to Enhance Safety and Efficiency."
           />
         </div>
 

@@ -33,13 +33,13 @@ export default function MechanicalShowcase({ category }: { category: Category })
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ShowcaseHeader
           dark
-          eyebrow={`${category.products.length} Mechanical Components`}
+          eyebrow={`${category.products.length} Products`}
           title={
             <>
-              Precision <span className="text-[var(--accent-light)]">Engineered</span> Components
+              Our <span className="text-[var(--accent)]">Products</span>
             </>
           }
-          intro="Ball joints, expansion joints, pumps, valves and actuators — built for seamless operation, durability and performance."
+          intro={category.summary}
         />
 
         <ul className="mt-12 sm:mt-14 grid md:grid-cols-2 gap-5 sm:gap-6">

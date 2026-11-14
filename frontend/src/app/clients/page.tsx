@@ -5,7 +5,7 @@ import ClientsSection from '@/components/sections/ClientsSection';
 import CtaBand from '@/components/sections/CtaBand';
 
 const DESCRIPTION =
-  'Chosen by leading clients in Saudi Arabia for quality and reliability — developers, utilities and industrial groups across the Kingdom.';
+  'Chosen by leading clients in Saudi Arabia for quality and reliability.';
 
 export const metadata: Metadata = pageMetadata({ title: 'Our Clients – Trusted Across Saudi Arabia', description: DESCRIPTION, path: '/clients' });
 

@@ -12,7 +12,8 @@ export type DetailBlock =
   | { type: 'heading'; text: string }
   | { type: 'list'; items: string[] }
   | { type: 'gallery'; images: string[] }
-  | { type: 'items'; items: { name: string; image: string }[] };
+  | { type: 'items'; items: { name: string; image: string }[] }
+  | { type: 'table'; head: string[]; rows: string[][] };
 
 export interface DetailSection {
   title: string;
@@ -35,6 +36,76 @@ export interface ProductDetail {
 }
 
 export const PRODUCT_DETAILS: ProductDetail[] = [
+  {
+    "slug": "portable-ventilation-exhaust-fan-ducted",
+    "category": "safety",
+    "product": "Portable Ventilation Exhaust Fan Ducted",
+    "intro": [
+      {
+        "type": "list",
+        "items": ["4–28 inch portable ventilation exhaust fan", "Ducted fan with flexible duct", "Suitable for small volume ventilation", "Voltage: 220 V", "Frequency: 50/60 Hz"]
+      }
+    ],
+    "sections": [
+      {
+        "title": "Description",
+        "blocks": [
+          { "type": "heading", "text": "8-16 Inch 220V Portable Ventilation Exhaust Fan Ducted Fan Flexible Duct Small Volume Ventilation Fan" },
+          { "type": "p", "text": "The portable ventilation fan is used along with flexible ventilation ducts to circulate fresh air or remove unwanted air, and it may also be used to maintain a suitable working temperature. Ducts connect to the ventilator through a strap system. It can be used apart from ducts for the same purposes. The steel housing protects the motor and other interior parts, ensuring safe operation." },
+          { "type": "p", "text": "The vent fan can safely be used for air supply and exhaust in deep working spaces where ceiling fans are non applicable, especially for cable maintenance, ship building, municipal underground engineering, and chemical or industrial factories." },
+          { "type": "p", "text": "The ventilator can also be used for drying." },
+          { "type": "gallery", "images": ["/images/masar/live/products/safety-equipment/portable-ventilation-exhaust-fan-ducted-detail.webp"] }
+        ]
+      },
+      {
+        "title": "Product Parameters",
+        "blocks": [
+          {
+            "type": "table",
+            "head": ["Specification (mm)", "Volt (V)", "Cycle (Hz)", "Air Volume Max (m³/min)", "Total Pressure Max (Pa)", "Power (W)", "Rotation Speed (r/min)", "Blade Num"],
+            "rows": [
+              ["PV-20 (8\")", "110/220/240", "50/60", "25 / 35", "250 / 420", "150 / 200", "2900 / 3300", "7"],
+              ["PV-25 (10\")", "110/220/240", "50/60", "45 / 55", "300 / 450", "350 / 400", "2900 / 3300", "7"],
+              ["PV-30 (12\")", "110/220/240", "50/60", "62 / 72", "350 / 500", "550 / 600", "2900 / 3300", "7"],
+              ["PV-35 (14\")", "110/220/240", "50/60", "85 / 102", "380 / 550", "750 / 900", "2900 / 3300", "6"],
+              ["PV-40 (16\")", "110/220/240", "50/60", "128 / 154", "450 / 600", "1100 / 1500", "2900 / 3300", "6"],
+              ["PV-40S (16\")", "110/220/240", "50/60", "96 / 115", "149 / 208", "550 / 750", "1450 / 1750", "8"],
+              ["PV-45 (18\")", "220/240", "50", "225", "798", "1500", "2900", "6"],
+              ["PV-45S (18\")", "110/220/240", "50/60", "133 / 160", "160 / 224", "650 / 850", "1450 / 1750", "8"],
+              ["PV-50 (20\")", "220/240", "50", "330", "986", "2200", "2900", "6"],
+              ["PV-50S (20\")", "110/220/240", "50/60", "175 / 210", "200 / 288", "750 / 1100", "1450 / 1750", "8"]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Installation Dimensions",
+        "blocks": [
+          { "type": "gallery", "images": ["/images/masar/live/products/safety-equipment/portable-ventilation-exhaust-fan-ducted-dimensions.webp"] },
+          {
+            "type": "table",
+            "head": ["Model", "ΦA", "ΦB", "ΦC", "L", "H", "H1"],
+            "rows": [
+              ["PV-20", "200", "210", "245", "280", "342", "154"],
+              ["PV-25", "250", "260", "598", "315", "373", "178"],
+              ["PV-30", "280", "292", "345", "350", "402", "196"],
+              ["PV-35", "350", "365", "420", "350", "478", "235"],
+              ["PV-40", "395", "415", "475", "400", "518", "281"],
+              ["PV-40(1)", "395", "415", "475", "400", "548", "281"],
+              ["PV-45", "440", "460", "515", "400", "555", "298"],
+              ["PV-50", "490", "515", "570", "400", "592", "307"]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Detail Images",
+        "blocks": [
+          { "type": "gallery", "images": ["/images/masar/live/products/safety-equipment/portable-ventilation-exhaust-fan-ducted-1.webp", "/images/masar/live/products/safety-equipment/portable-ventilation-exhaust-fan-ducted-2.webp", "/images/masar/live/products/safety-equipment/portable-ventilation-exhaust-fan-ducted-3.webp", "/images/masar/live/products/safety-equipment/portable-ventilation-exhaust-fan-ducted-4.webp", "/images/masar/live/products/safety-equipment/portable-ventilation-exhaust-fan-ducted-5.webp", "/images/masar/live/products/safety-equipment/portable-ventilation-exhaust-fan-ducted-6.webp"] }
+        ]
+      }
+    ]
+  },
   {
     "slug": "cooling-towers",
     "category": "cooling",
@@ -2748,6 +2819,14 @@ export const BRANDS = {
 
 /** intrinsic [width, height] of every imported photo */
 export const IMAGE_SIZES: Record<string, [number, number]> = {
+  "/images/masar/live/products/safety-equipment/portable-ventilation-exhaust-fan-ducted-1.webp": [550, 550],
+  "/images/masar/live/products/safety-equipment/portable-ventilation-exhaust-fan-ducted-2.webp": [550, 550],
+  "/images/masar/live/products/safety-equipment/portable-ventilation-exhaust-fan-ducted-3.webp": [550, 550],
+  "/images/masar/live/products/safety-equipment/portable-ventilation-exhaust-fan-ducted-4.webp": [550, 550],
+  "/images/masar/live/products/safety-equipment/portable-ventilation-exhaust-fan-ducted-5.webp": [550, 550],
+  "/images/masar/live/products/safety-equipment/portable-ventilation-exhaust-fan-ducted-6.webp": [550, 550],
+  "/images/masar/live/products/safety-equipment/portable-ventilation-exhaust-fan-ducted-detail.webp": [640, 330],
+  "/images/masar/live/products/safety-equipment/portable-ventilation-exhaust-fan-ducted-dimensions.webp": [462, 232],
   "/images/masar/live/products/cooling-and-frp/untitled-1.webp": [
     770,
     700

@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, ArrowUpRight, PhoneCall } from 'lucide-react';
-import { PRODUCT_RANGE } from '@/lib/masarContent';
+import { PRODUCT_RANGE, CONTACT_INTRO } from '@/lib/masarContent';
 import { getSiteContact } from '@/lib/siteSettings';
 import { quoteHref } from '@/lib/routes';
 
@@ -34,7 +34,7 @@ export default async function ProductRangeSection() {
             className="inline-flex items-center gap-2 rounded-full border border-sky-200/80 bg-white px-3.5 py-1.5 text-xs font-semibold text-[#0d7cae] shadow-xs"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-orange-400" />
-            {PRODUCT_RANGE.length} Product Lines · In Stock Across the Kingdom
+            {PRODUCT_RANGE.length} Product Lines
           </span>
           <h2 className="mt-5 text-[32px] sm:text-[44px] lg:text-[52px] font-black uppercase tracking-[-0.025em] leading-none text-slate-950">
             Product <span className="text-[#0d7cae]">Range</span>
@@ -95,8 +95,8 @@ export default async function ProductRangeSection() {
           className="mt-12 sm:mt-14 flex flex-col sm:flex-row items-center justify-between gap-4 rounded-[22px] bg-[#04121f] px-6 py-5 sm:px-8 sm:py-6 text-center sm:text-left"
         >
           <div>
-            <p className="text-base sm:text-lg font-bold text-white">Can&apos;t find the exact size or material?</p>
-            <p className="mt-1 text-sm text-white/60">Tell us your specification — we source it and quote fast.</p>
+            <p className="text-base sm:text-lg font-bold text-white">Contact Us</p>
+            <p className="mt-1 text-sm text-white/60">{CONTACT_INTRO}</p>
           </div>
           <div className="flex flex-wrap justify-center gap-2.5">
             <a

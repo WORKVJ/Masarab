@@ -46,7 +46,7 @@ const LEGACY_REDIRECTS = [
   ['/sensors.php', '/products/instrumentation/sensors'],
   ['/plates.php', '/products/pipe-fittings-alloys/plates-and-sheets'],
   ['/special-fittings.php', '/products/pipe-fittings-alloys/special-fittings'],
-  ['/portable-ventilation-exhaust-fan-ducted.php', '/products/safety-equipment'],
+  ['/portable-ventilation-exhaust-fan-ducted.php', '/products/safety-equipment/portable-ventilation-exhaust-fan-ducted'],
   // old instrumentation sub-site
   ['/instrumentation', '/products/instrumentation'],
   ['/instrumentation/:path*', '/products/instrumentation'],

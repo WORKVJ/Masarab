@@ -24,13 +24,13 @@ export default function ElectricalShowcase({ category }: { category: Category })
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ShowcaseHeader
           dark
-          eyebrow={`${category.products.length} Electrical Modules`}
+          eyebrow={`${category.products.length} Products`}
           title={
             <>
-              Power &amp; Control, <span className="text-[var(--accent-light)]">Panel Ready</span>
+              Our <span className="text-[var(--accent)]">Products</span>
             </>
           }
-          intro="Battery chargers, relays, breakers, VFDs and MCBs for power, oil & gas, desalination and heavy industry."
+          intro={category.summary}
         />
 
         {/* the panel */}

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { ArrowUpRight, Mail, PhoneCall } from 'lucide-react';
-import type { Category } from '@/lib/masarContent';
+import { CTA, type Category } from '@/lib/masarContent';
 import { getSiteContact } from '@/lib/siteSettings';
 import { quoteHref } from '@/lib/routes';
 import { type DivisionTheme, themeColors, themeVars } from '@/lib/divisionThemes';
@@ -51,7 +51,7 @@ export default async function DivisionCta({ category, theme }: { category: Categ
               Need {category.name}? <span style={{ color: theme.light }}>Let&apos;s Talk.</span>
             </h2>
             <p className="mt-5 text-[15px] sm:text-[17px] leading-[1.75] text-white/75">
-              Share your requirement — product, size, quantity and site — and our team will come back with a quotation.
+              {CTA.text}
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link

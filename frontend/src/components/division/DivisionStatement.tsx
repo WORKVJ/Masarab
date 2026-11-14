@@ -1,4 +1,4 @@
-import type { Category } from '@/lib/masarContent';
+import { ABOUT, type Category } from '@/lib/masarContent';
 import { type DivisionTheme, themeColors, themeVars } from '@/lib/divisionThemes';
 
 /** "About the division" — the client's introduction, laid out as an editorial statement in the division colour. */
@@ -48,9 +48,9 @@ export default function DivisionStatement({ category, theme }: { category: Categ
 
           <dl data-anim="up" className="mt-10 grid grid-cols-3 gap-3 sm:gap-4">
             {[
-              { k: String(category.products.length), v: 'Product lines' },
-              { k: 'KSA', v: 'Delivered Kingdom-wide' },
-              { k: 'RFQ', v: 'Quotes on request' },
+              { k: String(category.products.length), v: 'Products' },
+              { k: `${ABOUT.stats[0].value}${ABOUT.stats[0].suffix}`, v: ABOUT.stats[0].label },
+              { k: `${ABOUT.stats[2].value}${ABOUT.stats[2].suffix}`, v: ABOUT.stats[2].label },
             ].map(({ k, v }) => (
               <div key={v} className="rounded-2xl bg-[var(--accent-soft)] px-4 py-4 sm:px-5">
                 <dt className="sr-only">{v}</dt>

@@ -1,12 +1,13 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import RollText from '@/components/motion/RollText';
 import CountUp from '@/components/motion/CountUp';
 import { ArrowUpRight, Play, Building2, PhoneCall, TrendingUp, Droplet, ShieldCheck, MapPin } from 'lucide-react';
 import { useRequestQuote } from '@/lib/useRequestQuote';
-import { ABOUT, CATEGORIES, CTA, STATS_BANNER } from '@/lib/masarContent';
+import { ABOUT, CATEGORIES, CTA, HOME_SLIDES } from '@/lib/masarContent';
+import { useCycle } from '@/lib/useCycle';
 import { useContact } from '@/components/SiteContactProvider';
 import { categoryHref } from '@/lib/routes';
 
@@ -72,10 +73,8 @@ export default function Hero() {
               </span>
             </h1>
 
-            {/* Subtitle Paragraph */}
-            <p className="text-sm sm:text-base text-white/80 max-w-lg leading-relaxed font-normal">
-              {STATS_BANNER.text}
-            </p>
+            {/* the old site's six banner slides, one per division (all in the page; one shown at a time) */}
+            <HeroSlides />
 
             {/* Action Pill Buttons */}
             <div className="flex flex-wrap items-center gap-3 pt-1">
@@ -157,6 +156,59 @@ export default function Hero() {
       </div>
 
     </section>
+  );
+}
+
+/** Rotating division slides from the old home banner. Pauses on hover/focus; no rotation with reduced motion. */
+function HeroSlides() {
+  const [hold, setHold] = useState(false);
+  const [active, setActive] = useCycle(HOME_SLIDES.length, 6000, !hold);
+  return (
+    <div
+      className="max-w-lg"
+      onMouseEnter={() => setHold(true)}
+      onMouseLeave={() => setHold(false)}
+      onFocus={() => setHold(true)}
+      onBlur={() => setHold(false)}
+    >
+      <div className="grid">
+        {HOME_SLIDES.map((s, i) => {
+          const cat = CATEGORIES.find((c) => c.id === s.category);
+          const on = i === active;
+          return (
+            <div
+              key={s.category}
+              aria-hidden={!on}
+              className={`[grid-area:1/1] transition-[opacity,translate] duration-700 ${on ? 'opacity-100 translate-y-0' : 'pointer-events-none invisible opacity-0 translate-y-2'}`}
+            >
+              <p className="text-base sm:text-lg font-bold text-white leading-snug">{s.title}</p>
+              <p className="mt-1.5 text-sm sm:text-base text-white/80 leading-relaxed">{s.text}</p>
+              {cat && (
+                <Link
+                  href={categoryHref(cat.slug)}
+                  tabIndex={on ? 0 : -1}
+                  className="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-sky-300 hover:text-white transition-colors"
+                >
+                  Our Products <ArrowUpRight className="h-3.5 w-3.5" />
+                </Link>
+              )}
+            </div>
+          );
+        })}
+      </div>
+      <div className="mt-3 flex gap-1.5" role="group" aria-label="Choose a slide">
+        {HOME_SLIDES.map((s, i) => (
+          <button
+            key={s.category}
+            type="button"
+            onClick={() => setActive(i)}
+            aria-label={s.title}
+            aria-pressed={i === active}
+            className={`h-1.5 rounded-full transition-all duration-500 ${i === active ? 'w-7 bg-sky-300' : 'w-3 bg-white/35 hover:bg-white/60'}`}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -264,7 +316,7 @@ function MovingCard2() {
 
       <div className="relative z-10">
         <span className="block text-sm font-normal text-slate-800 leading-snug">Jeddah, Saudi Arabia</span>
-        <span className="block text-xs text-slate-500 font-normal mt-1">Supplying across the Kingdom</span>
+        <span className="block text-xs text-slate-500 font-normal mt-1">{CONTACT.addressLines[0]}</span>
       </div>
 
       <a

@@ -8,6 +8,7 @@ import InstrumentationShowcase from './showcases/InstrumentationShowcase';
 import MechanicalShowcase from './showcases/MechanicalShowcase';
 import PipeShowcase from './showcases/PipeShowcase';
 import SafetyShowcase from './showcases/SafetyShowcase';
+import { productLink } from '@/lib/productRoutes';
 
 /**
  * Each division presents its products in its own layout:
@@ -32,7 +33,13 @@ export default function DivisionShowcase({ category }: { category: Category }) {
     case 'pipe-fittings':
       return <PipeShowcase category={category} />;
     case 'safety':
-      return <SafetyShowcase products={category.products} colors={themeColors(DIVISION_THEMES.safety)!} />;
+      return (
+        <SafetyShowcase
+          products={category.products}
+          colors={themeColors(DIVISION_THEMES.safety)!}
+          links={Object.fromEntries(category.products.map((p) => [p.name, productLink(category, p.name)]))}
+        />
+      );
     default:
       return null;
   }

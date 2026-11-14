@@ -20,13 +20,13 @@ export default function PipeShowcase({ category }: { category: Category }) {
       />
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ShowcaseHeader
-          eyebrow={`${category.products.length} Product Lines`}
+          eyebrow={`${category.products.length} Products`}
           title={
             <>
-              Built Into Every <span className="text-[var(--accent)]">Pipeline</span>
+              Our <span className="text-[var(--accent)]">Products</span>
             </>
           }
-          intro="Plates and sheets, special fittings, nuts and bolts — for seamless integration and optimal performance in industrial piping systems."
+          intro={category.summary}
         />
 
         <ol className="mt-14 sm:mt-16 space-y-10 sm:space-y-14">

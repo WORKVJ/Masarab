@@ -26,10 +26,10 @@ export default function CategoryCards({
   eyebrow = 'Our Products',
   title = (
     <>
-      Eight Disciplines. <span className="text-[#0d7cae]">One Trusted Supplier.</span>
+      High-Quality Products to <span className="text-[#0d7cae]">Elevate Your Industry</span>
     </>
   ),
-  intro = 'From cooling and water treatment to chemicals, instrumentation and workforce safety — sourced from renowned manufacturers and delivered across the Kingdom.',
+  intro = 'Innovative Industrial Products to Enhance Safety and Efficiency.',
   showAllLink = true,
   id = 'categories',
   label = 'Products',
@@ -129,7 +129,7 @@ export default function CategoryCards({
                     <h3 className="mt-1 text-base sm:text-xl font-black uppercase tracking-tight leading-tight">{c.name}</h3>
                     {t && (
                       <p className="mt-2 hidden sm:block text-xs leading-relaxed text-white/70">
-                        {t.highlights[0].title} · {t.highlights[1].title}
+                        {c.headline}
                       </p>
                     )}
                     <span className="mt-3 hidden sm:block h-[3px] w-10 rounded-full" style={{ background: t?.light ?? '#fb923c' }} />

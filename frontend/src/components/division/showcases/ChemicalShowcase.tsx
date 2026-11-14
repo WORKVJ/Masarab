@@ -21,13 +21,13 @@ export default function ChemicalShowcase({ category }: { category: Category }) {
       <div aria-hidden="true" className="absolute inset-0 opacity-[0.06] invert pointer-events-none" style={{ backgroundImage: t.pattern, backgroundSize: t.patternSize }} />
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ShowcaseHeader
-          eyebrow={`${category.products.length} Chemical Families`}
+          eyebrow={`${category.products.length} Products`}
           title={
             <>
-              Our Chemical <span className="text-[var(--accent)]">Portfolio</span>
+              Our <span className="text-[var(--accent)]">Products</span>
             </>
           }
-          intro="Alcohols, aromatics, ketones, oleo chemicals and more — high-quality chemicals for industries across Saudi Arabia."
+          intro={category.summary}
         />
 
         <ul className="mt-12 sm:mt-14 grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">

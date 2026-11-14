@@ -27,13 +27,13 @@ export default function CoolingShowcase({ category }: { category: Category }) {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ShowcaseHeader
           dark
-          eyebrow={`${category.products.length} Cooling Products`}
+          eyebrow={`${category.products.length} Products`}
           title={
             <>
-              Engineered to Keep <span className="text-[var(--accent-light)]">Plants Cool</span>
+              Our <span className="text-[var(--accent)]">Products</span>
             </>
           }
-          intro="Cooling towers, FRP fans, chillers and air handling — selected for effective heat dissipation, energy efficiency and dependable operation."
+          intro={category.summary}
         />
 
         <ul className="mt-12 sm:mt-14 grid grid-cols-2 lg:grid-cols-4 auto-rows-[210px] sm:auto-rows-[250px] gap-3 sm:gap-4 [grid-auto-flow:dense]">

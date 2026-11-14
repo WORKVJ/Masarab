@@ -19,7 +19,7 @@ export default function ProductsPage() {
             High-Quality Products to <span className="text-[#0d7cae]">Elevate Your Industry</span>
           </>
         }
-        intro="Eight product disciplines from renowned manufacturers — explore each range below, or open a category for its full product list."
+        intro="Empowering Industries with Durable and Reliable Solutions. Premium Safety Equipment for Your Needs. Innovative Industrial Products to Enhance Safety and Efficiency."
         crumbs={[{ label: 'Products', href: '/products' }]}
       />
       <SolutionsExplorer />

@@ -54,6 +54,26 @@ export const ABOUT_PAGE = {
 };
 
 /** Home page stats banner. */
+/** The home page banner slides of the old site (one per division), word for word. */
+export const HOME_SLIDES = [
+  { category: 'cooling', title: 'Optimize Cooling Efficiency with Masar Arabia', text: 'Optimize cooling performance with our expertly designed Cooling Towers and FRP Fans. Tailored for various industries, our solutions offer maximum efficiency and minimal downtime.' },
+  { category: 'water', title: 'Advanced Water Treatment Solutions', text: 'Experience the future of water purification with Masar Arabia. Our cutting-edge solutions deliver exceptional water quality, tailored to your specific needs.' },
+  { category: 'mechanical', title: 'Precision Mechanical Components for Superior Performance', text: "Enhance industrial operations with Masar Arabia's high-quality mechanical components, ensuring seamless performance, durability, and reliability." },
+  { category: 'chemical', title: 'Effective and Sustainable Chemical Solutions for Industries', text: 'Discover high-quality chemicals from Masar Arabia. Our commitment to quality ensures reliable solutions that optimize your industrial processes and drive sustainable growth.' },
+  { category: 'electrical', title: 'Power Your Industry with Premium Electrical Solutions', text: "Elevate your industrial operations with Masar Arabia's premium electrical solutions. From grating and handrails to specialized components, our comprehensive range of products ensures enhanced efficiency, safety, and reliability." },
+  { category: 'safety', title: 'Uncompromising Safety for Your Workforce', text: 'Enhance workplace safety with our reliable, high-quality safety equipments. Exceeding industry standards, we offer comprehensive safety solutions to meet your needs.' },
+] as const;
+
+/** products.php banner on the old site */
+export const PRODUCTS_PAGE = {
+  heading: 'High-Quality Products to Elevate Your Industry',
+  slides: ['Empowering Industries with Durable and Reliable Solutions', 'Premium Safety Equipment for Your Needs', 'Innovative Industrial Products to Enhance Safety and Efficiency'],
+  fullList: 'Full list of Products',
+};
+
+/** contact-us.php intro (also the editable default in the admin panel) */
+export const CONTACT_INTRO = 'We understand the importance of approaching each work integrally and believe in the power of simple and easy communication.';
+
 export const STATS_BANNER = {
   heading: ['Comprehensive Product Range', 'Uncompromising Quality'],
   text: 'With years of experience serving a diverse range of industries, Masar Arabia is your trusted industrial supplier. We take pride in delivering exceptional service and consistently exceeding customer expectations.',

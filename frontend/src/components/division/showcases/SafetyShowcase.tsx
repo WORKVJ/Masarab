@@ -4,7 +4,10 @@ import { useMemo, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight, Search, X } from 'lucide-react';
-import type { CategoryProduct } from '@/lib/masarContent';
+import { CATEGORIES, type CategoryProduct } from '@/lib/masarContent';
+
+/** the old products.php description of the safety division */
+const SAFETY_SUMMARY = CATEGORIES.find((c) => c.id === 'safety')?.summary ?? '';
 import { quoteHref } from '@/lib/routes';
 import { type DivisionColors, themeVars } from '@/lib/divisionThemes';
 import ShowcaseHeader from '../ShowcaseHeader';
@@ -16,7 +19,16 @@ const HAZARD = 'repeating-linear-gradient(-45deg, #facc15 0 14px, #111827 14px 2
  * Safety — a searchable PPE catalogue with signage-style cards.
  * All 44 products are always in the HTML (extra ones are only CSS-hidden) so search engines see the full range.
  */
-export default function SafetyShowcase({ products, colors }: { products: CategoryProduct[]; colors: DivisionColors }) {
+/** `links`: each product's detail page, or its pre-filled quote form (worked out on the server). */
+export default function SafetyShowcase({
+  products,
+  colors,
+  links,
+}: {
+  products: CategoryProduct[];
+  colors: DivisionColors;
+  links: Record<string, string>;
+}) {
   const [query, setQuery] = useState('');
   const [showAll, setShowAll] = useState(false);
   const q = query.trim().toLowerCase();
@@ -32,13 +44,13 @@ export default function SafetyShowcase({ products, colors }: { products: Categor
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24">
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
           <ShowcaseHeader
-            eyebrow={`${products.length} Safety Products`}
+            eyebrow={`${products.length} Products`}
             title={
               <>
-                Head-to-Toe <span className="text-[var(--accent)]">Protection</span>
+                Our <span className="text-[var(--accent)]">Products</span>
               </>
             }
-            intro="Coveralls, fall protection, fire and arc-flash gear, respiratory protection, spill control and site safety — rigorously tested for reliability."
+            intro={SAFETY_SUMMARY}
           />
           {/* search */}
           <div data-anim="up" className="w-full lg:w-80 shrink-0">
@@ -78,7 +90,7 @@ export default function SafetyShowcase({ products, colors }: { products: Categor
             return (
               <li key={p.name} className={visible ? '' : 'hidden'}>
                 <Link
-                  href={quoteHref(p.name)}
+                  href={links[p.name] ?? quoteHref(p.name)}
                   className="group h-full flex flex-col overflow-hidden rounded-[18px] bg-white border border-slate-200/80 hover:border-[var(--accent)] hover:shadow-[0_22px_40px_-26px_rgba(234,88,12,0.6)] transition-[border-color,box-shadow] duration-300"
                 >
                   <span className="relative aspect-[4/3] bg-[#f8fafc]">

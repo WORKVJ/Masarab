@@ -1,26 +1,10 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import { INDUSTRIES } from '@/lib/masarContent';
+import { ABOUT_PAGE, INDUSTRIES } from '@/lib/masarContent';
 import CountUp from '@/components/motion/CountUp';
 import SectionHeader from './SectionHeader';
 import IndustryList from './IndustryList';
-
-/** What Masar supplies to each sector (keys match INDUSTRIES). */
-const SUPPLIES: Record<string, string> = {
-  Industrial: 'Valves, pumps, fasteners and safety gear for plant maintenance',
-  Power: 'Cooling towers, breakers, relays and transformer monitoring',
-  'Water & Desalination': 'Water treatment systems, dosing chemicals and pumps',
-  'Oil & Gas': 'Pipe fittings, alloy plates, valves and instrumentation',
-  Cement: 'Mechanical spares, drives and protective equipment',
-  Fertilizers: 'Corrosion-resistant fittings, chemicals and process instruments',
-  Sugar: 'Pumps, valves, heat exchangers and process instruments',
-  Chemicals: 'Solvents, glycols, alloy piping and chemical-resistant PPE',
-  'Steel Mills': 'Cooling systems, VFDs and fire-retardant protective wear',
-  Mining: 'Pumps, lifting equipment and fall protection',
-  Pharmaceutical: 'Purified-water treatment, calibrators and clean fittings',
-  Food: 'Water treatment, chillers, pumps and hygienic valves',
-};
 
 export default function IndustriesSection({
   image = { src: '/images/cooling-tower.jpg', alt: 'Cooling towers at an industrial plant in Saudi Arabia' },
@@ -40,10 +24,10 @@ export default function IndustriesSection({
               eyebrow="Industries We Serve"
               title={
                 <>
-                  Supplying the Plants that <span className="text-[#0d7cae]">Power the Kingdom</span>
+                  Empowering Industries with <span className="text-[#0d7cae]">Premium Supplies.</span>
                 </>
               }
-              intro="We specialize in the procurement and supply of Mechanical, Electrical, and Instrumentation materials and equipment for plants across every major sector."
+              intro={ABOUT_PAGE.paragraphs[0]}
             />
 
             <div data-anim="up" className="relative mt-8 aspect-[4/3] sm:aspect-[16/9] lg:aspect-[4/3] overflow-hidden rounded-3xl bg-[#04121f] shadow-[0_30px_60px_-30px_rgba(4,18,31,0.6)]">
@@ -73,7 +57,7 @@ export default function IndustriesSection({
                   href="/contact"
                   className="group/cta mt-6 inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-[#04121f] transition-colors hover:bg-sky-100"
                 >
-                  Discuss your plant&apos;s needs <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/cta:translate-x-1" />
+                  Contact Us <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/cta:translate-x-1" />
                 </Link>
               </div>
             </div>
@@ -81,7 +65,7 @@ export default function IndustriesSection({
         </div>
 
         {/* Right: every sector with what we supply to it */}
-        <IndustryList items={INDUSTRIES.map((name) => ({ name, supply: SUPPLIES[name] }))} />
+        <IndustryList items={INDUSTRIES} />
       </div>
     </section>
   );

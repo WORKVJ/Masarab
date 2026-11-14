@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight, PhoneCall } from 'lucide-react';
-import type { Category, CategoryProduct } from '@/lib/masarContent';
+import { CONTACT_INTRO, type Category, type CategoryProduct } from '@/lib/masarContent';
 import { getSiteContact } from '@/lib/siteSettings';
 import type { DetailBlock, DetailSection } from '@/lib/catalog';
 import { quoteHref } from '@/lib/routes';
@@ -46,7 +46,7 @@ export async function ProductOverview({
             )}
             <div className="rounded-[24px] p-6 text-white" style={{ background: 'linear-gradient(135deg, rgb(var(--accent-deep)), var(--accent))' }}>
               <p className="text-lg font-black uppercase leading-tight">Need {name}?</p>
-              <p className="mt-2 text-sm text-white/75 leading-relaxed">Tell us your specification and quantity — we reply with a quotation and delivery time.</p>
+              <p className="mt-2 text-sm text-white/75 leading-relaxed">{CONTACT_INTRO}</p>
               <div className="mt-5 flex flex-wrap gap-2.5">
                 <Link
                   href={quoteHref(name)}

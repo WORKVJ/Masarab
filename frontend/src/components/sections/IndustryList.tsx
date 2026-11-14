@@ -9,7 +9,7 @@ const ICONS = [Factory, Zap, Droplets, Flame, Building, Sprout, Candy, FlaskConi
  * The 12 sectors. Rows fade up one after another (MotionEngine, data-anim), each icon then
  * draws itself line by line, and hovering a row fills its icon and runs a blue line along its edge.
  */
-export default function IndustryList({ items }: { items: { name: string; supply: string }[] }) {
+export default function IndustryList({ items }: { items: readonly string[] }) {
   const ref = useRef<HTMLUListElement>(null);
 
   useEffect(() => {
@@ -32,17 +32,14 @@ export default function IndustryList({ items }: { items: { name: string; supply:
 
   return (
     <ul ref={ref} className="ind-list lg:col-span-7 grid sm:grid-cols-2 gap-x-10 border-t border-slate-200 self-start">
-      {items.map(({ name, supply }, i) => {
+      {items.map((name, i) => {
         const Icon = ICONS[i % ICONS.length];
         return (
-          <li key={name} data-anim="up" className="ind-row group flex items-start gap-4 border-b border-slate-200 py-6" style={{ '--i': i } as React.CSSProperties}>
+          <li key={name} data-anim="up" className="ind-row group flex items-center gap-4 border-b border-slate-200 py-5" style={{ '--i': i } as React.CSSProperties}>
             <span className="ind-icon grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-white text-[#0d7cae] ring-1 ring-slate-200 group-hover:bg-[#0d7cae] group-hover:text-white group-hover:ring-[#0d7cae]">
               <Icon data-draw className="h-5 w-5" strokeWidth={1.75} />
             </span>
-            <div className="min-w-0">
-              <h3 className="ind-title text-[17px] font-bold leading-snug text-slate-950">{name}</h3>
-              <p className="mt-1 text-sm leading-relaxed text-slate-600">{supply}</p>
-            </div>
+            <h3 className="ind-title min-w-0 self-center text-[17px] font-bold leading-snug text-slate-950">{name}</h3>
           </li>
         );
       })}

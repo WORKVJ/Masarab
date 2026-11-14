@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { Check } from 'lucide-react';
 import { type DetailBlock, imageSize } from '@/lib/catalog';
 
-/** Renders imported page content (paragraphs, headings, check lists, photos, sub-type cards) in the division colour. */
+/** Renders imported page content (paragraphs, headings, check lists, photos, sub-type cards, spec tables) in the division colour. */
 export default function DetailBlocks({ blocks, alt }: { blocks: DetailBlock[]; alt: string }) {
   return (
     <div className="space-y-5">
@@ -51,6 +51,39 @@ export default function DetailBlocks({ blocks, alt }: { blocks: DetailBlock[]; a
                     </div>
                   );
                 })}
+              </div>
+            );
+          case 'table':
+            return (
+              <div key={i} className="overflow-x-auto rounded-2xl border border-slate-200 bg-white">
+                <table className="w-full min-w-[560px] text-left text-sm">
+                  <thead className="bg-[var(--accent-soft)] text-[var(--accent)]">
+                    <tr>
+                      {b.head.map((h) => (
+                        <th key={h} scope="col" className="px-3.5 py-3 font-semibold whitespace-nowrap">
+                          {h}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 text-slate-700">
+                    {b.rows.map((row, r) => (
+                      <tr key={r} className="hover:bg-slate-50">
+                        {row.map((cell, c) =>
+                          c === 0 ? (
+                            <th key={c} scope="row" className="px-3.5 py-2.5 font-semibold text-slate-900 whitespace-nowrap">
+                              {cell}
+                            </th>
+                          ) : (
+                            <td key={c} className="px-3.5 py-2.5 tabular-nums whitespace-nowrap">
+                              {cell}
+                            </td>
+                          ),
+                        )}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             );
           case 'items':
