@@ -4,7 +4,7 @@ import { useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight, BadgeCheck, Cog, MapPin, PhoneCall, Truck } from 'lucide-react';
-import { ABOUT, ABOUT_PAGE, CATEGORIES, STATS_BANNER } from '@/lib/masarContent';
+import { ABOUT, ABOUT_PAGE, CATEGORIES } from '@/lib/masarContent';
 import { useContact } from '@/components/SiteContactProvider';
 import RollText from '@/components/motion/RollText';
 import CountUp from '@/components/motion/CountUp';
@@ -82,25 +82,17 @@ function RangeTile() {
   );
 }
 
-/**
- * variant "home": the home page About block (heading + first paragraph, "Read More" → /about).
- * variant "about": the About Us page section ("Empowering Industries with Premium Supplies.").
- */
-export default function AboutSection({ showMore = false, variant = 'home' }: { showMore?: boolean; variant?: 'home' | 'about' }) {
+/** The About Us page section ("Empowering Industries with Premium Supplies."). The home page uses HomeAbout. */
+export default function AboutSection() {
   const CONTACT = useContact();
   const onOpenRfq = useRequestQuote();
-  const isAbout = variant === 'about';
-  const title = isAbout ? (
+  const title = (
     <>
       Empowering Industries with <span className="text-[#0d7cae]">Premium Supplies.</span>
     </>
-  ) : (
-    <>
-      Empowering Industries with <span className="text-[#0d7cae]">Reliable Solutions for Success</span>
-    </>
   );
-  const intro = isAbout ? ABOUT_PAGE.paragraphs[1] : ABOUT.paragraphs[0];
-  const extra = isAbout ? ABOUT_PAGE.paragraphs[2] : null;
+  const intro = ABOUT_PAGE.paragraphs[1];
+  const extra = ABOUT_PAGE.paragraphs[2];
   return (
     <section id="about" className="relative py-16 lg:py-14 bg-white overflow-hidden">
       <div className="absolute inset-x-0 top-0 h-96 bg-gradient-to-b from-sky-50/70 to-transparent pointer-events-none" />
@@ -211,16 +203,6 @@ export default function AboutSection({ showMore = false, variant = 'home' }: { s
             })}
           </ul>
 
-          {/* the old home page's stats block: heading + text, then the three numbers */}
-          {variant === 'home' && (
-            <p data-anim="up" className="mt-6 text-sm leading-relaxed text-slate-600">
-              <strong className="font-bold text-slate-900">
-                {STATS_BANNER.heading[0]} · {STATS_BANNER.heading[1]}.
-              </strong>{' '}
-              {STATS_BANNER.text}
-            </p>
-          )}
-
           {/* stats strip — active card glides between the three stats */}
           <StatsStrip />
 
@@ -246,12 +228,6 @@ export default function AboutSection({ showMore = false, variant = 'home' }: { s
                 <span className="block font-bold text-slate-900">{CONTACT.phoneDisplay}</span>
               </span>
             </a>
-            {showMore && (
-              <Link href="/about" className="group inline-flex items-center gap-1.5 px-2 py-3 text-sm font-bold text-[#0d7cae]">
-                <RollText>Read More</RollText>
-                <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:rotate-45" />
-              </Link>
-            )}
           </div>
         </div>
       </div>

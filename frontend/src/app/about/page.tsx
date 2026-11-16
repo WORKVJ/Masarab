@@ -27,7 +27,7 @@ export default function AboutPage() {
         crumbs={[{ label: 'About Us', href: '/about' }]}
         image={{ src: '/images/masar/about.webp', alt: 'Masar Arabia — trusted industrial partner in Saudi Arabia' }}
       />
-      <AboutSection variant="about" />
+      <AboutSection />
       <AboutStory />
       <WhyMasar />
       <ClientsSection />

@@ -163,7 +163,8 @@ export default function RfqSection({ prefilledProduct = '' }: { prefilledProduct
 
         {/* Right: form */}
         <div className="lg:col-span-7" data-anim="right">
-          <div className="rounded-[32px] bg-gradient-to-br from-[#f0f9ff] to-[#e0f2fe]/60 border border-sky-100 p-6 sm:p-10">
+          {/* product buttons across the site open the page here (quoteHref → #quote-form) */}
+          <div id="quote-form" className="scroll-mt-28 rounded-[32px] bg-gradient-to-br from-[#f0f9ff] to-[#e0f2fe]/60 border border-sky-100 p-6 sm:p-10">
             {submittedRfqNumber ? (
               <div className="text-center py-12">
                 <div className="w-16 h-16 rounded-full bg-white text-emerald-600 flex items-center justify-center mx-auto shadow-md">
@@ -188,6 +189,14 @@ export default function RfqSection({ prefilledProduct = '' }: { prefilledProduct
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
                 <h3 className="text-lg font-black uppercase text-slate-950">Request a Quote</h3>
+                {prefilledProduct && (
+                  <p className="flex items-start gap-2 rounded-xl bg-sky-50 px-3.5 py-2.5 text-sm text-slate-700 ring-1 ring-inset ring-sky-200">
+                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#0d7cae]" aria-hidden="true" />
+                    <span>
+                      Requesting a quote for: <strong className="font-bold text-slate-900">{prefilledProduct}</strong>
+                    </span>
+                  </p>
+                )}
 
                 {errorMsg && (
                   <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-xl text-amber-900 text-sm space-y-3">

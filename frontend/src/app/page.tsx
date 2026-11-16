@@ -3,9 +3,8 @@ import { pageMetadata } from '@/lib/seo';
 import Hero, { HeroCardsBand } from '@/components/Hero';
 import KineticMarquee from '@/components/KineticMarquee';
 import ProductRangeSection from '@/components/sections/ProductRangeSection';
-import AboutSection from '@/components/sections/AboutSection';
+import HomeAbout from '@/components/sections/HomeAbout';
 import CategoryCards from '@/components/sections/CategoryCards';
-import IndustriesSection from '@/components/sections/IndustriesSection';
 import WhyMasar from '@/components/sections/WhyMasar';
 import ClientsSection from '@/components/sections/ClientsSection';
 import CtaBand from '@/components/sections/CtaBand';
@@ -29,9 +28,8 @@ export default function HomePage() {
       {/* …then the products: showroom product range (16 lines from the client's display board) */}
       <ProductRangeSection />
 
-      <AboutSection showMore />
-
-      <IndustriesSection />
+      {/* About + the industries served, in one section */}
+      <HomeAbout />
 
       <WhyMasar />
 

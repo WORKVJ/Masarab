@@ -22,9 +22,9 @@ export const NAV: NavItem[] = [
 
 export const categoryHref = (slug: string) => `/products/${slug}`;
 
-/** Contact page with the quote form pre-filled for a product / category. */
+/** Contact page, opened at the quote form (#quote-form) and pre-filled for a product / category. */
 export const quoteHref = (product?: string) =>
-  product ? `/contact?product=${encodeURIComponent(product)}` : '/contact';
+  product ? `/contact?product=${encodeURIComponent(product)}#quote-form` : '/contact#quote-form';
 
 /** True when `pathname` is this nav item's page (or one of its sub-pages). */
 export const isActive = (pathname: string, href: string) =>
