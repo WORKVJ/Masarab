@@ -59,7 +59,7 @@ export default function RichTextEditor({
   });
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white focus-within:border-[#0d7cae] focus-within:ring-2 focus-within:ring-[#0d7cae]/20">
+    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white focus-within:border-amber-400 focus-within:ring-2 focus-within:ring-amber-400/25">
       {editor ? <Toolbar editor={editor} onError={onError} /> : <div className="h-[49px] border-b border-slate-200 bg-slate-50" />}
       <EditorContent editor={editor} />
     </div>
@@ -191,7 +191,7 @@ function Btn({ label, on, disabled, onClick, children }: { label: string; on?: b
       onClick={onClick}
       className={cx(
         'grid h-9 w-9 place-items-center rounded-lg transition-colors disabled:opacity-35 [&>svg]:h-[18px] [&>svg]:w-[18px]',
-        on ? 'bg-[#0d7cae] text-white' : 'text-slate-600 hover:bg-white hover:text-slate-900',
+        on ? 'bg-amber-100 text-amber-900 ring-1 ring-inset ring-amber-300' : 'text-slate-600 hover:bg-white hover:text-slate-900',
       )}
     >
       {children}

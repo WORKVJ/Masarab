@@ -52,7 +52,7 @@ export function Facts({ title, rows }: { title: string; rows: { label: string; v
             <dd className="mt-0.5 break-words text-sm text-slate-900">
               {r.value ? (
                 r.href ? (
-                  <a href={r.href} className="text-[#0d7cae] hover:underline" target={r.href.startsWith('http') ? '_blank' : undefined} rel="noreferrer">
+                  <a href={r.href} className="text-amber-700 hover:underline" target={r.href.startsWith('http') ? '_blank' : undefined} rel="noreferrer">
                     {r.value}
                   </a>
                 ) : (

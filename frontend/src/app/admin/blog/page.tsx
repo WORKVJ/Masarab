@@ -90,7 +90,7 @@ export default function BlogListPage() {
                 }}
                 className={cx(
                   'rounded-full px-3 py-1.5 text-xs font-semibold transition-colors',
-                  status === f.value ? 'bg-[#0d7cae] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200',
+                  status === f.value ? 'bg-amber-100 text-amber-900 ring-1 ring-inset ring-amber-300' : 'bg-slate-100 text-slate-600 hover:bg-slate-200',
                 )}
               >
                 {f.label}

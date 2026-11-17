@@ -322,7 +322,7 @@ export const CATEGORIES: Category[] = [
 
 /**
  * Product Range — the 16 lines on the client's showroom display board, in the same 4×4 order.
- * `image` is the product photo shown in the grid; `blurb` is the hover tooltip.
+ * `image` is the product photo shown in the grid (none yet for lines the board has no picture of).
  */
 export type RangeGroup = 'piping' | 'drainage' | 'valves' | 'civil' | 'accessories';
 
@@ -330,27 +330,26 @@ export interface RangeProduct {
   id: string;
   name: string;
   group: RangeGroup;
-  blurb: string;
   image?: string;
 }
 
 export const PRODUCT_RANGE: RangeProduct[] = [
-  { id: 'pvc-cpvc', image: '/images/products/pvc-cpvc.jpg', name: 'PVC CPVC Pipes & Fittings', group: 'piping', blurb: 'Pressure pipes and solvent-weld fittings for water and chemical lines.' },
-  { id: 'pph-hdpe', image: '/images/products/pph-hdpe.jpg', name: 'PPH PPS ECTFE HDPE Pipes & Fittings', group: 'piping', blurb: 'Thermoplastic piping systems for aggressive industrial fluids.' },
-  { id: 'ppr', image: '/images/products/ppr-pipes.jpg', name: 'PPR Pipes & Fittings', group: 'piping', blurb: 'Hot and cold water piping with heat-fusion joints.' },
-  { id: 'manhole', image: '/images/products/manhole-covers.jpg', name: 'Manhole Covers, Gratings & Gullies', group: 'civil', blurb: 'Access covers, gully gratings and frames for roads and sites.' },
-  { id: 'pvc-drainage', image: '/images/products/pvc-drainage.jpg', name: 'PVC Drainage Fittings', group: 'drainage', blurb: 'Soil, waste and vent fittings — bends, tees, wyes and cleanouts.' },
-  { id: 'abs', image: '/images/products/abs-pipes.jpg', name: 'ABS Pipes & Fittings', group: 'piping', blurb: 'Tough, lightweight piping for chilled water and process lines.' },
-  { id: 'adhesives', image: '/images/products/pvc-adhesives.jpg', name: 'PVC CPVC Adhesives', group: 'accessories', blurb: 'Solvent cements, primers and cleaners for reliable joints.' },
-  { id: 'test-plugs', image: '/images/products/test-plugs.jpg', name: 'Test Plugs', group: 'civil', blurb: 'Pipe plugs and stoppers for pressure and leak testing.' },
-  { id: 'cast-iron', image: '/images/products/cast-iron.jpg', name: 'Cast Iron Pipes & Fittings', group: 'drainage', blurb: 'Durable, fire-safe and quiet soil and drainage systems.' },
-  { id: 'pvdf', image: '/images/products/pvdf-pipes.jpg', name: 'PVDF Pipes & Fittings', group: 'piping', blurb: 'High-purity fluoropolymer piping for demanding chemical service.' },
-  { id: 'couplings', image: '/images/products/mechanical-couplings.jpg', name: 'Mechanical Coupling & Flange Adaptors', group: 'accessories', blurb: 'Couplings and adaptors that join and repair different pipe materials.' },
-  { id: 'pressure', image: '/images/products/pressure-reducing.jpg', name: 'Pressure Reducing & Vacuum Breakers', group: 'valves', blurb: 'Valves that control line pressure and protect against vacuum.' },
-  { id: 'drains', image: '/images/products/drains.jpg', name: 'Drains', group: 'drainage', blurb: 'Floor, roof and channel drains for buildings and plants.' },
-  { id: 'copper', image: '/images/products/copper-pipes.jpg', name: 'Copper Pipes & Fittings', group: 'piping', blurb: 'Copper tube and fittings for HVAC, medical gas and plumbing.' },
-  { id: 'metal-valves', image: '/images/products/metal-valves.jpg', name: 'Metal Valves', group: 'valves', blurb: 'Gate, globe, check, ball and butterfly valves in metal bodies.' },
-  { id: 'fire-fighting', image: '/images/products/fire-fighting.jpg', name: 'Fire Fighting Valves', group: 'valves', blurb: 'Hydrants, landing valves and fire protection valves.' },
+  { id: 'pvc-cpvc', image: '/images/products/range/pvc-cpvc.webp', name: 'PVC CPVC Pipes & Fittings', group: 'piping' },
+  { id: 'pph-hdpe', image: '/images/products/range/pph-hdpe.webp', name: 'PPH PPS ECTFE HDPE Pipes & Fittings', group: 'piping' },
+  { id: 'ppr', image: '/images/products/range/ppr.webp', name: 'PPR Pipes & Fittings', group: 'piping' },
+  { id: 'manhole', image: '/images/products/range/manhole.webp', name: 'Manhole Covers, Gratings & Gullies', group: 'civil' },
+  { id: 'pvc-drainage', image: '/images/products/range/pvc-drainage.webp', name: 'PVC Drainage Fittings', group: 'drainage' },
+  { id: 'abs', name: 'ABS Pipes & Fittings', group: 'piping' },
+  { id: 'adhesives', name: 'PVC CPVC Adhesives', group: 'accessories' },
+  { id: 'test-plugs', name: 'Test Plugs', group: 'civil' },
+  { id: 'cast-iron', image: '/images/products/range/cast-iron.webp', name: 'Cast Iron Pipes & Fittings', group: 'drainage' },
+  { id: 'pvdf', image: '/images/products/range/pvdf.webp', name: 'PVDF Pipes & Fittings', group: 'piping' },
+  { id: 'couplings', image: '/images/products/range/couplings.webp', name: 'Mechanical Coupling & Flange Adaptors', group: 'accessories' },
+  { id: 'pressure', image: '/images/products/range/pressure.webp', name: 'Pressure Reducing & Vacuum Breakers', group: 'valves' },
+  { id: 'drains', image: '/images/products/range/drains.webp', name: 'Drains', group: 'drainage' },
+  { id: 'copper', image: '/images/products/range/copper.webp', name: 'Copper Pipes & Fittings', group: 'piping' },
+  { id: 'metal-valves', image: '/images/products/range/metal-valves.webp', name: 'Metal Valves', group: 'valves' },
+  { id: 'fire-fighting', image: '/images/products/range/fire-fighting.webp', name: 'Fire Fighting Valves', group: 'valves' },
 ];
 
 export const INDUSTRIES = [

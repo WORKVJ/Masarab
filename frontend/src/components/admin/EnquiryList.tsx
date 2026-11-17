@@ -167,7 +167,7 @@ export default function EnquiryList<T>({
                 {rows.map((r) => (
                   <tr key={r.id} className="cursor-pointer hover:bg-slate-50" onClick={() => router.push(`${pathname}/${r.id}`)}>
                     <td className="px-4 py-3">
-                      {r.unread && <span className="block h-2 w-2 rounded-full bg-sky-500" aria-label="Unread" />}
+                      {r.unread && <span className="block h-2 w-2 rounded-full bg-amber-500" aria-label="Unread" />}
                     </td>
                     <td className="max-w-0 px-2 py-3">
                       <Link href={`${pathname}/${r.id}`} className={cx('block truncate', r.unread ? 'font-semibold text-slate-900' : 'text-slate-800')} onClick={(e) => e.stopPropagation()}>
@@ -193,7 +193,7 @@ export default function EnquiryList<T>({
                 <li key={r.id}>
                   <Link href={`${pathname}/${r.id}`} className="block px-4 py-3.5 active:bg-slate-50">
                     <div className="flex items-center gap-2">
-                      {r.unread && <span className="h-2 w-2 shrink-0 rounded-full bg-sky-500" aria-label="Unread" />}
+                      {r.unread && <span className="h-2 w-2 shrink-0 rounded-full bg-amber-500" aria-label="Unread" />}
                       <span className={cx('min-w-0 flex-1 truncate text-sm', r.unread ? 'font-semibold text-slate-900' : 'text-slate-800')}>{r.title}</span>
                       <span className="shrink-0 text-xs text-slate-500">{timeAgo(r.at)}</span>
                     </div>
@@ -237,7 +237,7 @@ function Chip({ on, onClick, children }: { on: boolean; onClick: () => void; chi
       aria-pressed={on}
       className={cx(
         'rounded-full px-3 py-1.5 text-xs font-semibold transition-colors',
-        on ? 'bg-[#0d7cae] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200',
+        on ? 'bg-amber-100 text-amber-900 ring-1 ring-inset ring-amber-300' : 'bg-slate-100 text-slate-600 hover:bg-slate-200',
       )}
     >
       {children}

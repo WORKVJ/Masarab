@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
+  ArrowUpRight,
   ContactRound,
   ExternalLink,
   FileText,
@@ -18,7 +19,7 @@ import {
   X,
 } from 'lucide-react';
 import { api, AuthError, type PanelUser } from '@/lib/panelApi';
-import { cx, Spinner } from './ui';
+import { cx, SectionTitleContext, Spinner } from './ui';
 
 interface Session {
   user: PanelUser;
@@ -100,35 +101,41 @@ export default function AdminApp({ children }: { children: React.ReactNode }) {
   };
 
   const active = (href: string) => (href === '/admin' ? pathname === '/admin' : pathname.startsWith(href));
+  const current = NAV.find((n) => active(n.href));
+  const sectionTitle = current?.href === '/admin' ? 'Dashboard Overview' : current?.label ?? 'Admin';
 
   const sidebar = (
     <nav aria-label="Admin" className="flex h-full flex-col">
-      <div className="flex items-center justify-between px-5 pt-6 pb-8">
-        <Link href="/admin" className="flex items-center gap-3">
-          <Image src="/images/logo-white.png" alt="Masar Arabia" width={170} height={74} className="h-9 w-auto" />
+      <div className="flex items-center justify-between gap-3 px-6 pt-6 pb-6">
+        <Link href="/admin" className="flex items-center">
+          <Image src="/images/logo-dark.png" alt="Masar Arabia" width={170} height={74} className="h-9 w-auto" />
         </Link>
-        <button type="button" onClick={() => setMenuOpen(false)} className="lg:hidden rounded-lg p-1.5 text-white/70 hover:bg-white/10" aria-label="Close menu">
+        <span className="rounded-md border border-amber-300 bg-amber-50 px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-amber-800">Portal</span>
+        <button type="button" onClick={() => setMenuOpen(false)} className="lg:hidden rounded-lg p-1.5 text-slate-500 hover:bg-slate-100" aria-label="Close menu">
           <X className="h-5 w-5" />
         </button>
       </div>
-      <ul className="flex-1 space-y-1 px-3">
+      <div className="mx-6 border-t border-slate-200" />
+      <p className="px-6 pt-6 pb-3 text-[11px] font-bold uppercase tracking-[0.14em] text-slate-400">Navigation</p>
+      <ul className="flex-1 space-y-1.5 overflow-y-auto px-4">
         {NAV.filter((n) => !n.superuser || user.is_superuser).map(({ href, label, icon: Icon, badge }) => {
           const count = badge ? user.unread?.[badge] ?? 0 : 0;
+          const on = active(href);
           return (
             <li key={href}>
               <Link
                 href={href}
                 onClick={() => setMenuOpen(false)}
-                aria-current={active(href) ? 'page' : undefined}
+                aria-current={on ? 'page' : undefined}
                 className={cx(
-                  'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors',
-                  active(href) ? 'bg-white/10 text-white' : 'text-white/65 hover:bg-white/5 hover:text-white',
+                  'flex items-center gap-3 rounded-xl px-4 py-3 text-[15px] transition-colors',
+                  on ? 'bg-amber-50 font-semibold text-slate-900 ring-1 ring-inset ring-amber-200' : 'font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900',
                 )}
               >
-                <Icon className="h-[18px] w-[18px] shrink-0" />
+                <Icon className={cx('h-[18px] w-[18px] shrink-0', on ? 'text-amber-600' : 'text-slate-400')} />
                 <span className="flex-1">{label}</span>
                 {count > 0 && (
-                  <span className="min-w-5 rounded-full bg-sky-400 px-1.5 py-0.5 text-center text-[11px] font-bold leading-none text-[#04121f]" aria-label={`${count} unread`}>
+                  <span className="min-w-5 rounded-full bg-amber-500 px-1.5 py-0.5 text-center text-[11px] font-bold leading-none text-white" aria-label={`${count} unread`}>
                     {count}
                   </span>
                 )}
@@ -137,19 +144,26 @@ export default function AdminApp({ children }: { children: React.ReactNode }) {
           );
         })}
       </ul>
-      <div className="border-t border-white/10 p-3">
-        <a href="/" target="_blank" rel="noreferrer" className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-white/65 hover:bg-white/5 hover:text-white">
-          <ExternalLink className="h-[18px] w-[18px]" /> View website
+      <div className="mx-4 border-t border-slate-200 py-4 space-y-3">
+        <a
+          href="/"
+          target="_blank"
+          rel="noreferrer"
+          className="flex items-center gap-3 rounded-xl border border-slate-200 px-4 py-3 text-[15px] font-medium text-slate-700 hover:border-slate-300 hover:bg-slate-50"
+        >
+          <ExternalLink className="h-[18px] w-[18px] text-slate-500" />
+          <span className="flex-1">View Live Website</span>
+          <ArrowUpRight className="h-3.5 w-3.5 text-slate-400" />
         </a>
-        <div className="mt-2 flex items-center gap-3 rounded-xl px-3 py-2.5">
-          <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-sky-400/20 text-sm font-bold text-sky-200">
+        <div className="flex items-center gap-3 rounded-xl border border-slate-200 p-3">
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-amber-200 bg-amber-50 text-sm font-bold text-amber-800">
             {user.name.charAt(0).toUpperCase()}
           </span>
           <span className="min-w-0 flex-1">
-            <span className="block truncate text-sm font-semibold text-white">{user.name}</span>
-            <span className="block text-xs text-white/50">{user.is_superuser ? 'Administrator' : 'Staff'}</span>
+            <span className="block truncate text-sm font-bold text-slate-900">{user.name}</span>
+            <span className="block text-xs text-slate-500">{user.is_superuser ? 'Administrator' : 'Staff'}</span>
           </span>
-          <button type="button" onClick={logout} className="rounded-lg p-2 text-white/60 hover:bg-white/10 hover:text-white" aria-label="Sign out" title="Sign out">
+          <button type="button" onClick={logout} className="rounded-lg p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700" aria-label="Sign out" title="Sign out">
             <LogOut className="h-4 w-4" />
           </button>
         </div>
@@ -159,28 +173,45 @@ export default function AdminApp({ children }: { children: React.ReactNode }) {
 
   return (
     <SessionCtx.Provider value={{ user, refresh, onAuthError }}>
-      <div className="min-h-screen bg-slate-50 text-slate-900">
-        {/* desktop sidebar */}
-        <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 bg-[#04121f] lg:block">{sidebar}</aside>
+      <SectionTitleContext.Provider value={sectionTitle}>
+        <div className="min-h-screen bg-slate-50 text-slate-900">
+          {/* desktop sidebar */}
+          <aside className="fixed inset-y-0 left-0 z-30 hidden w-72 border-r border-slate-200 bg-white lg:block">{sidebar}</aside>
 
-        {/* mobile drawer */}
-        {menuOpen && (
-          <div className="fixed inset-0 z-40 lg:hidden">
-            <button type="button" aria-label="Close menu" className="absolute inset-0 bg-slate-900/50" onClick={() => setMenuOpen(false)} />
-            <aside className="absolute inset-y-0 left-0 w-72 max-w-[85vw] bg-[#04121f]">{sidebar}</aside>
+          {/* mobile drawer */}
+          {menuOpen && (
+            <div className="fixed inset-0 z-40 lg:hidden">
+              <button type="button" aria-label="Close menu" className="absolute inset-0 bg-slate-900/40" onClick={() => setMenuOpen(false)} />
+              <aside className="absolute inset-y-0 left-0 w-80 max-w-[85vw] bg-white">{sidebar}</aside>
+            </div>
+          )}
+
+          <div className="lg:pl-72">
+            {/* top bar: section name + system status */}
+            <header className="sticky top-0 z-20 flex min-h-[72px] items-center gap-3 border-b border-slate-200 bg-white/95 px-4 backdrop-blur sm:px-6 lg:px-10">
+              <button type="button" onClick={() => setMenuOpen(true)} className="rounded-lg p-2 text-slate-700 hover:bg-slate-100 lg:hidden" aria-label="Open menu">
+                <Menu className="h-5 w-5" />
+              </button>
+              <div className="min-w-0 flex-1 py-3">
+                <p className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.14em] text-amber-700">Masar Arabia Admin</p>
+                <p className="truncate text-lg sm:text-xl font-bold tracking-tight text-slate-900">{sectionTitle}</p>
+              </div>
+              <span className="hidden sm:inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3.5 py-1.5 text-sm font-semibold text-emerald-700 ring-1 ring-inset ring-emerald-200">
+                <span className="h-2 w-2 rounded-full bg-emerald-500" /> System Active
+              </span>
+              <a
+                href="/"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3.5 sm:px-4 py-1.5 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+              >
+                Live Site <ExternalLink className="h-4 w-4" />
+              </a>
+            </header>
+            <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-10">{children}</main>
           </div>
-        )}
-
-        <div className="lg:pl-64">
-          <header className="sticky top-0 z-20 flex h-14 items-center gap-3 border-b border-slate-200 bg-white/90 px-4 backdrop-blur lg:hidden">
-            <button type="button" onClick={() => setMenuOpen(true)} className="rounded-lg p-2 text-slate-700 hover:bg-slate-100" aria-label="Open menu">
-              <Menu className="h-5 w-5" />
-            </button>
-            <span className="font-semibold">Masar Arabia Admin</span>
-          </header>
-          <main className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">{children}</main>
         </div>
-      </div>
+      </SectionTitleContext.Provider>
     </SessionCtx.Provider>
   );
 }

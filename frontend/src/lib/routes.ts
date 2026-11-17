@@ -26,6 +26,9 @@ export const categoryHref = (slug: string) => `/products/${slug}`;
 export const quoteHref = (product?: string) =>
   product ? `/contact?product=${encodeURIComponent(product)}#quote-form` : '/contact#quote-form';
 
+/** A Product Range line's own page. */
+export const rangeHref = (id: string) => `/product-range/${id}`;
+
 /** True when `pathname` is this nav item's page (or one of its sub-pages). */
 export const isActive = (pathname: string, href: string) =>
   href === '/' ? pathname === '/' : pathname === href || pathname.startsWith(`${href}/`);

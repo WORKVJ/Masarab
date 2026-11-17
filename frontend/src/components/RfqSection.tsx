@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { submitRfq } from '@/lib/api';
 import { CATEGORIES, PRODUCT_RANGE } from '@/lib/masarContent';
@@ -22,7 +23,18 @@ const labelCls = 'block text-xs font-bold text-slate-700 mb-1.5';
  * server HTML (address, phone, email and form visible to search engines) and hydrates in one pass —
  * no Suspense boundary that the motion engine could alter before it hydrates.
  */
+/** Photo of a product, product-range line or division by its name (to show which product is being quoted). */
+function productImage(name: string): string | undefined {
+  if (!name) return undefined;
+  return (
+    PRODUCT_RANGE.find((p) => p.name === name)?.image ??
+    CATEGORIES.flatMap((c) => c.products).find((p) => p.name === name)?.image ??
+    CATEGORIES.find((c) => c.name === name)?.image
+  );
+}
+
 export default function RfqSection({ prefilledProduct = '' }: { prefilledProduct?: string }) {
+  const prefilledImage = productImage(prefilledProduct);
   const CONTACT = useContact();
   const router = useRouter();
   const [fullName, setFullName] = useState('');
@@ -190,12 +202,19 @@ export default function RfqSection({ prefilledProduct = '' }: { prefilledProduct
               <form onSubmit={handleSubmit} className="space-y-4">
                 <h3 className="text-lg font-black uppercase text-slate-950">Request a Quote</h3>
                 {prefilledProduct && (
-                  <p className="flex items-start gap-2 rounded-xl bg-sky-50 px-3.5 py-2.5 text-sm text-slate-700 ring-1 ring-inset ring-sky-200">
-                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#0d7cae]" aria-hidden="true" />
-                    <span>
-                      Requesting a quote for: <strong className="font-bold text-slate-900">{prefilledProduct}</strong>
+                  <div className="flex items-center gap-3 rounded-2xl bg-white p-2.5 pr-4 text-sm text-slate-700 ring-1 ring-inset ring-sky-200">
+                    {prefilledImage ? (
+                      <span className="relative h-14 w-[70px] shrink-0 overflow-hidden rounded-xl bg-[#eef3f7]">
+                        <Image src={prefilledImage} alt={prefilledProduct} fill sizes="70px" className="object-cover" />
+                      </span>
+                    ) : (
+                      <span className="ml-1.5 h-2 w-2 shrink-0 rounded-full bg-[#0d7cae]" aria-hidden="true" />
+                    )}
+                    <span className="leading-snug">
+                      <span className="block text-xs text-slate-500">Requesting a quote for</span>
+                      <strong className="font-bold text-slate-900">{prefilledProduct}</strong>
                     </span>
-                  </p>
+                  </div>
                 )}
 
                 {errorMsg && (

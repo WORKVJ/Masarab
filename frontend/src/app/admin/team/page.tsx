@@ -112,7 +112,7 @@ export default function TeamPage() {
                 <input className={inputCls} type="text" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required autoComplete="new-password" />
               </Field>
               <label className="flex items-start gap-3 self-center rounded-xl border border-slate-200 p-3">
-                <input type="checkbox" className="mt-0.5 h-4 w-4 accent-[#0d7cae]" checked={form.is_superuser} onChange={(e) => setForm({ ...form, is_superuser: e.target.checked })} />
+                <input type="checkbox" className="mt-0.5 h-4 w-4 accent-amber-600" checked={form.is_superuser} onChange={(e) => setForm({ ...form, is_superuser: e.target.checked })} />
                 <span className="text-sm">
                   <span className="font-semibold text-slate-800">Administrator</span>
                   <span className="block text-xs text-slate-500">Can add and remove team members.</span>
@@ -141,7 +141,7 @@ export default function TeamPage() {
               return (
                 <li key={m.id} className={cx('flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center', !m.is_active && 'bg-slate-50')}>
                   <div className="flex min-w-0 flex-1 items-center gap-3">
-                    <span className={cx('grid h-9 w-9 shrink-0 place-items-center rounded-full text-sm font-bold', m.is_active ? 'bg-sky-100 text-sky-800' : 'bg-slate-200 text-slate-500')}>
+                    <span className={cx('grid h-9 w-9 shrink-0 place-items-center rounded-full text-sm font-bold', m.is_active ? 'bg-amber-100 text-amber-800' : 'bg-slate-200 text-slate-500')}>
                       {name(m).charAt(0).toUpperCase()}
                     </span>
                     <div className="min-w-0">

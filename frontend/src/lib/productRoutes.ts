@@ -2,9 +2,9 @@
  * Product-page URLs. Kept apart from ./routes because it reads the full catalogue (./catalog),
  * which must stay on the server — ./routes is also imported by client components.
  */
-import { CATEGORIES, type Category } from './masarContent';
+import { CATEGORIES, PRODUCT_RANGE, type Category } from './masarContent';
 import { PRODUCT_DETAILS, VALVES } from './catalog';
-import { categoryHref, quoteHref } from './routes';
+import { categoryHref, quoteHref, rangeHref } from './routes';
 
 /** The valve catalogue is the detail page of Mechanical → "Valves & Actuators". */
 export const VALVES_PAGE = { category: 'mechanical', product: 'Valves & Actuators', slug: 'valves' } as const;
@@ -38,6 +38,7 @@ export const ALL_ROUTES = [
   ]),
   ...VALVES.map((v) => valveHref(v.slug)),
   '/product-range',
+  ...PRODUCT_RANGE.map((p) => rangeHref(p.id)),
   '/industries',
   '/brands',
   '/clients',

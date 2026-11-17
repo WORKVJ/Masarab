@@ -46,7 +46,7 @@ export default function LoginForm() {
         </div>
         <form onSubmit={submit} className="rounded-2xl bg-white p-6 shadow-xl sm:p-8">
           <div className="flex items-center gap-3">
-            <span className="grid h-10 w-10 place-items-center rounded-xl bg-sky-50 text-[#0d7cae]">
+            <span className="grid h-10 w-10 place-items-center rounded-xl bg-amber-50 text-amber-700">
               <LockKeyhole className="h-5 w-5" />
             </span>
             <div>

@@ -32,7 +32,7 @@ export default function QuoteDetailPage() {
       backLabel="All quote requests"
       eyebrow={
         <>
-          <span className="font-mono font-semibold text-[#0d7cae]">{q.rfq_number}</span>
+          <span className="font-mono font-semibold text-amber-700">{q.rfq_number}</span>
           <StatusBadge status={q.status} label={q.status_label} />
         </>
       }

@@ -310,7 +310,7 @@ export default function BlogEditor({ id }: { id?: number }) {
                 type="button"
                 onClick={() => coverRef.current?.click()}
                 disabled={busy === 'cover'}
-                className="grid aspect-[16/10] w-full place-items-center rounded-xl border-2 border-dashed border-slate-200 text-sm text-slate-500 hover:border-[#0d7cae] hover:text-[#0d7cae]"
+                className="grid aspect-[16/10] w-full place-items-center rounded-xl border-2 border-dashed border-slate-200 text-sm text-slate-500 hover:border-amber-400 hover:text-amber-700"
               >
                 <span className="flex flex-col items-center gap-2">
                   {busy === 'cover' ? <Loader2 className="h-6 w-6 animate-spin" /> : <ImagePlus className="h-6 w-6" />}

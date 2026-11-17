@@ -1,18 +1,22 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, ArrowUpRight, PhoneCall } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, CircleDot, Cylinder, Package, PaintBucket, PhoneCall, type LucideIcon } from 'lucide-react';
 import { PRODUCT_RANGE, CONTACT_INTRO } from '@/lib/masarContent';
 import { getSiteContact } from '@/lib/siteSettings';
-import { quoteHref } from '@/lib/routes';
+import { quoteHref, rangeHref } from '@/lib/routes';
 
 /**
  * Product Range — the 16 lines from the client's showroom display board, laid out like the board:
  * a centred title and one catalogue board of 16 cells (round photo + name) split by hairlines.
- * Each cell opens the contact form pre-filled for that product.
+ * Each cell opens that product's page (/product-range/<id>).
  * Server-rendered and static: hover effects are plain CSS transitions and nothing loops,
  * so the section costs nothing while scrolling.
  */
-export default async function ProductRangeSection() {
+/** Lines the client's photos don't show yet: an icon in the circle instead of a wrong picture. */
+const NO_PHOTO_ICONS: Record<string, LucideIcon> = { adhesives: PaintBucket, 'test-plugs': CircleDot, abs: Cylinder };
+
+/** `excludeId`: leave one product out (on that product's own page). */
+export default async function ProductRangeSection({ excludeId }: { excludeId?: string } = {}) {
   const CONTACT = await getSiteContact();
   return (
     <section
@@ -54,16 +58,16 @@ export default async function ProductRangeSection() {
           className="mt-12 sm:mt-16 rounded-[28px] overflow-hidden bg-white border border-slate-200/80 shadow-[0_40px_80px_-50px_rgba(13,124,174,0.45)]"
         >
           <ul className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-slate-200/70">
-            {PRODUCT_RANGE.map((p, i) => (
+            {PRODUCT_RANGE.map((p, i) => ({ p, i })).filter(({ p }) => p.id !== excludeId).map(({ p, i }) => (
               <li key={p.id} className="bg-white">
                 <Link
-                  href={quoteHref(p.name)}
-                  title={`${p.blurb} — request a quote`}
+                  href={rangeHref(p.id)}
+                  title={p.name}
                   className="group h-full flex flex-col sm:flex-row items-center gap-3 sm:gap-4 px-3 py-6 sm:px-6 sm:py-7 text-center sm:text-left hover:bg-[#f4f9fd] transition-colors duration-300"
                 >
                   {/* round photo */}
                   <span className="relative shrink-0 w-[84px] h-[84px] sm:w-[72px] sm:h-[72px] rounded-full overflow-hidden bg-[#eef6fb] ring-4 ring-[#eef6fb] shadow-[0_12px_24px_-14px_rgba(13,124,174,0.7)] group-hover:ring-sky-100 transition-[box-shadow] duration-300">
-                    {p.image && (
+                    {p.image ? (
                       <Image
                         src={p.image}
                         alt={p.name}
@@ -71,6 +75,8 @@ export default async function ProductRangeSection() {
                         sizes="96px"
                         className="object-cover transition-[scale] duration-500 ease-out group-hover:scale-110"
                       />
+                    ) : (
+                      <NoPhotoIcon id={p.id} />
                     )}
                   </span>
 
@@ -80,7 +86,7 @@ export default async function ProductRangeSection() {
                       {p.name}
                     </span>
                     <span className="mt-1.5 inline-flex items-center gap-1 text-xs font-semibold text-[#0d7cae] sm:opacity-0 sm:-translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-[opacity,translate] duration-300">
-                      Get a quote <ArrowRight className="w-3.5 h-3.5" />
+                      View product <ArrowRight className="w-3.5 h-3.5" />
                     </span>
                   </span>
                 </Link>
@@ -117,5 +123,14 @@ export default async function ProductRangeSection() {
         </div>
       </div>
     </section>
+  );
+}
+
+function NoPhotoIcon({ id }: { id: string }) {
+  const Icon = NO_PHOTO_ICONS[id] ?? Package;
+  return (
+    <span className="absolute inset-0 grid place-items-center text-[#0d7cae]">
+      <Icon className="h-8 w-8" strokeWidth={1.5} />
+    </span>
   );
 }
