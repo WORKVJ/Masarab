@@ -114,42 +114,8 @@ html.mx-motion { scroll-behavior: auto !important; }
   transform-origin: 0% 100%;
 }
 
-/* Kinetic marquee */
-.mx-marquee {
-  position: relative;
-  overflow: hidden;
-  padding: clamp(28px, 5vw, 64px) 0;
-  background: #fff;
-  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
-}
-.mx-marquee-dark { background: #050b17; border-bottom: 0; }
-.mx-marquee-band { display: flex; flex-direction: column; gap: clamp(4px, 1vw, 12px); will-change: transform; }
-.mx-rail { display: flex; width: max-content; will-change: transform; }
-.mx-rail-word {
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: -0.04em;
-  line-height: 0.95;
-  font-size: clamp(48px, 9.5vw, 156px);
-  color: #0f172a;
-  white-space: nowrap;
-}
-.mx-rail-outline {
-  color: transparent;
-  -webkit-text-stroke: 1.5px #0d7cae;
-}
-.mx-marquee-dark .mx-rail-word { color: #fff; }
-.mx-marquee-dark .mx-rail-outline { color: transparent; -webkit-text-stroke-color: rgba(56, 189, 248, 0.8); }
-.mx-rail-star {
-  font-size: clamp(22px, 3.5vw, 56px);
-  color: #f97316;
-  margin: 0 clamp(16px, 3vw, 44px);
-  display: inline-block;
-}
-
 /* Respect reduced-motion preferences everywhere */
 @media (prefers-reduced-motion: reduce) {
-  .mx-rail-star { animation: none !important; }
   .reveal {
     opacity: 1 !important;
     transform: none !important;
@@ -316,7 +282,7 @@ html.mx-motion { scroll-behavior: auto !important; }
    The selector names the looping classes explicitly: a `.mx-offscreen *` rule made the browser
    re-check every element of a section each time it crossed the screen edge (10–27 ms stalls
    while scrolling); with a class list only the looping elements are re-checked. */
-.mx-offscreen :is(.animate-marquee, .animate-ping, .animate-pulse, .mx-kenburns, .mx-logo-track, .mx-orb-drift, .mx-orb-drift-rev, .mx-ping-dot, .mx-radar, .mx-spin-ring, .mx-sweep, .mx-word-inner, .mx-rail), .mx-offscreen :is(.mx-play-ring, .mx-shine, .mx-ping-dot)::before, .mx-offscreen :is(.mx-play-ring, .mx-shine, .mx-ping-dot)::after {
+.mx-offscreen :is(.animate-marquee, .animate-ping, .animate-pulse, .mx-kenburns, .mx-logo-track, .mx-orb-drift, .mx-orb-drift-rev, .mx-ping-dot, .mx-radar, .mx-spin-ring, .mx-sweep, .mx-word-inner), .mx-offscreen :is(.mx-play-ring, .mx-shine, .mx-ping-dot)::before, .mx-offscreen :is(.mx-play-ring, .mx-shine, .mx-ping-dot)::after {
   animation-play-state: paused !important;
 }
 
@@ -502,8 +468,7 @@ html.mx-motion { scroll-behavior: auto !important; }
 .mx-motion [data-speed],
 .mx-motion [data-parallax-img],
 .mx-motion #hero > .max-w-7xl > .grid,
-.mx-motion #hero > [aria-hidden="true"],
-.mx-motion [data-velocity] {
+.mx-motion #hero > [aria-hidden="true"] {
   will-change: transform;
 }
 

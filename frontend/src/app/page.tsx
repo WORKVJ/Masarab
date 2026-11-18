@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { pageMetadata } from '@/lib/seo';
 import Hero, { HeroCardsBand } from '@/components/Hero';
-import KineticMarquee from '@/components/KineticMarquee';
 import ProductRangeSection from '@/components/sections/ProductRangeSection';
 import HomeAbout from '@/components/sections/HomeAbout';
 import CategoryCards from '@/components/sections/CategoryCards';
@@ -33,14 +32,8 @@ export default function HomePage() {
 
       <WhyMasar />
 
-      {/* Client request: moving cards + scrolling division names moved down here */}
+      {/* Client request: moving cards moved down here (the big scrolling division names were removed) */}
       <HeroCardsBand />
-      <KineticMarquee
-        rows={[
-          ['Cooling Solutions', 'Water Treatment', 'Chemical', 'Electrical'],
-          ['Instrumentation', 'Mechanical', 'Pipe Fittings & Alloys', 'Safety Equipments'],
-        ]}
-      />
 
       <CtaBand />
     </>

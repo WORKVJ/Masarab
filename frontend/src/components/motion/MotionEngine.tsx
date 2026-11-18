@@ -7,7 +7,7 @@
  *  • Hero intro timeline + gentle hero scroll-out (the part of the page the client loves)
  *  • Word-by-word reveal for every section <h2>
  *  • [data-anim="up"] batched fade-up reveals
- *  • [data-speed] parallax, [data-velocity] scroll-velocity skew, [data-magnetic] buttons
+ *  • [data-speed] parallax, [data-magnetic] buttons
  *  • Top scroll-progress bar
  *
  * Performance rules: only transform/opacity are animated, no filters, no clip-paths,
@@ -309,22 +309,6 @@ export default function MotionEngine() {
           }
         );
       });
-
-      // ── 7. Velocity skew (marquee band) ──────────────────────────────
-      // Only while the band is on screen — a page-wide trigger would write a transform to it on
-      // every scroll frame even when nobody can see it.
-      gsap.utils.toArray<HTMLElement>('[data-velocity]').forEach((el) => {
-        const setSkew = gsap.quickTo(el, 'skewY', { duration: 0.5, ease: 'power3.out' });
-        ScrollTrigger.create({
-          trigger: el,
-          start: 'top bottom',
-          end: 'bottom top',
-          onUpdate: (self) => setSkew(gsap.utils.clamp(-4, 4, self.getVelocity() / -400)),
-          onToggle: (self) => {
-            if (!self.isActive) gsap.set(el, { skewY: 0 });
-          },
-        });
-      });
     });
     cleanups.push(() => ctx.revert());
 
@@ -359,7 +343,7 @@ export default function MotionEngine() {
       (entries) => entries.forEach((e) => e.target.classList.toggle('mx-offscreen', !e.isIntersecting)),
       { rootMargin: '100px 0px' }
     );
-    document.querySelectorAll('[data-page] > section, [data-page] > .contents > section, [data-page] > .mx-marquee, [data-pause-offscreen], footer').forEach((el) => offscreenIO.observe(el));
+    document.querySelectorAll('[data-page] > section, [data-page] > .contents > section, [data-pause-offscreen], footer').forEach((el) => offscreenIO.observe(el));
     cleanups.push(() => offscreenIO.disconnect());
 
     // ── 9. Keep trigger positions fresh as images/data load ────────────

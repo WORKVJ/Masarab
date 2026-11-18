@@ -100,16 +100,16 @@ export default function AboutSection() {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-12 gap-12 lg:gap-14 items-center">
         {/* ───────────── Bento grid: 4 aligned tiles, no overlaps ───────────── */}
         <div className="lg:col-span-6 grid grid-cols-2 grid-rows-3 gap-3 sm:gap-4 h-[440px] sm:h-[500px] lg:h-[min(560px,calc(100svh_-_190px))]">
-          {/* A · engineer photo (tall) — shutter reveal + scroll parallax */}
+          {/* A · plant hall photo (tall) — shutter reveal + scroll parallax */}
           <div data-shutter className="group row-span-2 relative rounded-[26px] overflow-hidden shadow-[0_30px_60px_-35px_rgba(13,124,174,0.55)]">
             <div className="mx-shutter-photo absolute inset-0">
               <div data-parallax-img className="absolute -inset-y-[10%] inset-x-0">
                 <Image
-                  src="/images/safety-engineer.jpg"
-                  alt="Engineer on an industrial plant walkway"
+                  src="/images/masar/banner-2.webp"
+                  alt="Industrial plant hall with process machinery"
                   fill
                   sizes="(min-width: 1024px) 26vw, 50vw"
-                  className="object-cover object-[50%_35%] transition-[scale] duration-700 group-hover:scale-105"
+                  className="object-cover object-center transition-[scale] duration-700 group-hover:scale-105"
                 />
               </div>
             </div>
@@ -120,7 +120,7 @@ export default function AboutSection() {
           {/* B · range tile */}
           <RangeTile />
 
-          {/* C · FRP grating photo (tall) — shutter reveal + slow drift */}
+          {/* C · valves photo (tall) — shutter reveal + slow drift */}
           <div
             data-shutter
             data-shutter-delay="0.18"
@@ -129,18 +129,18 @@ export default function AboutSection() {
             <div className="mx-shutter-photo absolute inset-0">
               <div className="mx-kenburns absolute inset-0">
                 <Image
-                  src="/images/frp-marine.jpg"
-                  alt="FRP grating walkway at a coastal facility"
+                  src="/images/valves-industrial.jpg"
+                  alt="Industrial valves and process piping"
                   fill
                   sizes="(min-width: 1024px) 26vw, 50vw"
-                  className="object-cover object-[60%_50%] transition-[scale] duration-700 group-hover:scale-105"
+                  className="object-cover object-[40%_50%] transition-[scale] duration-700 group-hover:scale-105"
                 />
               </div>
             </div>
             <div className="absolute inset-0 bg-gradient-to-t from-[#04121f]/55 via-transparent to-transparent" />
             <span className="absolute left-3 bottom-3 inline-flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1.5 text-[11px] font-bold text-slate-900 shadow-md">
               <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-              FRP Gratings
+              Valves &amp; Piping
             </span>
             <span aria-hidden="true" className="mx-shutter-panel" />
           </div>
