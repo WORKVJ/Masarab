@@ -34,6 +34,15 @@ class PanelTests(TestCase):
         self.assertEqual(r.status_code, 201)
         self.assertEqual(anon.get('/api/contact/').status_code, 405)
 
+    def test_public_forms_work_while_logged_into_admin(self):
+        # same browser as the admin panel: session cookie present, no CSRF token sent by the website form
+        c = APIClient(enforce_csrf_checks=True)
+        c.login(username='boss', password='Str0ng-pass-123')
+        r = c.post('/api/rfq/', {'full_name': 'Y', 'company_name': 'C', 'email': 'y@example.com', 'phone': '1', 'product_category': 'Valves', 'specifications_notes': 'Need 4 valves'}, format='json')
+        self.assertEqual(r.status_code, 201, r.content)
+        r = c.post('/api/contact/', {'name': 'X', 'email': 'x@example.com', 'subject': 'S', 'message': 'M'}, format='json')
+        self.assertEqual(r.status_code, 201, r.content)
+
     def test_public_forms_cannot_set_internal_fields(self):
         anon = APIClient()
         r = anon.post('/api/contact/', {'name': 'X', 'email': 'x@example.com', 'subject': 'S', 'message': 'M', 'status': 'closed', 'notes': 'hacked', 'read_at': '2026-01-01T00:00:00Z'}, format='json')

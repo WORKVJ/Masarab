@@ -24,6 +24,9 @@ class QuoteRequestViewSet(viewsets.ModelViewSet):
     # Public endpoints accept new submissions only; the team reads them in the admin panel.
     # (Allowing GET here would let anyone list every customer's name, email and phone.)
     http_method_names = ['post', 'options']
+    # No login on public forms: with session auth, a browser that is also logged into the admin panel
+    # sends its session cookie, which turns on Django's CSRF check and rejects the form with 403.
+    authentication_classes = []
 
     def perform_create(self, serializer):
         q = serializer.save()
@@ -44,6 +47,9 @@ class ContactInquiryViewSet(viewsets.ModelViewSet):
     # Public endpoints accept new submissions only; the team reads them in the admin panel.
     # (Allowing GET here would let anyone list every customer's name, email and phone.)
     http_method_names = ['post', 'options']
+    # No login on public forms: with session auth, a browser that is also logged into the admin panel
+    # sends its session cookie, which turns on Django's CSRF check and rejects the form with 403.
+    authentication_classes = []
 
     def perform_create(self, serializer):
         m = serializer.save()
